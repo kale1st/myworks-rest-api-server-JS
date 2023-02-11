@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
 var login = function () {
     window.location.replace("./views/group.html");
