@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+import { checkUserExisting } from "./src/functions/chechkUserExisting";
 
 // #############################################################################
 // This configures static hosting for files in /public that have the extensions
@@ -17,24 +18,24 @@ app.use(express.static("public", options));
 
 // #############################################################################
 // Catch all handler for all other request.
-app.use("*", (req, res) => {
-  res
-    .json({
-      at: new Date().toISOString(),
-      method: req.method,
-      hostname: req.hostname,
-      ip: req.ip,
-      query: req.query,
-      headers: req.headers,
-      cookies: req.cookies,
-      params: req.params,
-    })
-    .end();
-});
+// app.use("*", (req, res) => {
+//   res
+//     .json({
+//       at: new Date().toISOString(),
+//       method: req.method,
+//       hostname: req.hostname,
+//       ip: req.ip,
+//       query: req.query,
+//       headers: req.headers,
+//       cookies: req.cookies,
+//       params: req.params,
+//     })
+//     .end();
+// });
 const port = process.env.PORT || 3000;
 
 app.get("/newuser", (req, res) => {
-  res.send("elhamdülillah");
+  checkUserExisting("azizka@hotmail.com");
 });
 
 app.listen(port, () => {
