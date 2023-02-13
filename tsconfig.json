@@ -4,5 +4,8 @@
         "target": "ES5",
         "outDir": "public/ts-built",
         "rootDir": "public/scripts"
-    }
+    },
+    "include": [
+        "public/scripts/**/*"
+      ]
   }

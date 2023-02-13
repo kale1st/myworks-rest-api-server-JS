@@ -5,8 +5,8 @@
     "main": "server.js",
     "scripts": {
         "serve": "nodemon --watch . server.js",
-        "build": "tsc -w",
-        "start": "nodemon server.js",
+        "build": "tsc public/scripts/*.ts",
+        "start": "nodemon server.ts",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -21,6 +21,8 @@
     "homepage": "https://github.com/cyclic-software/express-hello-world#readme",
     "dependencies": {
         "express": "^4.17.1",
+        "firebase": "^9.17.1",
+        "firebase-admin": "^11.5.0",
         "typescript": "^4.9.5"
     },
     "devDependencies": {
