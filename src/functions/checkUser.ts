@@ -7,9 +7,9 @@ initializeApp({
   databaseURL: "https://mywebsite-3f527-default-rtdb.firebaseio.com",
 });
 
-export const checkUserExisting = async (email) => {
+export const checkUser = async (email) => {
   const user = await admin.auth().getUserByEmail(email);
-  await console.log(user);
+  await console.log(user)
   // creates user in firebase Auth
   //   const { uid } = await admin.auth().createUser({
   //     displayName: "aziz",

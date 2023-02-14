@@ -1,9 +1,11 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-import { checkUserExisting } from "./src/functions/checkUser";
-import { createUser } from "./src/functions/addNewUser";
-// #############################################################################
+import { checkUser } from "./src/functions/checkUser";
+import { createUser } from "./src/CRUD/addNewUser";
+import { addRole } from "./src/functions/addRole";
+
+// #########################################################################
 // This configures static hosting for files in /public that have the extensions
 // listed in the array.
 var options = {
@@ -34,12 +36,16 @@ app.use(express.static("public", options));
 // });
 const port = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  // checkUserExisting("azizka@hotmail.com");
+app.get("/checkuser", (req, res) => {
+  checkUser("azizkale@hotmail.com");
 });
 
 app.get("/adduser", (req, res) => {
   createUser("azizkaddddd@hotmail.com", "");
+});
+
+app.get("/addrole", (req, res) => {
+  addRole("azizkale@hotmail.com", 'mentor');
 });
 
 app.listen(port, () => {
