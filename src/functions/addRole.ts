@@ -9,14 +9,21 @@ import * as admin from "firebase-admin";
 
 export const addRole = async (email, role) => {
     const user: any = await admin.auth().getUserByEmail(email).then(async (userRecord: any) => {
-        if (userRecord.customClaims.roles.contains(role)) {
+        if (userRecord.customClaims.roles.includes(role)) {
             console.log('this user is already a ' + role)
         }
         else {
             // adds role to users
             const uid = userRecord.uid;
-            console.log(`User UID: ${uid}`);
-            await admin.auth().setCustomUserClaims(uid, { roles: role })
+            // console.log(`User UID: ${uid}`);
+            // await admin.auth().setCustomUserClaims(uid, { roles: role })
+            let arr = userRecord.customClaims.roles;
+            await arr.push(role);
+            await admin.auth().setCustomUserClaims(uid, { roles: arr })
+            // await console.log(typeof userRecord.customClaims.roles)
+            // await console.log(userRecord.customClaims.roles)           
+            // await console.log(arr)
+            await console.log('role added')
         }
     });
 

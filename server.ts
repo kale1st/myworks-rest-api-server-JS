@@ -41,11 +41,11 @@ app.get("/checkuser", (req, res) => {
 });
 
 app.get("/adduser", (req, res) => {
-  createUser("azizkaddddd@hotmail.com", "");
+  createUser("azizkale@hotmail.com", "123456");
 });
 
 app.get("/addrole", (req, res) => {
-  addRole("azizkale@hotmail.com", 'mentor');
+  addRole("azizkale@hotmail.com", 'admin');
 });
 
 app.listen(port, () => {
