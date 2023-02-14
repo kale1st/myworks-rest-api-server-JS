@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-import { checkUserExisting } from "./src/functions/chechkUserExisting";
+import { checkUserExisting } from "./src/functions/checkUser";
 import { createUser } from "./src/functions/addNewUser";
 // #############################################################################
 // This configures static hosting for files in /public that have the extensions
@@ -34,11 +34,11 @@ app.use(express.static("public", options));
 // });
 const port = process.env.PORT || 3000;
 
-app.get("/abcd", (req, res) => {
-  checkUserExisting("azizka@hotmail.com");
+app.get("/", (req, res) => {
+  // checkUserExisting("azizka@hotmail.com");
 });
 
-app.get("/efg", (req, res) => {
+app.get("/adduser", (req, res) => {
   createUser("azizkaddddd@hotmail.com", "");
 });
 

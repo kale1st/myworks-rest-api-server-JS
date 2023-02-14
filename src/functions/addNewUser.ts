@@ -1,26 +1,19 @@
-const { getAuth, createUserWithEmailAndPassword } = require("firebase/auth");
-import { firebaseApp } from "../tools/firebaseTools";
-import { checkUserExisting } from "./chechkUserExisting";
+import * as admin from "firebase-admin";
+import { checkUserExisting } from "./checkUser";
 
-const auth = getAuth(firebaseApp);
 
 export const createUser = async (email, password) => {
   await checkUserExisting(email)
     .then(() => {
       console.log("this user exists");
     })
-    .catch(() => {
-      console.log("this user does not exist");
+    .catch(async () => {
+      // if user does not, new user is created
+      const { uid } = await admin.auth().createUser({
+        displayName: "aziz",
+        password: "123456",
+        email: "azizaga@gmail.com"
+      })
     });
-  //   createUserWithEmailAndPassword(auth, email, password)
-  //     .then((userCredential) => {
-  //       // Signed in
-  //       const user = userCredential.user;
-  //       // ...
-  //     })
-  //     .catch((error) => {
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       // ..
-  //     });
+
 };
