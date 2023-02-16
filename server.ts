@@ -4,6 +4,7 @@ const app = express();
 import { checkUser } from "./src/functions/checkUser";
 import { createUser } from "./src/CRUD/addNewUser";
 import { addRole } from "./src/functions/addRole";
+import { signin } from "./src/functions/sigin"
 
 // #########################################################################
 // This configures static hosting for files in /public that have the extensions
@@ -47,6 +48,10 @@ app.get("/adduser", (req, res) => {
 app.get("/addrole", (req, res) => {
   addRole("azizkale@hotmail.com", 'admin');
 });
+
+app.get("/signin", (req, res) => {
+  signin('azizkale@hotmail.com', '123456')
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
