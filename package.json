@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "firebase": "^9.17.1",
     "firebase-admin": "^11.5.0",
+    "morgan": "^1.10.0",
     "token": "^0.1.0",
     "typescript": "^4.9.5"
   },

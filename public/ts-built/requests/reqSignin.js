@@ -1,28 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signin = void 0;
-var signin = function () {
+var signin = function() {
     fetch('http://localhost:3000/signin', {
-        method: 'post',
-        headers: {
-            "Content-type": "application/json",
-            "authorization": "Bearer tokentokentoken"
-        },
-        body: JSON.stringify({
-            "firstName": "Marcos",
-            "lastName": "Silva",
-            "email": "marcos.henrique@toptal.com",
-            "password": "s3cr3tp4sswo4rd"
+            method: 'post',
+            headers: {
+                "Content-type": "application/json",
+                "authorization": "Bearer tokentokentoken"
+            },
+            body: JSON.stringify({
+                "firstName": "Marcos",
+                "lastName": "Silva",
+                "email": "marcos.henrique@toptal.com",
+                "password": "s3cr3tp4sswo4rd"
+            })
         })
-    })
-        .then(function (response) {
-        return response.json();
-    })
-        .then(function (data) {
-        console.log('Request succeeded with JSON response', data);
-    })
-        .catch(function (error) {
-        console.log('Request failed', error);
-    });
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log('Request succeeded with JSON response', data);
+        })
+        .catch(function(error) {
+            console.log('Request failed', error);
+        });
 };
 exports.signin = signin;

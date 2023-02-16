@@ -1,12 +1,27 @@
-const express = require("express");
-const path = require("path");
+import express, { Express } from 'express';
 const app = express();
+import morgan from 'morgan';
 import { checkUser } from "./src/functions/checkUser";
 import { createUser } from "./src/CRUD/addNewUser";
 import { addRole } from "./src/functions/addRole";
-import { signin } from "./src/functions/sigin"
-import { authenticate } from "./src/Middlewares/authentication";
-import { authorize } from "./src/Middlewares/authorization";
+import routes from './src/routes/users/userroutes';
+
+
+// app.use(morgan('dev'));
+
+/** RULES OF API */
+app.use((req, res, next) => {
+  // set the CORS policy
+  res.header('Access-Control-Allow-Origin', '*');
+  // set the CORS headers
+  res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization');
+  // set the CORS method headers
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'GET PATCH DELETE POST');
+    return res.status(200).json({});
+  }
+  next();
+});
 
 // #########################################################################
 // This configures static hosting for files in /public that have the extensions
@@ -19,8 +34,10 @@ var options = {
   maxAge: "1m",
   redirect: false,
 };
-app.use(express.static("public", options));
+app.use('/site', express.static("public", options));
 
+/** Routes */
+app.use('/', routes);
 // #############################################################################
 // Catch all handler for all other request.
 // app.use("*", (req, res) => {
@@ -51,9 +68,9 @@ app.get("/addrole", (req, res) => {
   addRole("azizkale@hotmail.com", 'admin');
 });
 
-app.post("/signin", [authenticate, authorize], (req, res) => {
-  signin('azizkale@hotmail.com', '123456')
-})
+// app.post("/signin", [authenticate, authorize], (req, res) => {
+//   signin('azizkale@hotmail.com', '123456')
+// })
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

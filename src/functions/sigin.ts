@@ -1,11 +1,14 @@
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { firebaseApp } from "../tools/firebaseTools";
 const secretkey = "../tools/secretkey"
 
 const auth = getAuth(firebaseApp);
 let token;
-export const signin = async (email: any, password: any) => {
+const signin = async (req: Request, res: Response) => {
+    let email, password;
+    console.log(req.body)
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
@@ -25,3 +28,5 @@ export const signin = async (email: any, password: any) => {
     else
         "please try again"
 }
+
+export default { signin };
