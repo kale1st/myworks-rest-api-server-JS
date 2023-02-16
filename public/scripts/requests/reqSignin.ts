@@ -1,22 +1,24 @@
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import jwt from 'jsonwebtoken';
-const secretkey = '../../src/tools/secretkey';
-
-export const signIn = async (email, password) => {
-  const auth = getAuth();
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-      // ...
+export const signin = () => {
+  fetch('http://localhost:3000/signin', {
+    method: 'post',
+    headers: {
+      "Content-type": "application/json",
+      "authorization": `Bearer tokentokentoken`
+    },
+    body: JSON.stringify({
+      "firstName": "Marcos",
+      "lastName": "Silva",
+      "email": "marcos.henrique@toptal.com",
+      "password": "s3cr3tp4sswo4rd"
     })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log('Request succeeded with JSON response', data);
+    })
+    .catch(function (error) {
+      console.log('Request failed', error);
     });
-  // Replace with your own logic for validating username and password
-
-
-  // const token = jwt.sign({ email }, secretkey);
-  // return token;
 }

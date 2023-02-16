@@ -5,6 +5,8 @@ import { checkUser } from "./src/functions/checkUser";
 import { createUser } from "./src/CRUD/addNewUser";
 import { addRole } from "./src/functions/addRole";
 import { signin } from "./src/functions/sigin"
+import { authenticate } from "./src/Middlewares/authentication";
+import { authorize } from "./src/Middlewares/authorization";
 
 // #########################################################################
 // This configures static hosting for files in /public that have the extensions
@@ -49,7 +51,7 @@ app.get("/addrole", (req, res) => {
   addRole("azizkale@hotmail.com", 'admin');
 });
 
-app.get("/signin", (req, res) => {
+app.post("/signin", [authenticate, authorize], (req, res) => {
   signin('azizkale@hotmail.com', '123456')
 })
 
