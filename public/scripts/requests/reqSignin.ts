@@ -3,8 +3,12 @@ export const signin = () => {
     method: 'POST',
     headers: {
       "Content-type": "application/json",
-      "authorization": `Bearer tokentokentoken`,
-    }
+      "authorization": `Bearer tokentokentoken`
+    },
+    body: JSON.stringify({
+      "email": "azizkale@hotmail.com",
+      "password": "123456"
+    })
   })
     .then(function (response) {
       return response.json();

@@ -7,14 +7,13 @@ const secretkey = "../tools/secretkey"
 const auth = getAuth(firebaseApp);
 let token;
 const signin = async (req: Request, res: Response) => {
-    let email, password;
-    signInWithEmailAndPassword(auth, email, password)
+    const { email, password } = await req.body;
+
+    await signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            const token = jwt.sign({ userCredential }, secretkey);
-            // console.log(userCredential)
-            console.log(jwt.verify(token, secretkey))
+            token = jwt.sign({ userCredential }, secretkey);
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -23,9 +22,12 @@ const signin = async (req: Request, res: Response) => {
         });
     // =============
     if (token)
-        return token
+        return res.status(200).json({
+            token: token
+        });
     else
-        "please try again"
+        return res.status(400).send({ errors: ['Invalid e-mail or password'] });
+
 }
 
 export default { signin };
