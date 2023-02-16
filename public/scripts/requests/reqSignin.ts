@@ -1,16 +1,10 @@
 export const signin = () => {
   fetch('http://localhost:3000/signin', {
-    method: 'post',
+    method: 'POST',
     headers: {
       "Content-type": "application/json",
-      "authorization": `Bearer tokentokentoken`
-    },
-    body: JSON.stringify({
-      "firstName": "Marcos",
-      "lastName": "Silva",
-      "email": "marcos.henrique@toptal.com",
-      "password": "s3cr3tp4sswo4rd"
-    })
+      "authorization": `Bearer tokentokentoken`,
+    }
   })
     .then(function (response) {
       return response.json();

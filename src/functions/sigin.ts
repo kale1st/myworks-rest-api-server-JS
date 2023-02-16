@@ -8,7 +8,6 @@ const auth = getAuth(firebaseApp);
 let token;
 const signin = async (req: Request, res: Response) => {
     let email, password;
-    console.log(req.body)
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
