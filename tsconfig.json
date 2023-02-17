@@ -7,5 +7,5 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["public/scripts/requests/**/*"]
+  "include": ["public/scripts/requests/**/*", "public/scripts/functions/**/*"]
 }

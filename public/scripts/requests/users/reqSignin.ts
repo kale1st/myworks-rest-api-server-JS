@@ -1,12 +1,15 @@
-export const signin = () => {
-  fetch('http://localhost:3000/signin', {
+export const signin = async () => {
+  const email = await document.getElementById('email') as HTMLInputElement;
+  const password = await document.getElementById('psw') as HTMLInputElement;
+
+  await fetch('http://localhost:3000/signin', {
     method: 'POST',
     headers: {
       "Content-type": "application/json",
     },
     body: JSON.stringify({
-      "email": "azizkale@hotmail.com",
-      "password": "123456"
+      "email": email.value,
+      "password": password.value
     })
   })
     .then(function (response) {
@@ -14,7 +17,9 @@ export const signin = () => {
     })
     .then(function (data) {
       console.log('Request succeeded with JSON response', data);
-      localStorage.setItem('token', data.token);
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
     })
     .catch(function (error) {
       console.log('Request failed', error);
@@ -23,6 +28,7 @@ export const signin = () => {
 
 export const addUser = () => {
   const token = localStorage.getItem('token');
+  console.log(token)
   fetch('http://localhost:3000/users/adduser', {
     method: 'POST',
     headers: {

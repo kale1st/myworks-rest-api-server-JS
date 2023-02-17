@@ -10,14 +10,14 @@
     />
     <!-- own css files -->
     <link rel="stylesheet" href="./styles/index.css" />
+    <link rel="stylesheet" href="./styles/alerts.css" />
   </head>
 
   <body>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-sm-6 col-md-6">
-          <h2>Login Form</h2>
-
+          <h2>Signin Form</h2>
           <div>
             <div class="imgcontainer">
               <img
@@ -26,13 +26,13 @@
                 class="avatar"
               />
             </div>
-
             <div class="container">
-              <label for="uname"><b>Username</b></label>
+              <label for="email"><b>Username</b></label>
               <input
                 type="text"
-                placeholder="Enter Username"
-                name="uname"
+                placeholder="Enter E-mail"
+                name="email"
+                id="email"
                 required
               />
 
@@ -41,6 +41,7 @@
                 type="password"
                 placeholder="Enter Password"
                 name="psw"
+                id="psw"
                 required
               />
 
@@ -75,5 +76,6 @@
       var exports = {};
     </script>
     <script src="./ts-built/requests/users/reqSignin.js"></script>
+    <script src="./ts-built/functions/alerts.js"></script>
   </body>
 </html>

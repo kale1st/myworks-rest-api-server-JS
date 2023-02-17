@@ -1,13 +1,19 @@
 import * as admin from "firebase-admin";
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-const secretkey = "../tools/secretkey"
+import { Request, Response } from 'express';
 
 const addUser = async (req: Request, res: Response) => {
     let email, password, token;
     token = req.headers['authorization']?.split(' ')[1];
-    const tokk = jwt.verify(token, secretkey)
-    console.log((tokk['_tokenResponse']))
+
+    //decoding incomming idToken from Client-site
+    admin.auth().verifyIdToken(token)
+        .then((decodedToken) => {
+            const uid = decodedToken.uid;
+            console.log(decodedToken);
+        })
+        .catch((error) => {
+            console.log('Error verifying ID token:', error);
+        });
 
     const user = await admin.auth().getUserByEmail(email).then(async (userRecord) => {
         console.log('already exists')
