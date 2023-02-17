@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.send = exports.signin = void 0;
+exports.addUser = exports.signin = void 0;
 var signin = function () {
     fetch('http://localhost:3000/signin', {
         method: 'POST',
         headers: {
             "Content-type": "application/json",
-            "authorization": "Bearer tokentokentoken"
         },
         body: JSON.stringify({
             "email": "azizkale@hotmail.com",
@@ -25,14 +24,18 @@ var signin = function () {
     });
 };
 exports.signin = signin;
-var send = function () {
+var addUser = function () {
     var token = localStorage.getItem('token');
-    console.log(token);
-    fetch('http://localhost:3000/adduser', {
-        method: 'GET',
+    fetch('http://localhost:3000/users/adduser', {
+        method: 'POST',
         headers: {
-            "Authorization": "Bearer ".concat(token)
-        }
+            "Content-type": "application/json",
+            "authorization": "Bearer ".concat(token)
+        },
+        body: JSON.stringify({
+            "email": "azizkale@hotmail.com",
+            "password": "123456"
+        })
     })
         .then(function (response) {
         console.log(response);
@@ -41,4 +44,4 @@ var send = function () {
         console.log('Request failed', error);
     });
 };
-exports.send = send;
+exports.addUser = addUser;

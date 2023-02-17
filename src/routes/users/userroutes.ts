@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.use(bodyParser.json());
 router.post('/signin', signin.signin);
-router.post('/users/create', usercontroller.createUser);
+router.post('/users/adduser', usercontroller.addUser);
 
 export default router

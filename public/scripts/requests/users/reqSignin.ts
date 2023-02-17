@@ -3,7 +3,6 @@ export const signin = () => {
     method: 'POST',
     headers: {
       "Content-type": "application/json",
-      "authorization": `Bearer tokentokentoken`
     },
     body: JSON.stringify({
       "email": "azizkale@hotmail.com",
@@ -22,14 +21,18 @@ export const signin = () => {
     });
 }
 
-export const send = () => {
+export const addUser = () => {
   const token = localStorage.getItem('token');
-  console.log(token)
-  fetch('http://localhost:3000/adduser', {
-    method: 'GET',
+  fetch('http://localhost:3000/users/adduser', {
+    method: 'POST',
     headers: {
-      "Authorization": `Bearer ${token}`
-    }
+      "Content-type": "application/json",
+      "authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      "email": "azizkale@hotmail.com",
+      "password": "123456"
+    })
   })
     .then(function (response) {
       console.log(response)
