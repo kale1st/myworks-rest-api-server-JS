@@ -1,8 +1,6 @@
 import express, { Express } from 'express';
 const app = express();
-import morgan from 'morgan';
 import { checkUser } from "./src/functions/checkUser";
-import { createUser } from "./src/CRUD/addNewUser";
 import { addRole } from "./src/functions/addRole";
 import routes from './src/routes/users/userroutes';
 
@@ -30,7 +28,7 @@ var options = {
   dotfiles: "ignore",
   etag: false,
   extensions: ["htm", "html", "css", "js", "ico", "jpg", "jpeg", "png", "svg"],
-  index: ["index.html"],
+  index: ["signin.html"],
   maxAge: "1m",
   redirect: false,
 };
@@ -61,16 +59,13 @@ app.get("/checkuser", (req, res) => {
 });
 
 app.get("/adduser", (req, res) => {
-  createUser("azizkale@hotmail.com", "123456");
+
+  // createUser("azizkale@hotmail.com", "123456");
 });
 
 app.get("/addrole", (req, res) => {
   addRole("azizkale@hotmail.com", 'admin');
 });
-
-// app.post("/signin", [authenticate, authorize], (req, res) => {
-//   signin('azizkale@hotmail.com', '123456')
-// })
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

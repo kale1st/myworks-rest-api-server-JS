@@ -15,6 +15,24 @@ export const signin = () => {
     })
     .then(function (data) {
       console.log('Request succeeded with JSON response', data);
+      localStorage.setItem('token', data.token);
+    })
+    .catch(function (error) {
+      console.log('Request failed', error);
+    });
+}
+
+export const send = () => {
+  const token = localStorage.getItem('token');
+  console.log(token)
+  fetch('http://localhost:3000/adduser', {
+    method: 'GET',
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+    .then(function (response) {
+      console.log(response)
     })
     .catch(function (error) {
       console.log('Request failed', error);
