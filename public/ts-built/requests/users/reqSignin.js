@@ -61,13 +61,14 @@ var signin = function () { return __awaiter(void 0, void 0, void 0, function () 
                         return response.json();
                     })
                         .then(function (data) {
-                        console.log('Request succeeded with JSON response', data);
                         if (data.token) {
                             localStorage.setItem('token', data.token);
                         }
+                        else
+                            document.getElementById('id_alert_signin').style.display = 'block';
                     })
                         .catch(function (error) {
-                        console.log('Request failed', error);
+                        document.getElementById('id_alert_signin').style.display = 'block';
                     })];
             case 3:
                 _a.sent();
