@@ -19,8 +19,7 @@ export const signin = async () => {
       if (data.token) {
         await localStorage.setItem('token', data.token);
         // window.location.href = "views/accountpage.html";
-        // window.location.replace('views/accountpage.html');
-        await location.assign("views/accountpage.html");
+        window.location.replace('views/accountpage.html');
       }
       else
         document.getElementById('id_alert_signin').style.display = 'block';

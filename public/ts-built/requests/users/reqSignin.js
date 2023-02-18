@@ -69,22 +69,17 @@ var signin = function () { return __awaiter(void 0, void 0, void 0, function () 
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
-                                    if (!data.token) return [3 /*break*/, 3];
+                                    if (!data.token) return [3 /*break*/, 2];
                                     return [4 /*yield*/, localStorage.setItem('token', data.token)];
                                 case 1:
                                     _a.sent();
                                     // window.location.href = "views/accountpage.html";
-                                    // window.location.replace('views/accountpage.html');
-                                    return [4 /*yield*/, location.assign("views/accountpage.html")];
+                                    window.location.replace('views/accountpage.html');
+                                    return [3 /*break*/, 3];
                                 case 2:
-                                    // window.location.href = "views/accountpage.html";
-                                    // window.location.replace('views/accountpage.html');
-                                    _a.sent();
-                                    return [3 /*break*/, 4];
-                                case 3:
                                     document.getElementById('id_alert_signin').style.display = 'block';
-                                    _a.label = 4;
-                                case 4: return [2 /*return*/];
+                                    _a.label = 3;
+                                case 3: return [2 /*return*/];
                             }
                         });
                     }); })
