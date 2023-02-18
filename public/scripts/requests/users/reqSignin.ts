@@ -12,12 +12,15 @@ export const signin = async () => {
       "password": password.value
     })
   })
-    .then(function (response) {
-      return response.json();
+    .then(async (response) => {
+      return await response.json();
     })
-    .then(function (data) {
+    .then(async (data) => {
       if (data.token) {
-        localStorage.setItem('token', data.token);
+        await localStorage.setItem('token', data.token);
+        // window.location.href = "views/accountpage.html";
+        // window.location.replace('views/accountpage.html');
+        await location.assign("views/accountpage.html");
       }
       else
         document.getElementById('id_alert_signin').style.display = 'block';

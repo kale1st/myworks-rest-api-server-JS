@@ -57,16 +57,37 @@ var signin = function () { return __awaiter(void 0, void 0, void 0, function () 
                             "password": password.value
                         })
                     })
-                        .then(function (response) {
-                        return response.json();
-                    })
-                        .then(function (data) {
-                        if (data.token) {
-                            localStorage.setItem('token', data.token);
-                        }
-                        else
-                            document.getElementById('id_alert_signin').style.display = 'block';
-                    })
+                        .then(function (response) { return __awaiter(void 0, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, response.json()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        });
+                    }); })
+                        .then(function (data) { return __awaiter(void 0, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!data.token) return [3 /*break*/, 3];
+                                    return [4 /*yield*/, localStorage.setItem('token', data.token)];
+                                case 1:
+                                    _a.sent();
+                                    // window.location.href = "views/accountpage.html";
+                                    // window.location.replace('views/accountpage.html');
+                                    return [4 /*yield*/, location.assign("views/accountpage.html")];
+                                case 2:
+                                    // window.location.href = "views/accountpage.html";
+                                    // window.location.replace('views/accountpage.html');
+                                    _a.sent();
+                                    return [3 /*break*/, 4];
+                                case 3:
+                                    document.getElementById('id_alert_signin').style.display = 'block';
+                                    _a.label = 4;
+                                case 4: return [2 /*return*/];
+                            }
+                        });
+                    }); })
                         .catch(function (error) {
                         document.getElementById('id_alert_signin').style.display = 'block';
                     })];

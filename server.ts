@@ -28,11 +28,11 @@ var options = {
   dotfiles: "ignore",
   etag: false,
   extensions: ["htm", "html", "css", "js", "ico", "jpg", "jpeg", "png", "svg"],
-  index: ["signin.html"],
+  index: ["views/signin.html"],
   maxAge: "1m",
   redirect: false,
 };
-app.use('/site', express.static("public", options));
+app.use('/', express.static("public", options));
 
 /** Routes */
 app.use('/', routes);
