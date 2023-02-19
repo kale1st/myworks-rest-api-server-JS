@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addUser = exports.signin = void 0;
+exports.signin = void 0;
 var signin = function () { return __awaiter(void 0, void 0, void 0, function () {
     var email, password;
     return __generator(this, function (_a) {
@@ -94,25 +94,3 @@ var signin = function () { return __awaiter(void 0, void 0, void 0, function () 
     });
 }); };
 exports.signin = signin;
-var addUser = function () {
-    var token = localStorage.getItem('token');
-    console.log(token);
-    fetch('http://localhost:3000/users/adduser', {
-        method: 'POST',
-        headers: {
-            "Content-type": "application/json",
-            "authorization": "Bearer ".concat(token)
-        },
-        body: JSON.stringify({
-            "email": "azizkale@hotmail.com",
-            "password": "123456"
-        })
-    })
-        .then(function (response) {
-        console.log(response);
-    })
-        .catch(function (error) {
-        console.log('Request failed', error);
-    });
-};
-exports.addUser = addUser;

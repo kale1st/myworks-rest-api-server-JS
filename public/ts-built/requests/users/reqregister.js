@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -60,37 +37,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUser = void 0;
-var admin = __importStar(require("firebase-admin"));
-var createUser = function (email, password) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+var createUser = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var email, password;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, admin.auth().getUserByEmail(email).then(function (userRecord) { return __awaiter(void 0, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        console.log('already exists');
-                        return [2 /*return*/];
-                    });
-                }); }).catch(function (error) { return __awaiter(void 0, void 0, void 0, function () {
-                    var uid;
+            case 0: return [4 /*yield*/, document.getElementById('email')];
+            case 1:
+                email = _a.sent();
+                return [4 /*yield*/, document.getElementById('psw')];
+            case 2:
+                password = _a.sent();
+                fetch('http://localhost:3000/users/createuser', {
+                    method: 'POST',
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "email": email.value,
+                        "password": password.value
+                    })
+                })
+                    .then(function (response) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, admin.auth().createUser({
-                                    displayName: email,
-                                    password: password,
-                                    email: email,
-                                })];
-                            case 1:
-                                uid = (_a.sent()).uid;
-                                return [4 /*yield*/, admin.auth().setCustomUserClaims(uid, { roles: new Array() })];
-                            case 2:
-                                _a.sent();
-                                console.log(error.message);
-                                return [2 /*return*/];
+                            case 0: return [4 /*yield*/, response.json()];
+                            case 1: return [2 /*return*/, _a.sent()];
                         }
                     });
-                }); })];
-            case 1:
-                user = _a.sent();
+                }); })
+                    .then(function (data) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        console.log(data);
+                        return [2 /*return*/];
+                    });
+                }); })
+                    .catch(function (error) {
+                    document.getElementById('id_alert_signin').innerHTML = 'oops! connection problem?';
+                    document.getElementById('id_alert_signin').style.display = 'block';
+                });
                 return [2 /*return*/];
         }
     });

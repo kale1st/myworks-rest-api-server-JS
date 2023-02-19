@@ -32,25 +32,3 @@ export const signin = async () => {
 
     });
 }
-
-export const addUser = () => {
-  const token = localStorage.getItem('token');
-  console.log(token)
-  fetch('http://localhost:3000/users/adduser', {
-    method: 'POST',
-    headers: {
-      "Content-type": "application/json",
-      "authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify({
-      "email": "azizkale@hotmail.com",
-      "password": "123456"
-    })
-  })
-    .then(function (response) {
-      console.log(response)
-    })
-    .catch(function (error) {
-      console.log('Request failed', error);
-    });
-}
