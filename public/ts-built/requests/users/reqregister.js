@@ -67,8 +67,21 @@ var createUser = function () { return __awaiter(void 0, void 0, void 0, function
                 }); })
                     .then(function (data) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        console.log(data);
-                        return [2 /*return*/];
+                        switch (_a.label) {
+                            case 0:
+                                console.log(data);
+                                if (!data.token) return [3 /*break*/, 2];
+                                return [4 /*yield*/, localStorage.setItem('token', data.token)];
+                            case 1:
+                                _a.sent();
+                                window.location.replace('views/accountpage.html');
+                                return [3 /*break*/, 3];
+                            case 2:
+                                document.getElementById('id_alert_signin').innerHTML = 'email or password incorrect';
+                                document.getElementById('id_alert_signin').style.display = 'block';
+                                _a.label = 3;
+                            case 3: return [2 /*return*/];
+                        }
                     });
                 }); })
                     .catch(function (error) {

@@ -2,7 +2,6 @@ export const createUser = async () => {
     const email = await document.getElementById('email') as HTMLInputElement;
     const password = await document.getElementById('psw') as HTMLInputElement;
 
-
     fetch('http://localhost:3000/users/createuser', {
         method: 'POST',
         headers: {
@@ -18,19 +17,18 @@ export const createUser = async () => {
         })
         .then(async (data) => {
             console.log(data)
-            // if (data.token) {
-            //     await localStorage.setItem('token', data.token);
-            //     window.location.replace('views/accountpage.html');
-            // }
-            // else {
-            //     document.getElementById('id_alert_signin').innerHTML = 'email or password incorrect';
-            //     document.getElementById('id_alert_signin').style.display = 'block';
+            if (data.token) {
+                await localStorage.setItem('token', data.token);
+                window.location.replace('views/accountpage.html');
+            }
+            else {
+                document.getElementById('id_alert_signin').innerHTML = 'email or password incorrect';
+                document.getElementById('id_alert_signin').style.display = 'block';
 
-            // }
+            }
         })
         .catch(function (error) {
             document.getElementById('id_alert_signin').innerHTML = 'oops! connection problem?';
             document.getElementById('id_alert_signin').style.display = 'block';
-
         });
 }

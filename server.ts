@@ -55,7 +55,7 @@ app.use('/', routes);
 const port = process.env.PORT || 3000;
 
 app.get("/checkuser", (req, res) => {
-  checkUser("azizkale@hotmail.com");
+  checkUser("aqqzizkale@hotmail.com");
 });
 
 app.get("/adduser", (req, res) => {
