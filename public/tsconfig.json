@@ -2,7 +2,10 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES5",
+    "outDir": "ts-built",
+    "rootDir": "scripts",
     "resolveJsonModule": true,
     "esModuleInterop": true
-  }
+  },
+  "include": ["scripts/requests/**/*", "scripts/alerts/**/*"]
 }

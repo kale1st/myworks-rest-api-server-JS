@@ -21,10 +21,14 @@ export const signin = async () => {
         // window.location.href = "views/accountpage.html";
         window.location.replace('views/accountpage.html');
       }
-      else
+      else {
+        document.getElementById('id_alert_signin').innerHTML = 'email or password incorrect';
         document.getElementById('id_alert_signin').style.display = 'block';
+
+      }
     })
     .catch(function (error) {
+      document.getElementById('id_alert_signin').innerHTML = 'oops! connection problem?';
       document.getElementById('id_alert_signin').style.display = 'block';
 
     });

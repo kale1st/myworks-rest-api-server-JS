@@ -77,6 +77,7 @@ var signin = function () { return __awaiter(void 0, void 0, void 0, function () 
                                     window.location.replace('views/accountpage.html');
                                     return [3 /*break*/, 3];
                                 case 2:
+                                    document.getElementById('id_alert_signin').innerHTML = 'email or password incorrect';
                                     document.getElementById('id_alert_signin').style.display = 'block';
                                     _a.label = 3;
                                 case 3: return [2 /*return*/];
@@ -84,6 +85,7 @@ var signin = function () { return __awaiter(void 0, void 0, void 0, function () 
                         });
                     }); })
                         .catch(function (error) {
+                        document.getElementById('id_alert_signin').innerHTML = 'oops! connection problem?';
                         document.getElementById('id_alert_signin').style.display = 'block';
                     })];
             case 3:
