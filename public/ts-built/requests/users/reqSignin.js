@@ -73,7 +73,6 @@ var signin = function () { return __awaiter(void 0, void 0, void 0, function () 
                                     return [4 /*yield*/, localStorage.setItem('token', data.token)];
                                 case 1:
                                     _a.sent();
-                                    // window.location.href = "views/accountpage.html";
                                     window.location.replace('views/accountpage.html');
                                     return [3 /*break*/, 3];
                                 case 2:
