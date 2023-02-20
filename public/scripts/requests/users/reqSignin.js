@@ -1,4 +1,4 @@
-const signin = async(email = '', password = '') => {
+const signin = async(email = '', password = '', path = 'views/accountpage.html') => {
     email = await document.getElementById('email');
     password = await document.getElementById('psw');
 
@@ -21,8 +21,8 @@ const signin = async(email = '', password = '') => {
                     const status = response.status;
                     // 
                     await localStorage.setItem('token', token);
-                    console.log(reqJSONData.url)
-                    await window.location.href('/views/accountpage.html');
+
+                    await window.location.replace(path);
                 });
             } else if (response.status === 404) {
                 // If the response status is not 200 OK, throw an error
