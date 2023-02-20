@@ -1,11 +1,10 @@
 {
-  "name": "express-hello-world",
+  "name": "young-developers",
   "version": "1.0.0",
   "description": "",
   "main": "server.ts",
+  "author": "azizkale",
   "scripts": {
-    "serve": "nodemon --watch . server.js",
-    "build": "tsc *.ts",
     "dev": "nodemon server.ts",
     "start": "nodemon server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"

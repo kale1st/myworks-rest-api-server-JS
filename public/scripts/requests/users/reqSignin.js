@@ -28,7 +28,6 @@ const signin = async(email = '', password = '', path = 'views/accountpage.html')
                 // If the response status is not 200 OK, throw an error
                 document.getElementById('id_alert_signin').innerHTML = "email or password incorrect";
                 document.getElementById('id_alert_signin').style.display = 'block';
-                // throw new Error('Invalid credentials');
             }
         })
         .catch(function(error) {

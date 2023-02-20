@@ -1,5 +1,6 @@
+const mainUrl = "http://localhost:3000"
+    // const mainUrl = "http://192.168.0.17:3000"
 const reqJSONData = {
-    url: "http://localhost:3000",
-    req_signin: "http://localhost:3000/signin",
-    req_register: 'http://localhost:3000/users/createuser'
+    req_signin: mainUrl + "/signin",
+    req_register: mainUrl + '/users/createuser'
 }
