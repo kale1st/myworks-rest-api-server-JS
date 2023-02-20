@@ -29,7 +29,7 @@ const signin = async (req: Request, res: Response) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            return res.status(400).send({ errors: ['Invalid e-mail or password'] });
+            return res.status(404).send({ errors: ['Invalid e-mail or password'] });
 
         });
 }
