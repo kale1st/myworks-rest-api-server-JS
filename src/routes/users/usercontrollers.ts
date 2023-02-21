@@ -33,7 +33,6 @@ const createUser = async (req: Request, res: Response) => {
                             error: error.message
                         });
                     });
-
             });
     })
 };

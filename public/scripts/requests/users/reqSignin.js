@@ -13,7 +13,6 @@ const signin = async(email = '', password = '', path = 'views/accountpage.html')
             })
         })
         .then(async(response) => {
-            console.log(response)
             if (response.status === 200) {
                 // If the response status is 200 OK, extract the token from the response
                 return response.json().then(async data => {
