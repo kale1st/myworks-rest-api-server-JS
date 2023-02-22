@@ -1,10 +1,19 @@
 import express, { Express } from 'express';
+import cors from 'cors';
 const app = express();
 import { checkUser } from "./src/functions/checkUser";
 import { addRole } from "./src/functions/addRole";
 import routes from './src/routes/users/userroutes';
 
 
+// app.use(cors());
+// const cors = require('cors');
+const corsOptions = {
+  origin: 'http://localhost:4200',
+  credentials: true,            //access-control-allow-credentials:true
+  optionSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 // app.use(morgan('dev'));
 
 /** RULES OF API */
@@ -38,20 +47,20 @@ app.use('/', express.static("public", options));
 app.use('/', routes);
 // #############################################################################
 // Catch all handler for all other request.
-// app.use("*", (req, res) => {
-//   res
-//     .json({
-//       at: new Date().toISOString(),
-//       method: req.method,
-//       hostname: req.hostname,
-//       ip: req.ip,
-//       query: req.query,
-//       headers: req.headers,
-//       cookies: req.cookies,
-//       params: req.params,
-//     })
-//     .end();
-// });
+app.use("*", (req, res) => {
+  res
+    .json({
+      at: new Date().toISOString(),
+      method: req.method,
+      hostname: req.hostname,
+      ip: req.ip,
+      query: req.query,
+      headers: req.headers,
+      cookies: req.cookies,
+      params: req.params,
+    })
+    .end();
+});
 const port = process.env.PORT || 3000;
 
 app.get("/checkuser", (req, res) => {

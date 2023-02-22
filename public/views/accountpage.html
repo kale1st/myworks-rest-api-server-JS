@@ -1,93 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <title>W3.CSS Template</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Roboto"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <!-- owns -->
     <link rel="stylesheet" href="../styles/w3.css" />
     <link rel="stylesheet" href="../styles/accountpage.css" />
     <style></style>
-  </head>
+</head>
 
-  <body class="w3-light-grey">
+<body class="w3-light-grey">
     <!-- Navbar -->
     <div class="w3-top">
-      <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
-        <a
-          class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1"
-          href="javascript:void(0)"
-          onclick="w3_open()"
-          ><i class="fa fa-bars"></i
+        <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+            <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i
         ></a>
-        <!-- <a href="#" class="w3-bar-item w3-button w3-theme-l1">Logo</a>
+            <!-- <a href="#" class="w3-bar-item w3-button w3-theme-l1">Logo</a>
         <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white"
           >About</a>
          -->
-      </div>
+        </div>
     </div>
 
     <!-- Sidebar -->
-    <nav
-      class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left"
-      id="mySidebar"
-    >
-      <a
-        href="javascript:void(0)"
-        onclick="w3_close()"
-        class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large"
-        title="Close Menu"
-      >
-        <i class="fa fa-remove"></i>
-      </a>
-      <h4 class="w3-bar-item"><b>Menu</b></h4>
-      <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-      <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-      <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-      <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
+    <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+        <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+            <i class="fa fa-remove"></i>
+        </a>
+        <h4 class="w3-bar-item"><b>Menu</b></h4>
+        <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
+        <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
+        <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
+        <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
     </nav>
 
     <!-- Overlay effect when opening sidebar on small screens -->
-    <div
-      class="w3-overlay w3-hide-large"
-      onclick="w3_close()"
-      style="cursor: pointer"
-      title="close side menu"
-      id="myOverlay"
-    ></div>
+    <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor: pointer" title="close side menu" id="myOverlay"></div>
 
     <!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
     <div class="w3-main" style="margin-left: 250px">
-      <div class="w3-row w3-padding-16">
-        <!-- Page Container -->
-        <div class="w3-content w3-margin-top">
-          <!-- The Grid -->
-          <div class="w3-row-padding">
-            <!-- Left Column -->
-            <div id="profile-left-col" class="w3-third">
-              <div class="w3-white w3-text-grey w3-card-4">
-                <div class="w3-display-container">
-                  <img
-                    src="https://www.w3schools.com/w3css/img_avatar3.png"
-                    style="width: 100%"
-                    alt="Avatar"
-                  />
-                </div>
-                <div class="w3-container">
-                  <h3 id="profile-uname">username</h3>
-                  <hr />
-                  <p class="w3-large">
-                    <b
-                      ><i
+        <div class="w3-row w3-padding-16">
+            <!-- Page Container -->
+            <div class="w3-content w3-margin-top">
+                <!-- The Grid -->
+                <div class="w3-row-padding">
+                    <!-- Left Column -->
+                    <div id="profile-left-col" class="w3-third">
+                        <div class="w3-white w3-text-grey w3-card-4">
+                            <div class="w3-display-container">
+                                <img src="https://www.w3schools.com/w3css/img_avatar3.png" style="width: 100%" alt="Avatar" />
+                            </div>
+                            <div class="w3-container">
+                                <h3 id="profile-uname">username</h3>
+                                <hr />
+                                <p class="w3-large">
+                                    <b><i
                         class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"
                       ></i
                       >Badges</b
@@ -99,77 +71,9 @@
                       ><i
                         class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"
                       ></i
-                      >Works</b
+                      >Books</b
                     >
                   </p>
-                  <p>Adobe Photoshop</p>
-                  <div class="w3-light-grey w3-round-xlarge w3-small">
-                    <div
-                      class="w3-container w3-center w3-round-xlarge w3-teal"
-                      style="width: 90%"
-                    >
-                      90%
-                    </div>
-                  </div>
-                  <p>Photography</p>
-                  <div class="w3-light-grey w3-round-xlarge w3-small">
-                    <div
-                      class="w3-container w3-center w3-round-xlarge w3-teal"
-                      style="width: 80%"
-                    >
-                      <div class="w3-center w3-text-white">80%</div>
-                    </div>
-                  </div>
-                  <p>Illustrator</p>
-                  <div class="w3-light-grey w3-round-xlarge w3-small">
-                    <div
-                      class="w3-container w3-center w3-round-xlarge w3-teal"
-                      style="width: 75%"
-                    >
-                      75%
-                    </div>
-                  </div>
-                  <p>Media</p>
-                  <div class="w3-light-grey w3-round-xlarge w3-small">
-                    <div
-                      class="w3-container w3-center w3-round-xlarge w3-teal"
-                      style="width: 50%"
-                    >
-                      50%
-                    </div>
-                  </div>
-                  <br />
-
-                  <p class="w3-large w3-text-theme">
-                    <b
-                      ><i
-                        class="fa fa-globe fa-fw w3-margin-right w3-text-teal"
-                      ></i
-                      >Languages</b
-                    >
-                  </p>
-                  <p>English</p>
-                  <div class="w3-light-grey w3-round-xlarge">
-                    <div
-                      class="w3-round-xlarge w3-teal"
-                      style="height: 24px; width: 100%"
-                    ></div>
-                  </div>
-                  <p>Spanish</p>
-                  <div class="w3-light-grey w3-round-xlarge">
-                    <div
-                      class="w3-round-xlarge w3-teal"
-                      style="height: 24px; width: 55%"
-                    ></div>
-                  </div>
-                  <p>German</p>
-                  <div class="w3-light-grey w3-round-xlarge">
-                    <div
-                      class="w3-round-xlarge w3-teal"
-                      style="height: 24px; width: 25%"
-                    ></div>
-                  </div>
-                  <br />
                 </div>
               </div>
 
@@ -185,145 +89,129 @@
                   <i
                     class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"
                   ></i
-                  >Work Experience
+                  >My Books
                 </h2>
+                <button onclick="document.getElementById('id-add_book').style.display='block'" class="w3-button w3-green w3-large" style="float: right;">Add New Book</button>
                 <div class="w3-container">
-                  <h5 class="w3-opacity">
-                    <b>Front End Developer / w3schools.com</b>
-                  </h5>
-                  <h6 class="w3-text-teal">
-                    <i class="fa fa-calendar fa-fw w3-margin-right"></i>Jan 2015
-                    -
-                    <span class="w3-tag w3-teal w3-round">Current</span>
-                  </h6>
-                  <p>
-                    Lorem ipsum dolor sit amet. Praesentium magnam consectetur
-                    vel in deserunt aspernatur est reprehenderit sunt hic. Nulla
-                    tempora soluta ea et odio, unde doloremque repellendus iure,
-                    iste.
-                  </p>
-                  <hr />
-                </div>
-                <div class="w3-container">
-                  <h5 class="w3-opacity">
-                    <b>Web Developer / something.com</b>
-                  </h5>
-                  <h6 class="w3-text-teal">
-                    <i class="fa fa-calendar fa-fw w3-margin-right"></i>Mar 2012
-                    - Dec 2014
-                  </h6>
-                  <p>
-                    Consectetur adipisicing elit. Praesentium magnam consectetur
-                    vel in deserunt aspernatur est reprehenderit sunt hic. Nulla
-                    tempora soluta ea et odio, unde doloremque repellendus iure,
-                    iste.
-                  </p>
-                  <hr />
-                </div>
-                <div class="w3-container">
-                  <h5 class="w3-opacity">
-                    <b>Graphic Designer / designsomething.com</b>
-                  </h5>
-                  <h6 class="w3-text-teal">
-                    <i class="fa fa-calendar fa-fw w3-margin-right"></i>Jun 2010
-                    - Mar 2012
-                  </h6>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  </p>
-                  <br />
-                </div>
-              </div>
+                  <h5 class="w3-opacity">                  
+                    <b>Book-1</b>
+                                    </h5>
+                                    <h6 class="w3-text-teal">
+                                        <i class="fa fa-calendar fa-fw w3-margin-right"></i>Jan 2015 -
+                                        <span class="w3-tag w3-teal w3-round">Current</span>
+                                    </h6>
+                                    <p>
+                                        Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure, iste.
+                                    </p>
+                                    <hr />
+                            </div>
+                            <div class="w3-container">
+                                <h5 class="w3-opacity">
+                                    <b>Web Developer / something.com</b>
+                                </h5>
+                                <h6 class="w3-text-teal">
+                                    <i class="fa fa-calendar fa-fw w3-margin-right"></i>Mar 2012 - Dec 2014
+                                </h6>
+                                <p>
+                                    Consectetur adipisicing elit. Praesentium magnam consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure, iste.
+                                </p>
+                                <hr />
+                            </div>
+                            <div class="w3-container">
+                                <h5 class="w3-opacity">
+                                    <b>Graphic Designer / designsomething.com</b>
+                                </h5>
+                                <h6 class="w3-text-teal">
+                                    <i class="fa fa-calendar fa-fw w3-margin-right"></i>Jun 2010 - Mar 2012
+                                </h6>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                </p>
+                                <br />
+                            </div>
+                        </div>
 
-              <div class="w3-container w3-card w3-white">
-                <h2 class="w3-text-grey w3-padding-16">
-                  <i
-                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"
-                  ></i
-                  >Education
-                </h2>
-                <div class="w3-container">
-                  <h5 class="w3-opacity"><b>W3Schools.com</b></h5>
-                  <h6 class="w3-text-teal">
-                    <i class="fa fa-calendar fa-fw w3-margin-right"></i>Forever
-                  </h6>
-                  <p>Web Development! All I need to know in one place</p>
-                  <hr />
-                </div>
-                <div class="w3-container">
-                  <h5 class="w3-opacity"><b>London Business School</b></h5>
-                  <h6 class="w3-text-teal">
-                    <i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 -
-                    2015
-                  </h6>
-                  <p>Master Degree</p>
-                  <hr />
-                </div>
-                <div class="w3-container">
-                  <h5 class="w3-opacity"><b>School of Coding</b></h5>
-                  <h6 class="w3-text-teal">
-                    <i class="fa fa-calendar fa-fw w3-margin-right"></i>2010 -
-                    2013
-                  </h6>
-                  <p>Bachelor Degree</p>
-                  <br />
-                </div>
-              </div>
+                        <!-- End Right Column -->
+                    </div>
 
-              <!-- End Right Column -->
+                    <!-- End Grid -->
+                </div>
+
+                <!-- End Page Container -->
+            </div>
+        </div>
+
+        <footer id="myFooter">
+            <div class="w3-container w3-theme-l2 w3-padding-32">
+                <h4>Footer</h4>
             </div>
 
-            <!-- End Grid -->
-          </div>
-
-          <!-- End Page Container -->
-        </div>
-      </div>
-
-      <footer id="myFooter">
-        <div class="w3-container w3-theme-l2 w3-padding-32">
-          <h4>Footer</h4>
-        </div>
-
-        <div class="w3-container w3-theme-l1">
-          <p>
-            Powered by
-            <a
-              href="https://www.w3schools.com/w3css/default.asp"
-              target="_blank"
-              >w3.css</a
+            <div class="w3-container w3-theme-l1">
+                <p>
+                    Powered by
+                    <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a
             >
           </p>
         </div>
       </footer>
 
       <!-- END MAIN -->
+    </div>   
     </div>
+     <!-- Add New Book(MODAL) -->
+     <div id="id-add_book" class="w3-modal">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+    
+        <div class="w3-center"><br>
+          <span onclick="document.getElementById('id-add_book').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
+          <img src="img_avatar4.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+        </div>
+  
+        <form class="w3-container">
+          <div class="w3-section">
+            <label><b>Book Bame</b></label>
+            <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter book name" name="bookname" required>
+            <label><b>Number Of Pages</b></label>
+            <input class="w3-input w3-border" type="text" placeholder="Enter Number Of Pages" name="nummberofpages" required>
+            <label><b>Author</b></label>
+            <input class="w3-input w3-border" type="text" placeholder="Enter Author Name (optional)" name="authorname">
+            <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Add</button>          
+          </div>
+        </form>
+  
+        <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+          <button onclick="document.getElementById('id-add_book').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+        
+            </div>
 
+    </div>
+    </div>
+    <!-- Add New Book=========================== -->
     <script>
-      // Get the Sidebar
-      var mySidebar = document.getElementById("mySidebar");
+        // Get the Sidebar
+        var mySidebar = document.getElementById("mySidebar");
 
-      // Get the DIV with overlay effect
-      var overlayBg = document.getElementById("myOverlay");
+        // Get the DIV with overlay effect
+        var overlayBg = document.getElementById("myOverlay");
 
-      // Toggle between showing and hiding the sidebar, and add overlay effect
-      function w3_open() {
-        if (mySidebar.style.display === "block") {
-          mySidebar.style.display = "none";
-          overlayBg.style.display = "none";
-        } else {
-          mySidebar.style.display = "block";
-          overlayBg.style.display = "block";
+        // Toggle between showing and hiding the sidebar, and add overlay effect
+        function w3_open() {
+            if (mySidebar.style.display === "block") {
+                mySidebar.style.display = "none";
+                overlayBg.style.display = "none";
+            } else {
+                mySidebar.style.display = "block";
+                overlayBg.style.display = "block";
+            }
         }
-      }
 
-      // Close the sidebar with the close button
-      function w3_close() {
-        mySidebar.style.display = "none";
-        overlayBg.style.display = "none";
-      }
+        // Close the sidebar with the close button
+        function w3_close() {
+            mySidebar.style.display = "none";
+            overlayBg.style.display = "none";
+        }
     </script>
     <!-- my scripts -->
-  </body>
+</body>
+
 </html>
