@@ -3,7 +3,8 @@ import cors from 'cors';
 const app = express();
 import { checkUser } from "./src/functions/checkUser";
 import { addRole } from "./src/functions/addRole";
-import routes from './src/routes/users/userroutes';
+import userroutes from './src/routes/users/userroutes';
+import bookroutes from './src/routes/works/Book/bookroutes';
 
 
 // app.use(cors());
@@ -44,7 +45,8 @@ var options = {
 app.use('/', express.static("public", options));
 
 /** Routes */
-app.use('/', routes);
+app.use('/', userroutes);
+app.use('/', bookroutes);
 // #############################################################################
 // Catch all handler for all other request.
 app.use("*", (req, res) => {
