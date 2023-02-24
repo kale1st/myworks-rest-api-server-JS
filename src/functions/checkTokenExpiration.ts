@@ -7,19 +7,15 @@ const tokenControl = async (req: Request, res: Response, next: NextFunction) => 
     admin.auth()
         .verifyIdToken(idToken, checkRevoked)
         .then((payload) => {
-            // Token is valid.
-
+            // Token is valid.           
             next();
-            return true
         })
         .catch((error) => {
-            console.log('#tooken eski')
             if (error.code == 'auth/id-token-revoked') {
                 // Token has been revoked. Inform the user to reauthenticate or signOut() the user.
             } else {
                 // Token is invalid.
             }
-            return false
         });
 }
 

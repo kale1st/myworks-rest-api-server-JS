@@ -1,9 +1,6 @@
 import * as admin from "firebase-admin";
-// import { getAuth } from "firebase/auth";
 import { Request, Response } from 'express';
-import { firebaseApp } from "../../tools/firebaseTools";
 
-// const auth = getAuth(firebaseApp);
 const createUser = async (req: Request, res: Response) => {
     const { email, password } = await req.body;
 
