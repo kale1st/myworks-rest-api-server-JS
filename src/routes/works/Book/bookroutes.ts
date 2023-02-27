@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.use(bodyParser.json());
 router.post('/book/createbook', tokenControl, bookcontroller.createBook);
+router.get('/book/retrieve', tokenControl, bookcontroller.retrieve);
 
 export default router

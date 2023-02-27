@@ -10,7 +10,7 @@ import bookroutes from './src/routes/works/Book/bookroutes';
 // app.use(cors());
 // const cors = require('cors');
 const corsOptions = {
-  origin: 'http://localhost:4200',
+  origin: ['http://localhost:4200', 'http://192.168.0.17:4200'],
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200
 }
