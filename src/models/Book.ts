@@ -1,6 +1,7 @@
 import { BookType } from "./BookTypes";
 
 export class Book {
+    bookId: any;
     name: string;
     totalPage: number;
     readPage: number;

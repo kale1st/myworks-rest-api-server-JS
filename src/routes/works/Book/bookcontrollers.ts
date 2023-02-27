@@ -2,7 +2,6 @@ import * as admin from "firebase-admin";
 import { getDatabase, ref, set } from "firebase/database";
 import { Request, Response } from 'express';
 import { Book } from "../../../models/Book";
-const applicationDefault = require("../tools/applicationDefault.json");
 
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 const db = getDatabase();
@@ -23,7 +22,7 @@ const createBook = async (req: Request, res: Response) => {
     })
 };
 
-const retrieve = async (req: Request, res: Response) => {
+const retrieveAllBooks = async (req: Request, res: Response) => {
     const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
         // Get a reference to the desired node in the database
@@ -43,35 +42,20 @@ const retrieve = async (req: Request, res: Response) => {
 }
 
 const deleteBook = async (req: Request, res: Response) => {
-    const bookId: Book = req.body.bookId;
+    const bookId = req.body.bookId;
     const token = req.body.token;
-
     await admin.auth().verifyIdToken(token).then(async (response) => {
-        const deleteData = async (ref, path) => {
-            const dataRef = ref.child(path);
-            return dataRef.remove()
-                .then(() => {
-                    res.send(`Data deleted at ${path}`)
-                    console.log(`Data deleted at ${path}`);
-                })
-                .catch((error) => {
-                    console.error(`Error deleting data at ${path}:`, error);
-                });
-        }
-        admin.initializeApp({
-            credential: admin.credential.cert(applicationDefault),
-            databaseURL: process.env.DATABASE_URL
-        });
-        const db = admin.database().ref('users');
-        deleteData(db, response.uid + '/works/books/' + bookId);
+
+        const ref = await admin.database().ref('users/' + response.uid + '/works/books/');
+
+        await ref.child(bookId).remove();
+
+        return await res.send(
+            { info: 'the book at' + bookId + 'id!' }
+        );
     }).catch((err) => {
         console.log(err)
     })
-
-
-
-
-
 }
 
-export default { createBook, retrieve, deleteBook };
+export default { createBook, retrieveAllBooks, deleteBook };
