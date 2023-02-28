@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, child, push, update } from "firebase/database";
 import { Request, Response } from 'express';
 import { Book } from "../../../models/Book";
 
@@ -57,5 +57,27 @@ const deleteBook = async (req: Request, res: Response) => {
         console.log(err)
     })
 }
+const updateBook = async (req: Request, res: Response) => {
+    const book = req.body.book;
+    const token = req.body.token;
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        const db = admin.database();
+        const ref = db.ref('users/' + response.uid + '/works/books/' + book.bookId);
 
-export default { createBook, retrieveAllBooks, deleteBook };
+        return ref.update(book)
+            .then(async () => {
+                return await res.send(
+                    { book: book }
+                );
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+            });
+
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+export default { createBook, retrieveAllBooks, deleteBook, updateBook };
