@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import { getDatabase, ref, set, child, push, update } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 import { Request, Response } from 'express';
 import { Book } from "../../../models/Book";
 
@@ -10,19 +10,28 @@ const createBook = async (req: Request, res: Response) => {
 
     const book: Book = req.body.book;
     const token = req.body.token;
-
-    await admin.auth().verifyIdToken(token).then(async (response) => {
-        await set(
-            ref(db, 'users/' + response.uid + '/works/books/' + uuidv1()), book);
-        return await res.send(
-            { book: book }
+    try {
+        await admin.auth().verifyIdToken(token).then(async (response) => {
+            book.bookId = await uuidv1()
+            await set(
+                ref(db, 'users/' + response.uid + '/works/books/' + book.bookId), book);
+            return await res.send(
+                { book: book }
+            );
+        }).catch((err) => {
+            return res.send(
+                { error: err.message }
+            );
+        })
+    } catch (err) {
+        return res.send(
+            { error: err.message }
         );
-    }).catch((err) => {
-        console.log(err)
-    })
-};
+    }
 
+};
 const retrieveAllBooks = async (req: Request, res: Response) => {
+
     const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
         // Get a reference to the desired node in the database
@@ -30,17 +39,21 @@ const retrieveAllBooks = async (req: Request, res: Response) => {
 
         // Read the data at the node once
         nodeRef.once('value', (snapshot) => {
-            const data = snapshot.val();
-            return res.status(200).send(data);
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it wxists
+                const data = snapshot.val();
+                return res.status(200).send(Object.values(data));
+            } else {
+                // handle the case where the node doesn't exist or is null
+            }
+
         }, (error) => {
             return res.status(404).send(error);
         });
     }).catch((err) => {
         return res.status(401).send(err.message);
     })
-
 }
-
 const deleteBook = async (req: Request, res: Response) => {
     const bookId = req.body.bookId;
     const token = req.body.token;
