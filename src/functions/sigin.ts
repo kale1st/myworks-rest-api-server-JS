@@ -18,22 +18,21 @@ const signin = async (req: Request, res: Response) => {
                         return res.send({
                             "status": 200,
                             "message": "Success",
-                            "token": idToken
-
+                            "token": idToken,
+                            'uid': user.uid,
+                            'displayName': user.providerData[0].displayName
                         });
                     })
                     .catch((error) => {
                         return res.send({
-                            'errors': [error.message],
+                            'error': error.message,
                             'status': 404
                         });
                     });
             }
         })
         .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            return res.send({ errors: ['Invalid e-mail or password'] });
+            return res.send({ 'error': error.message, 'status': 404 });
 
         });
 }
