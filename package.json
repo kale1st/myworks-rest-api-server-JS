@@ -9,7 +9,9 @@
     "start": "node server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "typescript": "^4.9.5"
+  },
   "devDependencies": {
     "nodemon": "^2.0.12",
     "cors": "^2.8.5",
@@ -18,8 +20,7 @@
     "firebase": "^9.17.1",
     "firebase-admin": "^11.5.0",
     "morgan": "^1.10.0",
-    "token": "^0.1.0",
-    "typescript": "^4.9.5",
+    "token": "^0.1.0",  
     "uuid": "^9.0.0"
   }
 }
