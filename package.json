@@ -1,26 +1,27 @@
 {
-  "name": "young-developers",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.ts",
-  "author": "azizkale",
-  "scripts": {
-    "dev": "nodemon server.ts",
-    "start": "node server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "typescript": "^4.9.5", "express": "^4.17.1",
-    "firebase": "^9.17.1",
-    "firebase-admin": "^11.5.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.12",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-   
-    "morgan": "^1.10.0",
-    "token": "^0.1.0",  
-    "uuid": "^9.0.0"
-  }
+    "name": "young-developers",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.ts",
+    "author": "azizkale",
+    "scripts": {
+        "dev": "nodemon server.ts",
+        "start": "node server.ts",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "typescript": "^4.9.5",
+        "express": "^4.17.1",
+        "firebase": "^9.17.1",
+        "firebase-admin": "^11.5.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.3",
+        "morgan": "^1.10.0",
+        "token": "^0.1.0",
+        "uuid": "^9.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.12",
+
+    }
 }
