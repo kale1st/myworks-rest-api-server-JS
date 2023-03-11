@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express from 'express';
 import cors from 'cors';
 const app = express();
 import { checkUser } from "./src/functions/checkUser";
@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 // #########################################################################
 // This configures static hosting for files in /public that have the extensions
 // listed in the array.
-var options = {
+let options = {
   dotfiles: "ignore",
   etag: false,
   extensions: ["htm", "html", "css", "js", "ico", "jpg", "jpeg", "png", "svg"],

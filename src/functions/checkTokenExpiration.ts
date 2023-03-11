@@ -2,7 +2,7 @@ import * as admin from "firebase-admin";
 import { NextFunction, Request, Response } from 'express';
 
 const tokenControl = async (req: Request, res: Response, next: NextFunction) => {
-    let checkRevoked = true;
+    const checkRevoked = true;
     try {
         const idToken = await req.body.token || req.headers['authorization'].split(' ')[1];
         admin.auth()
