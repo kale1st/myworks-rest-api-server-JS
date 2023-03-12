@@ -1,4 +1,4 @@
-name: Node.js Project
+name: Node.js Firebase App Deployment
 
 on:
   push:
@@ -8,20 +8,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: 16.x
-      - run: npm ci
-      - run: npm run build
-      - name: Deploy to Cyclic.sh
-        uses: appleboy/ssh-action@master
-        with:         
-          script: |
-            cd /path/to/project
-            npm install --production
-            pm2 restart server
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Copy .env file
+        run: cp .env
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions
+
         env:
           APIKEY: ${{secrets.APIKEY}}
           AUTHDOMAIN: ${{secrets.AUTHDOMAIN}}
