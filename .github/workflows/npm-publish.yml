@@ -24,7 +24,7 @@ jobs:
         run: npm run build
 
       - name: Copy .env file
-        run: cp .env.dist .env
+        run: cp .env
 
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
