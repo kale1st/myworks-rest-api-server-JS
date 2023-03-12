@@ -5,8 +5,8 @@
   "main": "server.ts",
   "author": "azizkale",
   "scripts": {
-    "start": "ts-node server.ts",
     "dev": "nodemon server.ts",
+    "start": "nodemon server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
