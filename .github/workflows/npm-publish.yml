@@ -17,18 +17,17 @@ jobs:
       - run: npm run build
       - name: Deploy to Cyclic.sh
         uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.CYCLIC_HOST }}
-          username: ${{ secrets.CYCLIC_USERNAME }}
-          password: ${{ secrets.CYCLIC_PASSWORD }}
+        with:         
           script: |
             cd /path/to/project
             npm install --production
             pm2 restart server
         env:
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          API_KEY: ${{ secrets.API_KEY }}
+          APIKEY: ${{secrets.APIKEY}}
+          AUTHDOMAIN: ${{secrets.AUTHDOMAIN}}
+          DATABASEURL: ${{secrets.DATABASEURL}}
+          PROJECTID: ${{secrets.PROJECTID}}
+          STORAGEBUCKET: ${{secrets.STORAGEBUCKET}}
+          MESSAGINGSENDERID: ${{secrets.MESSAGINGSENDERID}}
+          APPID: ${{secrets.APPID}}
+          MEASUREMENTID: ${{secrets.MEASUREMENTID}}
