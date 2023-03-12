@@ -23,8 +23,8 @@ jobs:
       - name: Build TypeScript
         run: npm run build
 
-      - name: Copy .env file
-        run: cp .env
+      - name: Copy .env file to dist folder
+        run: cp .env dist/
 
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
