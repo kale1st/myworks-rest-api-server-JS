@@ -6,9 +6,7 @@ import { addRole } from "./src/functions/addRole";
 import userroutes from './src/routes/users/userroutes';
 import bookroutes from './src/routes/works/Book/bookroutes';
 
-
-// app.use(cors());
-// const cors = require('cors');
+require('dotenv').config();
 const corsOptions = {
   origin: ['http://localhost:4200', 'http://192.168.0.17:4200'],
   credentials: true,            //access-control-allow-credentials:true
