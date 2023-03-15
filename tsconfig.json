@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES2015",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "outDir": "dist"
+    },
+    "include": ["**/*.ts", "**/*.json", ".env"]
+    // "include": ["**/*.ts", "package.json", "package-lock.json", ".eslintrc.json",]
+}
