@@ -1,8 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-require('dotenv').config();
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
@@ -11,8 +10,7 @@ const checkUser_1 = require("./src/functions/checkUser");
 const addRole_1 = require("./src/functions/addRole");
 const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
-// app.use(cors());
-// const cors = require('cors');
+require('dotenv').config();
 const corsOptions = {
     origin: ['http://localhost:4200', 'http://192.168.0.17:4200'],
     credentials: true,
@@ -53,20 +51,20 @@ app.use('/', bookroutes_1.default);
 app.use("*", (req, res) => {
     res
         .json({
-            at: new Date().toISOString(),
-            method: req.method,
-            hostname: req.hostname,
-            ip: req.ip,
-            query: req.query,
-            headers: req.headers,
-            cookies: req.cookies,
-            params: req.params,
-        })
+        at: new Date().toISOString(),
+        method: req.method,
+        hostname: req.hostname,
+        ip: req.ip,
+        query: req.query,
+        headers: req.headers,
+        cookies: req.cookies,
+        params: req.params,
+    })
         .end();
 });
 const port = process.env.PORT || 3000;
 app.get("/checkuser", (req, res) => {
-    // (0, checkUser_1.checkUser)("aqqzizkale@hotmail.com");
+    (0, checkUser_1.checkUser)("aqqzizkale@hotmail.com");
 });
 app.get("/adduser", (req, res) => {
     // createUser("azizkale@hotmail.com", "123456");
