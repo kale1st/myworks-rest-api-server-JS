@@ -12,8 +12,8 @@ const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
 require('dotenv').config();
 const corsOptions = {
-    origin: ['http://localhost:4200', 'http://192.168.0.17:4200', 'https://busy-red-dolphin-wear.cyclic.app/'],
-    credentials: true, //access-control-allow-credentials:true
+    origin: ['http://localhost:4200', 'http://192.168.0.17:4200'],
+    credentials: true,
     optionSuccessStatus: 200
 };
 app.use((0, cors_1.default)(corsOptions));
