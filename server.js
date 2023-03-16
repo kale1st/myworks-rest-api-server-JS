@@ -1,5 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
+var __importDefault = (this && this.__importDefault) || function(mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -12,8 +12,8 @@ const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
 require('dotenv').config();
 const corsOptions = {
-    origin: ['http://localhost:4200', 'http://192.168.0.17:4200'],
-    credentials: true,
+    origin: ['http://localhost:4200', 'http://192.168.0.17:4200', 'https://busy-red-dolphin-wear.cyclic.app/'],
+    credentials: true, //access-control-allow-credentials:true
     optionSuccessStatus: 200
 };
 app.use((0, cors_1.default)(corsOptions));
@@ -51,15 +51,15 @@ app.use('/', bookroutes_1.default);
 app.use("*", (req, res) => {
     res
         .json({
-        at: new Date().toISOString(),
-        method: req.method,
-        hostname: req.hostname,
-        ip: req.ip,
-        query: req.query,
-        headers: req.headers,
-        cookies: req.cookies,
-        params: req.params,
-    })
+            at: new Date().toISOString(),
+            method: req.method,
+            hostname: req.hostname,
+            ip: req.ip,
+            query: req.query,
+            headers: req.headers,
+            cookies: req.cookies,
+            params: req.params,
+        })
         .end();
 });
 const port = process.env.PORT || 3000;
