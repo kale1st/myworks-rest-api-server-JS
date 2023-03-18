@@ -6,6 +6,5 @@
         "esModuleInterop": true,
         "outDir": "dist"
     },
-    "include": ["**/*.ts", "**/*.json", ".env"]
-    // "include": ["**/*.ts", "package.json", "package-lock.json", ".eslintrc.json",]
+    "include": ["**/*.ts", "**/*.json"]
 }
