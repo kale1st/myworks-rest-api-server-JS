@@ -8,9 +8,13 @@ import bookroutes from './src/routes/works/Book/bookroutes';
 
 require('dotenv').config();
 const corsOptions = {
-  origin: ['http://localhost:4200', 'http://192.168.0.17:4200'],
-  credentials: true,            //access-control-allow-credentials:true
-  optionSuccessStatus: 200
+  origin: [
+    "https://mywebsite-3f527.firebaseapp.com",
+    "http://localhost:4200",
+    "https://mywebsite-3f527.web.app/"
+  ],
+  default: "http://localhost:4200",
+  optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions));
 // app.use(morgan('dev'));
