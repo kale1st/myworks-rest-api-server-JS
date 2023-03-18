@@ -1,5 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
+var __importDefault = (this && this.__importDefault) || function(mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -51,15 +51,15 @@ app.use('/', bookroutes_1.default);
 app.use("*", (req, res) => {
     res
         .json({
-        at: new Date().toISOString(),
-        method: req.method,
-        hostname: req.hostname,
-        ip: req.ip,
-        query: req.query,
-        headers: req.headers,
-        cookies: req.cookies,
-        params: req.params,
-    })
+            at: new Date().toISOString(),
+            method: req.method,
+            hostname: req.hostname,
+            ip: req.ip,
+            query: req.query,
+            headers: req.headers,
+            cookies: req.cookies,
+            params: req.params,
+        })
         .end();
 });
 const port = process.env.PORT || 3000;
