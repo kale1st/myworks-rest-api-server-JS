@@ -13,8 +13,4 @@ export class userSchema {
         this.password = password
         this.role = role
     }
-
-    addBookToUser = (book: Book, token: string) => {
-
-    }
 };

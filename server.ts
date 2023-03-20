@@ -11,7 +11,8 @@ const corsOptions = {
   origin: [
     "https://mywebsite-3f527.firebaseapp.com",
     "http://localhost:4200",
-    "https://mywebsite-3f527.web.app/"
+    "https://mywebsite-3f527.web.app/",
+    "http://192.168.0.17:4200"
   ],
   default: "http://localhost:4200",
   optionsSuccessStatus: 200
@@ -51,24 +52,24 @@ app.use('/', userroutes);
 app.use('/', bookroutes);
 // #############################################################################
 // Catch all handler for all other request.
-app.use("*", (req, res) => {
-  res
-    .json({
-      at: new Date().toISOString(),
-      method: req.method,
-      hostname: req.hostname,
-      ip: req.ip,
-      query: req.query,
-      headers: req.headers,
-      cookies: req.cookies,
-      params: req.params,
-    })
-    .end();
-});
+// app.use("*", (req, res) => {
+//   res
+//     .json({
+//       at: new Date().toISOString(),
+//       method: req.method,
+//       hostname: req.hostname,
+//       ip: req.ip,
+//       query: req.query,
+//       headers: req.headers,
+//       cookies: req.cookies,
+//       params: req.params,
+//     })
+//     .end();
+// });
 const port = process.env.PORT || 3000;
 
 app.get("/checkuser", (req, res) => {
-  checkUser("aqqzizkale@hotmail.com");
+  checkUser("azizkale@hotmail.com");
 });
 
 app.get("/adduser", (req, res) => {
