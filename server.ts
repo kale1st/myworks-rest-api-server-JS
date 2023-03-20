@@ -5,6 +5,7 @@ import { checkUser } from "./src/functions/checkUser";
 import { addRole } from "./src/functions/addRole";
 import userroutes from './src/routes/users/userroutes';
 import bookroutes from './src/routes/works/Book/bookroutes';
+import hatimroutes from './src/routes/Hatim/hatimroutes'
 
 require('dotenv').config();
 const corsOptions = {
@@ -50,6 +51,7 @@ app.use('/', express.static("public", options));
 /** Routes */
 app.use('/', userroutes);
 app.use('/', bookroutes);
+app.use('/', hatimroutes);
 // #############################################################################
 // Catch all handler for all other request.
 // app.use("*", (req, res) => {
