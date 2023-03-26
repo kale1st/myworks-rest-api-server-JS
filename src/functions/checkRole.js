@@ -32,48 +32,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const auth_1 = require("firebase/auth");
-const firebaseTools_1 = require("../tools/firebaseTools");
 const admin = __importStar(require("firebase-admin"));
-const auth = (0, auth_1.getAuth)(firebaseTools_1.firebaseApp);
-const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = yield req.body;
-    yield (0, auth_1.signInWithEmailAndPassword)(auth, email, password)
-        .then((userCredential) => __awaiter(void 0, void 0, void 0, function* () {
-        // Signed in 
-        if (userCredential.user) {
-            const user = yield userCredential.user;
-            //getting token from Fire-Auth
-            yield user.getIdToken()
-                .then((idToken) => {
-                // Send the ID token to the server for authentication
-                admin.auth()
-                    .verifyIdToken(idToken)
-                    .then((decodedToken) => {
-                    // Token is valid.   
-                    return res.send({
-                        "status": 200,
-                        "message": "Success",
-                        "token": idToken,
-                        'uid': decodedToken.user_id,
-                        'displayName': user.providerData[0].displayName,
-                        roles: decodedToken.roles
-                    });
-                })
-                    .catch((err) => {
-                    return res.status(401).send(err.message);
-                });
-            })
-                .catch((error) => {
-                return res.send({
-                    'error': error.message,
-                    'status': 404
-                });
-            });
-        }
-    }))
-        .catch((error) => {
-        return res.send({ 'error': error.message, 'status': 404 });
-    });
+const chechkRole = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const idToken = (yield req.body.token) || req.headers['authorization'].split(' ')[1];
+        admin.auth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+            // Token is valid.   
+            if (decodedToken.roles.includes('admin') || decodedToken.roles.includes('mentor'))
+                next();
+            else
+                console.log('yetkisiz giris');
+            return decodedToken.roles;
+        })
+            .catch((err) => {
+            return res.status(401).send(err.message);
+        });
+    }
+    catch (error) {
+        return res.status(401).send(error.message);
+    }
+    return true;
 });
-exports.default = { signin };
+exports.default = chechkRole;

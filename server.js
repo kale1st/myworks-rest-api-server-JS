@@ -1,5 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -10,12 +10,15 @@ const checkUser_1 = require("./src/functions/checkUser");
 const addRole_1 = require("./src/functions/addRole");
 const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
+const hatimroutes_1 = __importDefault(require("./src/routes/Hatim/hatimroutes"));
+const port = process.env.PORT || 3000;
 require('dotenv').config();
 const corsOptions = {
     origin: [
         "https://mywebsite-3f527.firebaseapp.com",
         "http://localhost:4200",
-        "https://mywebsite-3f527.web.app/"
+        "https://mywebsite-3f527.web.app/",
+        "http://192.168.0.17:4200"
     ],
     default: "http://localhost:4200",
     optionsSuccessStatus: 200
@@ -50,25 +53,25 @@ app.use('/', express_1.default.static("public", options));
 /** Routes */
 app.use('/', userroutes_1.default);
 app.use('/', bookroutes_1.default);
+app.use('/', hatimroutes_1.default);
 // #############################################################################
 // Catch all handler for all other request.
-app.use("*", (req, res) => {
-    res
-        .json({
-            at: new Date().toISOString(),
-            method: req.method,
-            hostname: req.hostname,
-            ip: req.ip,
-            query: req.query,
-            headers: req.headers,
-            cookies: req.cookies,
-            params: req.params,
-        })
-        .end();
-});
-const port = process.env.PORT || 3000;
+// app.use("*", (req, res) => {
+//   res
+//     .json({
+//       at: new Date().toISOString(),
+//       method: req.method,
+//       hostname: req.hostname,
+//       ip: req.ip,
+//       query: req.query,
+//       headers: req.headers,
+//       cookies: req.cookies,
+//       params: req.params,
+//     })
+//     .end();
+// });
 app.get("/checkuser", (req, res) => {
-    (0, checkUser_1.checkUser)("aqqzizkale@hotmail.com");
+    (0, checkUser_1.checkUser)("azizkale@hotmail.com");
 });
 app.get("/adduser", (req, res) => {
     // createUser("azizkale@hotmail.com", "123456");
