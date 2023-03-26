@@ -1,6 +1,7 @@
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Request, Response } from 'express';
 import { firebaseApp } from "../tools/firebaseTools";
+import * as admin from "firebase-admin";
 
 const auth = getAuth(firebaseApp);
 const signin = async (req: Request, res: Response) => {
@@ -15,13 +16,22 @@ const signin = async (req: Request, res: Response) => {
                 await user.getIdToken()
                     .then((idToken) => {
                         // Send the ID token to the server for authentication
-                        return res.send({
-                            "status": 200,
-                            "message": "Success",
-                            "token": idToken,
-                            'uid': user.uid,
-                            'displayName': user.providerData[0].displayName
-                        });
+                        admin.auth()
+                            .verifyIdToken(idToken)
+                            .then((decodedToken) => {
+                                // Token is valid.   
+                                return res.send({
+                                    "status": 200,
+                                    "message": "Success",
+                                    "token": idToken,
+                                    'uid': decodedToken.user_id,
+                                    'displayName': user.providerData[0].displayName,
+                                    roles: decodedToken.roles
+                                });
+                            })
+                            .catch((err) => {
+                                return res.status(401).send(err.message);
+                            });
                     })
                     .catch((error) => {
                         return res.send({
