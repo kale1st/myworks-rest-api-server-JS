@@ -6,6 +6,7 @@ import { addRole } from "./src/functions/addRole";
 import userroutes from './src/routes/users/userroutes';
 import bookroutes from './src/routes/works/Book/bookroutes';
 import hatimroutes from './src/routes/Hatim/hatimroutes'
+import functionsroutes from './src/routes/Functions/functionsroutes'
 
 const port = process.env.PORT || 3000;
 
@@ -54,6 +55,7 @@ app.use('/', express.static("public", options));
 app.use('/', userroutes);
 app.use('/', bookroutes);
 app.use('/', hatimroutes);
+app.use('/', functionsroutes);
 // #############################################################################
 // Catch all handler for all other request.
 // app.use("*", (req, res) => {

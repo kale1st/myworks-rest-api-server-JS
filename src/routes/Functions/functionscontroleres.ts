@@ -1,17 +1,15 @@
+import { Request, Response } from 'express';
 import * as admin from "firebase-admin";
-import { NextFunction, Request, Response } from 'express';
 
-const chechkRole = async (req: Request, res: Response, next: NextFunction) => {
+const getUserInfo = async (req: Request, res: Response) => {
     try {
         const idToken = await req.body.token || req.headers['authorization'].split(' ')[1];
         admin.auth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
                 // Token is valid.   
-                if (decodedToken.roles.includes('admin') || decodedToken.roles.includes('mentor'))
-                    next();
-                else console.log('yetkisiz giris')
-                return decodedToken.roles
+                console.log(decodedToken)
+                return decodedToken
             })
             .catch((err) => {
                 return res.status(401).send(err.message);
@@ -22,4 +20,4 @@ const chechkRole = async (req: Request, res: Response, next: NextFunction) => {
     return true
 }
 
-export default chechkRole;
+export default { getUserInfo };
