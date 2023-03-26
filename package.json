@@ -7,7 +7,7 @@
   "scripts": {
     "test": "mocha tests/unit/",
     "dev": "nodemon server.js",
-    "start": "ts-node server.js",
+    "start": "node server.js",
     "build": "tsc"
   },
   "dependencies": {
