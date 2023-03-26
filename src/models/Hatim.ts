@@ -8,7 +8,8 @@ export class Hatim {
     createHatim = () => {
         const db = getDatabase();
         for (let index = 1; index < 31; index++) {
-            set(ref(db, `Hatim/cuzs/cuz-${index}`), {
+            set(ref(db, `Hatim/cuzs/${index}`), {
+                cuzname: index,
                 beingRead: false,
                 complete: false,
                 reader: ''

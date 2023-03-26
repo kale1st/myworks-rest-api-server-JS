@@ -10,8 +10,7 @@ const retrieveHatim = async (req: Request, res: Response) => {
     const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
         // Get a reference to the desired node in the database
-        const nodeRef = admin.database().ref('Hatim/');
-
+        const nodeRef = admin.database().ref('Hatim');
         // Read the data at the node once
         nodeRef.once('value', (snapshot) => {
             if (snapshot.exists()) {
@@ -33,10 +32,27 @@ const retrieveHatim = async (req: Request, res: Response) => {
 
 }
 const deleteHatim = async (req: Request, res: Response) => {
-
+    console.log('deleted')
 }
 const updateHatim = async (req: Request, res: Response) => {
+    const { cuz, cuznumber, token } = req.body
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        const db = admin.database();
+        const ref = db.ref('Hatim/cuzs/' + cuznumber);
+        return ref.update(cuz)
+            .then(async () => {
+                return await res.send(
+                    { cuz }
+                );
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+            });
 
+
+    }).catch((err) => {
+        console.log(err)
+    })
 }
 
 export default { createHatim, retrieveHatim, deleteHatim, updateHatim };

@@ -7,6 +7,8 @@ import userroutes from './src/routes/users/userroutes';
 import bookroutes from './src/routes/works/Book/bookroutes';
 import hatimroutes from './src/routes/Hatim/hatimroutes'
 
+const port = process.env.PORT || 3000;
+
 require('dotenv').config();
 const corsOptions = {
   origin: [
@@ -68,7 +70,6 @@ app.use('/', hatimroutes);
 //     })
 //     .end();
 // });
-const port = process.env.PORT || 3000;
 
 app.get("/checkuser", (req, res) => {
   checkUser("azizkale@hotmail.com");
