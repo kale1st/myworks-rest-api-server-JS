@@ -1,12 +1,10 @@
 import { Request, Response } from 'express';
 import { Hatim } from '../../models/Hatim';
 import * as admin from "firebase-admin";
-import chechkRole from '../../functions/checkRole';
 
 const hatim = new Hatim();
 const createHatim = async (req: Request, res: Response) => {
-    console.log('hatim sifirlandi')
-    // hatim.createHatim();
+    hatim.createHatim();
 };
 const retrieveHatim = async (req: Request, res: Response) => {
     const token = req.headers['authorization'].split(' ')[1];

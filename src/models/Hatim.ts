@@ -14,9 +14,9 @@ export class Hatim {
                 complete: false,
                 reader: ''
             });
-            set(ref(db, 'Hatim/totalhatim'), {
-                totalHatim: 0
-            });
+            // set(ref(db, 'Hatim/totalhatim'), {
+            //     totalHatim: 0
+            // });
         }
     }
 }
