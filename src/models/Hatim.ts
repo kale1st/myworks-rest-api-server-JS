@@ -25,17 +25,16 @@ export class Hatim {
         // Get a reference to the desired node in the database
         const nodeRef = admin.database().ref('Hatim');
         // Read the data at the node once
-        nodeRef.once('value', (snapshot) => {
+        return nodeRef.once('value', (snapshot) => {
             if (snapshot.exists()) {
                 // access the data from the snapshot if it exists
                 const data = snapshot.val();
                 const cuzs = data['cuzs']
                 const totalHatim = data['totalhatim']
-                console.log(data)
-                return data
+                return { cuzs: cuzs, totalHatim: totalHatim }
 
             } else {
-                return { data: null }
+                return { cuzs: null, totalHatim: null }
             }
         }, (error) => {
             return { error: error }

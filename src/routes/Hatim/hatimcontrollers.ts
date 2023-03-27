@@ -9,7 +9,11 @@ const createHatim = async (req: Request, res: Response) => {
 const retrieveHatim = async (req: Request, res: Response) => {
     const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
-        await res.status(200).send(hatim.retrieveAllCuzs());
+        hatim.retrieveAllCuzs().then((data) => {
+            res.status(202).send(data);
+        }).catch((err) => {
+            return res.status(401).send(err.message);
+        })
     }).catch((err) => {
         return res.status(401).send(err.message);
     })
