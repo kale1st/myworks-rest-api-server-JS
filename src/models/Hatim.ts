@@ -1,5 +1,6 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { cuz } from "./cuz"
+import * as admin from "firebase-admin";
 
 export class Hatim {
     hatim: cuz[]
@@ -18,5 +19,31 @@ export class Hatim {
             //     totalHatim: 0
             // });
         }
+    }
+
+    retrieveAllCuzs = () => {
+        // Get a reference to the desired node in the database
+        const nodeRef = admin.database().ref('Hatim');
+        // Read the data at the node once
+        nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it exists
+                const data = snapshot.val();
+                const cuzs = data['cuzs']
+                const totalHatim = data['totalhatim']
+                console.log(data)
+                return data
+
+            } else {
+                return { data: null }
+            }
+        }, (error) => {
+            return { error: error }
+        });
+
+    }
+
+    getSingleCuz = (cuznumber: number) => {
+
     }
 }
