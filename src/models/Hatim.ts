@@ -42,6 +42,19 @@ export class Hatim {
 
     }
 
+    updateHatim = (cuznumber: number | any, cuz: cuz) => {
+        const db = admin.database();
+        const ref = db.ref('Hatim/cuzs/' + cuznumber);
+        return ref.update(cuz)
+            .then(() => {
+                return { cuz }
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error }
+            });
+    }
+
     getSingleCuz = (cuznumber: number) => {
 
     }

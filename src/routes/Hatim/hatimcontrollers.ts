@@ -9,11 +9,13 @@ const createHatim = async (req: Request, res: Response) => {
 const retrieveHatim = async (req: Request, res: Response) => {
     const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
-        hatim.retrieveAllCuzs().then((data) => {
-            res.status(202).send(data);
+        //
+        await hatim.retrieveAllCuzs().then((data) => {
+            res.status(200).send(data);
         }).catch((err) => {
             return res.status(401).send(err.message);
         })
+        //
     }).catch((err) => {
         return res.status(401).send(err.message);
     })
@@ -29,18 +31,13 @@ const getSingleCuz = async (req: Request, res: Response) => {
 const updateHatim = async (req: Request, res: Response) => {
     const { cuz, cuznumber, token } = req.body
     await admin.auth().verifyIdToken(token).then(async (response) => {
-        const db = admin.database();
-        const ref = db.ref('Hatim/cuzs/' + cuznumber);
-        return ref.update(cuz)
-            .then(async () => {
-                return await res.send(
-                    { cuz }
-                );
-            })
-            .catch((error) => {
-                console.error("Error updating data:", error);
-            });
-
+        //
+        await hatim.updateHatim(cuznumber, cuz).then((data) => {
+            res.status(200).send(data);
+        }).catch((err) => {
+            return res.status(401).send(err.message);
+        })
+        //   
 
     }).catch((err) => {
         console.log(err)
