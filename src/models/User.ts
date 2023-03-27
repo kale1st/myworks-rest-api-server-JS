@@ -1,6 +1,5 @@
 import { Book } from "./Book";
-
-export class userSchema {
+export class User {
     userName: string;
     email: string;
     password: string;
@@ -12,5 +11,9 @@ export class userSchema {
         this.email = email
         this.password = password
         this.role = role
+    }
+
+    creasteUser = async (email: string, password: any) => {
+
     }
 };
