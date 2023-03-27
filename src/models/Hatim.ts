@@ -55,7 +55,19 @@ export class Hatim {
             });
     }
 
-    getSingleCuz = (cuznumber: number) => {
+    getSingleCuz = (cuzname: number) => {
+        // Get a reference to the desired node in the database
+        const nodeRef = admin.database().ref('Hatim/cuzs/' + cuzname);
+        // Read the data at the node once
+        return nodeRef.once('value')
+            .then((snapshot) => {
+                const data = snapshot.val();
+                return JSON.stringify({ cuz: data })// prints the data from the node
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
 
     }
 }

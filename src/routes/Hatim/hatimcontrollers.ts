@@ -21,13 +21,6 @@ const retrieveHatim = async (req: Request, res: Response) => {
     })
 
 }
-const deleteHatim = async (req: Request, res: Response) => {
-    console.log('deleted')
-}
-
-const getSingleCuz = async (req: Request, res: Response) => {
-
-}
 const updateHatim = async (req: Request, res: Response) => {
     const { cuz, cuznumber, token } = req.body
     await admin.auth().verifyIdToken(token).then(async (response) => {
@@ -43,5 +36,25 @@ const updateHatim = async (req: Request, res: Response) => {
         console.log(err)
     })
 }
+const deleteHatim = async (req: Request, res: Response) => {
+    console.log('deleted')
+}
 
-export default { createHatim, retrieveHatim, deleteHatim, updateHatim };
+const getSingleCuz = async (req: Request, res: Response) => {
+    const token = req.headers['authorization'].split(' ')[1];
+    const cuznumber: number | any = req.query.cuznumber;
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        //
+        await hatim.getSingleCuz(cuznumber).then((data) => {
+            res.status(200).send(data);
+        }).catch((err) => {
+            return res.status(401).send(err.message);
+        })
+        //
+    }).catch((err) => {
+        return res.status(401).send(err.message);
+    })
+}
+
+
+export default { createHatim, retrieveHatim, getSingleCuz, deleteHatim, updateHatim };

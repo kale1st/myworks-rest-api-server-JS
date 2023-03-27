@@ -1,5 +1,5 @@
 export class cuz {
-    cuzname: string;
+    cuzname: number;
     complete: boolean;
     beingRead: boolean;
     reader: string;
