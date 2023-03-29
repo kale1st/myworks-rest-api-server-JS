@@ -36,49 +36,52 @@ const Hatim_1 = require("../../models/Hatim");
 const admin = __importStar(require("firebase-admin"));
 const hatim = new Hatim_1.Hatim();
 const createHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    hatim.createHatim();
+    yield hatim.createHatim();
 });
 const retrieveHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers['authorization'].split(' ')[1];
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        // Get a reference to the desired node in the database
-        const nodeRef = admin.database().ref('Hatim');
-        // Read the data at the node once
-        nodeRef.once('value', (snapshot) => {
-            if (snapshot.exists()) {
-                // access the data from the snapshot if it wxists
-                const data = snapshot.val();
-                const cuzs = data['cuzs'];
-                const totalHatim = data['totalhatim'];
-                return res.status(200).send({ cuzs: cuzs, totalHatim: totalHatim });
-            }
-            else {
-                // handle the case where the node doesn't exist or is null
-            }
-        }, (error) => {
-            return res.status(404).send(error);
+        //
+        yield hatim.retrieveAllCuzs().then((data) => {
+            res.status(200).send(data);
+        }).catch((err) => {
+            return res.status(401).send(err.message);
         });
+        //
     })).catch((err) => {
         return res.status(401).send(err.message);
+    });
+});
+const updateHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { cuz, cuznumber, token } = req.body;
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        //
+        yield hatim.updateHatim(cuznumber, cuz).then((data) => {
+            res.status(200).send(data);
+        }).catch((err) => {
+            return res.status(401).send(err.message);
+        });
+        //   
+    })).catch((err) => {
+        console.log(err);
     });
 });
 const deleteHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('deleted');
 });
-const updateHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { cuz, cuznumber, token } = req.body;
+const getSingleCuz = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers['authorization'].split(' ')[1];
+    const cuznumber = req.query.cuznumber;
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        const db = admin.database();
-        const ref = db.ref('Hatim/cuzs/' + cuznumber);
-        return ref.update(cuz)
-            .then(() => __awaiter(void 0, void 0, void 0, function* () {
-            return yield res.send({ cuz });
-        }))
-            .catch((error) => {
-            console.error("Error updating data:", error);
+        //
+        yield hatim.getSingleCuz(cuznumber).then((data) => {
+            res.status(200).send(data);
+        }).catch((err) => {
+            return res.status(401).send(err.message);
         });
+        //
     })).catch((err) => {
-        console.log(err);
+        return res.status(401).send(err.message);
     });
 });
-exports.default = { createHatim, retrieveHatim, deleteHatim, updateHatim };
+exports.default = { createHatim, retrieveHatim, getSingleCuz, deleteHatim, updateHatim };

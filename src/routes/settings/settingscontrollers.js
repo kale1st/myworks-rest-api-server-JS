@@ -9,16 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
-class User {
-    constructor(username, email, password, role) {
-        this.creasteUser = (email, password) => __awaiter(this, void 0, void 0, function* () {
-        });
-        this.userName = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-}
-exports.User = User;
-;
+const auth_1 = require("firebase/auth");
+const auth = (0, auth_1.getAuth)();
+const updateUserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    (0, auth_1.updateProfile)(auth.currentUser, {
+        photoURL: "https://example.com/jane-q-user/profile.jpg"
+    }).then(() => {
+        // Profile updated!
+        return auth.currentUser;
+        // ...
+    }).catch((error) => {
+        // An error occurred
+        // ...
+    });
+});
+exports.default = { updateUserName };

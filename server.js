@@ -1,5 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -11,6 +11,7 @@ const addRole_1 = require("./src/functions/addRole");
 const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
 const hatimroutes_1 = __importDefault(require("./src/routes/Hatim/hatimroutes"));
+const settingsroutes_1 = __importDefault(require("./src/routes/settings/settingsroutes"));
 const port = process.env.PORT || 3000;
 require('dotenv').config();
 const corsOptions = {
@@ -54,6 +55,7 @@ app.use('/', express_1.default.static("public", options));
 app.use('/', userroutes_1.default);
 app.use('/', bookroutes_1.default);
 app.use('/', hatimroutes_1.default);
+app.use('/', settingsroutes_1.default);
 // #############################################################################
 // Catch all handler for all other request.
 // app.use("*", (req, res) => {
