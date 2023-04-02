@@ -6,6 +6,7 @@ import tokenControl from '../../functions/checkTokenExpiration';
 const router = express.Router();
 router.use(bodyParser.json());
 
-router.patch('/settings/username', tokenControl, settingscontrollers.updateUserName);
+router.get('/settings/getuserinfo', tokenControl, settingscontrollers.getUserInfo)
+router.patch('/settings/username', tokenControl, settingscontrollers.updateUserInfo);
 
 export default router;
