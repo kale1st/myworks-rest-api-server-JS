@@ -42,7 +42,6 @@ const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
         //
         if (user) {
-            console.log(user);
             return res.status(200).send(user);
         }
         else
