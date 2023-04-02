@@ -57,6 +57,7 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                         "token": idToken,
                         'uid': decodedToken.user_id,
                         'displayName': user.providerData[0].displayName,
+                        'photoURL': user.providerData[0].photoURL,
                         roles: decodedToken.roles
                     });
                 })
