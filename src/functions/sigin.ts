@@ -26,6 +26,7 @@ const signin = async (req: Request, res: Response) => {
                                     "token": idToken,
                                     'uid': decodedToken.user_id,
                                     'displayName': user.providerData[0].displayName,
+                                    'photoURL': user.providerData[0].photoURL,
                                     roles: decodedToken.roles
                                 });
                             })

@@ -10,7 +10,6 @@ const getUserInfo = async (req: Request, res: Response) => {
     await admin.auth().verifyIdToken(token).then(async (response) => {
         //
         if (user) {
-            console.log(user)
             return res.status(200).send(user)
         }
         else
