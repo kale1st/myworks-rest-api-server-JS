@@ -7,6 +7,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.get('/settings/getuserinfo', tokenControl, settingscontrollers.getUserInfo)
-router.patch('/settings/username', tokenControl, settingscontrollers.updateUserInfo);
+router.patch('/settings/updateuser', tokenControl, settingscontrollers.updateUser);
+router.patch('/settings/updateuserpassword', tokenControl, settingscontrollers.updateUserPassword);
 
 export default router;
