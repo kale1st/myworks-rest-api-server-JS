@@ -84,4 +84,33 @@ const getSingleCuz = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.status(401).send(err.message);
     });
 });
-exports.default = { createHatim, retrieveHatim, getSingleCuz, deleteHatim, updateHatim };
+const getReaderName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers['authorization'].split(' ')[1];
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        return res.send(response);
+        //
+    })).catch((err) => {
+        return res.status(401).send(err.message);
+    });
+});
+//to show name of another user who got cuz before
+const getNameOfAnotherUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers['authorization'].split(' ')[1];
+    const userId = req.query.uid;
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        if (userId && userId.length <= 128) {
+            yield admin.auth().getUser(userId)
+                .then((userRecord) => {
+                return res.send({ readername: userRecord.displayName });
+            })
+                .catch((error) => {
+                console.error('Error fetching user record:', error);
+            });
+        }
+        else
+            res.send('no reader found');
+    })).catch((err) => {
+        return res.status(401).send(err.message);
+    });
+});
+exports.default = { createHatim, retrieveHatim, getSingleCuz, deleteHatim, updateHatim, getReaderName, getNameOfAnotherUsers };

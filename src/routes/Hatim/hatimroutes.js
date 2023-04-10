@@ -15,4 +15,6 @@ router.get('/hatim/retrieve', checkTokenExpiration_1.default, hatimcontrollers_1
 router.get('/hatim/retrievesinglecuz', checkTokenExpiration_1.default, hatimcontrollers_1.default.getSingleCuz);
 router.delete('/hatim/delete', checkTokenExpiration_1.default, hatimcontrollers_1.default.deleteHatim);
 router.patch('/hatim/update', checkTokenExpiration_1.default, hatimcontrollers_1.default.updateHatim);
+router.get('/hatim/getReaderName', checkTokenExpiration_1.default, hatimcontrollers_1.default.getReaderName);
+router.get('/hatim/getAnotherReadersName', checkTokenExpiration_1.default, hatimcontrollers_1.default.getNameOfAnotherUsers);
 exports.default = router;

@@ -70,4 +70,18 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }));
     }));
 });
-exports.default = { createUser };
+const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers['authorization'].split(' ')[1];
+    const userId = req.query.uid;
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        admin.auth().getUser(userId)
+            .then((userRecord) => {
+        })
+            .catch((error) => {
+            console.error('Error fetching user record:', error);
+        });
+    })).catch((err) => {
+        return res.status(401).send(err.message);
+    });
+});
+exports.default = { createUser, getUserById };
