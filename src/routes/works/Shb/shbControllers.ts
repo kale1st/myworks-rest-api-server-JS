@@ -10,21 +10,15 @@ const createShb = async (req: Request, res: Response) => {
     const shbId = await uuidv1()
     const shbInfo: string[] = []
     const shbHistory: string[] = []
-    const { shbName, shbPhotoUrl, editorId, createDate } = req.body;
+    const { shbName, shbPhotoUrl, editorId, createDate } = req.body.shb;
+
+    let newShb: SHB = req.body.shb;
+    newShb.shbId = await uuidv1()
 
     await admin.auth().verifyIdToken(token).then(async (response) => {
         try {
-            const newShb = await new SHB(
-                shbId,
-                shbName,
-                shbPhotoUrl,
-                editorId,
-                createDate,
-                shbInfo,
-                shbHistory
-            )
-            const shb = await shb_class.createShb(newShb);
-            await res.status(200).send(shb);
+            await shb_class.createShb(newShb);
+            await res.status(200).send(newShb);
         } catch (err) {
             return res.status(409).send(
                 { error: err.message }
