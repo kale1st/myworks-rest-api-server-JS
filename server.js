@@ -79,7 +79,7 @@ app.get("/adduser", (req, res) => {
     // createUser("azizkale@hotmail.com", "123456");
 });
 app.get("/addrole", (req, res) => {
-    (0, addRole_1.addRole)("azizkale@hotmail.com", 'admin');
+    (0, addRole_1.addRole)("azizkale@hotmail.com", 'mentor');
 });
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

@@ -37,29 +37,29 @@ const auth_1 = require("firebase/auth");
 const auth = (0, auth_1.getAuth)();
 const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers['authorization'].split(' ')[1];
-    const auth = (0, auth_1.getAuth)();
-    const user = auth.currentUser;
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        //
-        if (user) {
-            return res.status(200).send(user);
-        }
+        if (response)
+            admin.auth().getUserByEmail(response.email).then((user) => {
+                return res.status(200).send(user);
+            });
         else
-            return res.status(401).send();
+            return res.status(404).send('user not found');
     }));
 });
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { updateObject } = req.body;
-    (0, auth_1.updateProfile)(auth.currentUser, {
-        photoURL: updateObject.photoURL,
-        displayName: updateObject.displayName,
-    }).then(() => {
-        console.log('profile updated');
-        return auth.currentUser;
-        // ...
-    }).catch((error) => {
-        // An error occurred
-        // ...
+    admin.auth().getUserByEmail(updateObject.email)
+        .then((userRecord) => {
+        // Update the user's profile information
+        return admin.auth().updateUser(userRecord.uid, updateObject).then((response) => {
+            return res.status(200).send(response);
+        });
+    })
+        .then((error) => {
+        return res.status(404).send(error);
+    })
+        .catch((error) => {
+        console.error('Error updating user profile:', error);
     });
 });
 const updateUserPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

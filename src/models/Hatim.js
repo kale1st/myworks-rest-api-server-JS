@@ -37,9 +37,9 @@ class Hatim {
                     complete: false,
                     reader: ''
                 });
-                // set(ref(db, 'Hatim/totalhatim'), {
-                //     totalHatim: 0
-                // });
+                (0, database_1.set)((0, database_1.ref)(db, 'Hatim/totalhatim'), {
+                    totalHatim: 0
+                });
             }
         };
         this.retrieveAllCuzs = () => {
