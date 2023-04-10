@@ -1,19 +1,27 @@
 import { getDatabase, ref, set } from "firebase/database";
 
 export class SHB {
+    shbId: any;
     shbName: string;
     shbPhotoUrl: string;
-    shbInfo: string;
+    editorId: any; //userId
+    createDate: Date;
+    shbInfo: string[];
+    shbHistory: string[];
 
-    constructor(shbName: string, shbPhotoUrl: string, shbInfo: string) {
-        this.shbName = shbName,
+    constructor(shbId: any, shbName: string, shbPhotoUrl: string, editorId: any, createDate: Date, shbInfo: string[], shbHistory: string[]) {
+        this.shbId = shbId,
+            this.shbName = shbName,
             this.shbPhotoUrl = shbPhotoUrl,
-            this.shbInfo = shbInfo
+            this.shbInfo = shbInfo,
+            this.shbHistory = shbHistory
+        this.editorId = editorId,
+            this.createDate = createDate
     }
 
-    createShb = (userId: number, shbId: number, shb: SHB) => {
+    createShb = (shb: SHB) => {
         const db = getDatabase();
-        set(ref(db, 'users/' + userId + '/works/shb/' + shbId), shb);
+        set(ref(db, 'users/' + shb.editorId + '/works/shb/' + shb.shbId), shb);
     }
 
 }
