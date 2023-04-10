@@ -42,4 +42,22 @@ const createUser = async (req: Request, res: Response) => {
     })
 };
 
-export default { createUser };
+const getUserById = async (req: Request, res: Response) => {
+    const token = req.headers['authorization'].split(' ')[1];
+    const userId: string | any = req.query.uid
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        admin.auth().getUser(userId)
+            .then((userRecord) => {
+
+            })
+            .catch((error) => {
+                console.error('Error fetching user record:', error);
+            });
+
+    }).catch((err) => {
+        return res.status(401).send(err.message);
+    })
+
+}
+
+export default { createUser, getUserById };

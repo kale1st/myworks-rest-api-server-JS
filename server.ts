@@ -83,7 +83,7 @@ app.get("/adduser", (req, res) => {
 });
 
 app.get("/addrole", (req, res) => {
-  addRole("azizkale@hotmail.com", 'admin');
+  addRole("azizkale@hotmail.com", 'mentor');
 });
 
 app.listen(port, () => {
