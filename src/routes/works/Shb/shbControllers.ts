@@ -3,14 +3,14 @@ import { Request, Response } from 'express';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 import { SHB } from "../../../models/shb";
 
-const shb_class = new SHB('', '', '', null, null, null, null);
+const shb_class = new SHB('', '', '', null, null, null);
 
 const createShb = async (req: Request, res: Response) => {
     const token = req.body.token
     const shbId = await uuidv1()
     const shbInfo: string[] = []
     const shbHistory: string[] = []
-    const { shbName, shbPhotoUrl, editorId, createDate } = req.body.shb;
+    const { shbName, editorId, createDate } = req.body.shb;
 
     let newShb: SHB = req.body.shb;
     newShb.shbId = await uuidv1()

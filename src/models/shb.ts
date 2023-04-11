@@ -3,16 +3,14 @@ import { getDatabase, ref, set } from "firebase/database";
 export class SHB {
     shbId: any;
     shbName: string;
-    shbPhotoUrl: string;
     editorId: any; //userId
     createDate: Date;
     shbInfo: string[];
     shbHistory: string[];
 
-    constructor(shbId: any, shbName: string, shbPhotoUrl: string, editorId: any, createDate: Date, shbInfo: string[], shbHistory: string[]) {
+    constructor(shbId: any, shbName: string, editorId: any, createDate: Date, shbInfo: string[], shbHistory: string[]) {
         this.shbId = shbId,
             this.shbName = shbName,
-            this.shbPhotoUrl = shbPhotoUrl,
             this.shbInfo = shbInfo,
             this.shbHistory = shbHistory
         this.editorId = editorId,
