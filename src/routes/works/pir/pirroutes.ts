@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.use(bodyParser.json());
 router.post('/pir/create', chechkRole, pircontroller.createPir);
-router.get('/pir/retrieve', tokenControl, pircontroller.retrievePirs);
+router.post('/pir/addchapter', tokenControl, pircontroller.addChapter);
 
 
 export default router;

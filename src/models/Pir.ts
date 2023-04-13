@@ -1,5 +1,6 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
+const db = getDatabase();
 
 export class Pir {
     pirId: any;
@@ -22,7 +23,6 @@ export class Pir {
     }
 
     async createPir(pir: Pir) {
-        const db = getDatabase();
         await set(ref(db, 'pir/' + pir.pirId), {
             name: pir.name,
             description: pir.description,
@@ -32,10 +32,15 @@ export class Pir {
             chapterName: pir.chapter.chapterName,
             chapterContent: pir.chapter.chapterContent
         });
-        // await set(ref(db, 'users/' + pir.editorId + '/works/pirs/' + pir.pirId), { pir: pir.pirId });
+
     }
 
-    async retrieveEditors() {
+    async addChapterToPir(pir: Pir) {
+        await set(ref(db, 'pir/' + pir.pirId + '/chapters/' + pir.chapter.chapterId), {
+            chapterName: pir.chapter.chapterName,
+            chapterContent: pir.chapter.chapterContent
+        });
 
+        // await set(ref(db, 'users/' + pir.editorId + '/works/pirs/' + pir.pirId), { pir: pir.pirId });
     }
 };

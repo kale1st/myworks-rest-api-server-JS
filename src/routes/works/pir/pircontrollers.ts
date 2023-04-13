@@ -13,7 +13,7 @@ const createPir = async (req: Request, res: Response) => {
         try {
             console.log(newPir)
             await pirInstance.createPir(newPir);
-            // await res.status(200).send(newPir);
+            await res.status(200).send(newPir);
         } catch (err) {
             return res.status(409).send(
                 { error: err.message }
@@ -26,8 +26,25 @@ const createPir = async (req: Request, res: Response) => {
     })
 }
 
-const retrievePirs = async (req: Request, res: Response) => {
 
+
+const addChapter = async (req: Request, res: Response) => {
+    const pir: Pir = req.body.pir;
+    const editorId = req.body.editorId
+    const token = req.body.token;
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        try {
+            //
+        } catch (err) {
+            return res.status(409).send(
+                { error: err.message }
+            );
+        }
+    }).catch((err) => {
+        return res.status(401).send(
+            { error: err.message }
+        );
+    })
 }
 
-export default { createPir, retrievePirs }
+export default { createPir, addChapter }
