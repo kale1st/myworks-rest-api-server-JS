@@ -9,10 +9,10 @@ const createPir = async (req: Request, res: Response) => {
     let newPir: Pir = req.body.pir;
     newPir.pirId = await uuidv1();
     newPir.chapters[0].chapterId = await uuidv1(); // first chapter
+    newPir.chapters[0].pirId = await uuidv1();
     const token = req.body.token;
     await admin.auth().verifyIdToken(token).then(async (response) => {
         try {
-            console.log(newPir);
             await pirInstance.createPir(newPir).then(() => {
                 res.status(200).send(newPir);
             }).catch((err) => {
@@ -32,7 +32,14 @@ const createPir = async (req: Request, res: Response) => {
     })
 }
 
-const addChapter = async (req: Request, res: Response) => {
+const retrievePirs = async (req: Request, res: Response) => {
+
+    pirInstance.retrievePirs().then((pirs) => {
+        return res.status(200).send(pirs)
+    })
+}
+
+const createChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
     chapter.chapterId = uuidv1();
     const token = req.body.token;
@@ -57,11 +64,18 @@ const addChapter = async (req: Request, res: Response) => {
     })
 }
 
-const retrievePirsByEditorId = async (req: Request, res: Response) => {
-    const editorId: number | any = req.query.editorId;
+const retrieveChaptersByEditorId = async (req: Request, res: Response) => {
+    const editorId: any = req.query.editorId;
+    const pirId: any = req.query.pirId;
     pirInstance.retrievePirs().then((pirs) => {
-        return res.status(200).send(pirs)
+        const selectedPir: Pir | any = (Object.values(pirs.val()).filter((pir: Pir) => pir.pirId === pirId))[0]
+
+        const chapters = Object.values(
+            selectedPir.chapters).filter((chapter: Chapter) =>
+                chapter.editorId === editorId
+            )
+        return res.status(200).send(chapters)
+
     })
 }
-
-export default { createPir, addChapter, retrievePirsByEditorId }
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId }
