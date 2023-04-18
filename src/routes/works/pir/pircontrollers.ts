@@ -38,14 +38,13 @@ const addChapter = async (req: Request, res: Response) => {
     const token = req.body.token;
     await admin.auth().verifyIdToken(token).then(async (response) => {
         try {
-            console.log(chapter)
-            // pirInstance.addChapterToPir(chapter).then(() => {
-            //     res.status(200).send(chapter);
-            // }).catch((err) => {
-            //     return res.status(409).send(
-            //         { error: err.message }
-            //     );
-            // })
+            pirInstance.addChapterToPir(chapter).then(() => {
+                res.status(200).send(chapter);
+            }).catch((err) => {
+                return res.status(409).send(
+                    { error: err.message }
+                );
+            })
         } catch (err) {
             return res.status(409).send(
                 { error: err.message }
