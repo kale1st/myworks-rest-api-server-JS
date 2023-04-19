@@ -78,4 +78,16 @@ export class Pir {
                 return { errror: error }
             });
     }
+    async updatePir(pir: Pir) {
+        const db = admin.database();
+        const ref = db.ref('pir/' + pir.pirId);
+        return ref.update(pir)
+            .then(() => {
+                return { pir }
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error }
+            });
+    }
 };

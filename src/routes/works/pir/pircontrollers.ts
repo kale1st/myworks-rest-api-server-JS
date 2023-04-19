@@ -71,18 +71,19 @@ const retrieveChaptersByEditorId = async (req: Request, res: Response) => {
         const selectedPir: Pir | any = (Object.values(pirs.val()).filter((pir: Pir) => pir.pirId === pirId))[0]
 
         const chapters = Object.values(
-            selectedPir.chapters).filter((chapter: Chapter) =>
+            selectedPir?.chapters).filter((chapter: Chapter) =>
                 chapter.editorId === editorId
             )
         return res.status(200).send(chapters)
 
+    }).catch((error) => {
+        return res.status(401).send(error.message);
     })
 }
 
 const updateChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
     const token = req.body.token;
-    console.log(chapter)
     await admin.auth().verifyIdToken(token).then(async (response) => {
         const db = admin.database();
         pirInstance.updateChapter(chapter).then((updatedChapter) => {
@@ -93,4 +94,18 @@ const updateChapter = async (req: Request, res: Response) => {
         console.log(err)
     })
 }
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter }
+const updatePir = async (req: Request, res: Response) => {
+    const pir: Pir = req.body.pir;
+    const token = req.body.token;
+
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        const db = admin.database();
+        pirInstance.updatePir(pir).then((updatedPir) => {
+            return res.status(200).send(updatedPir)
+        })
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir }
