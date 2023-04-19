@@ -66,5 +66,16 @@ export class Pir {
             return { error: error }
         });
     }
-
+    async updateChapter(chapter: Chapter) {
+        const db = admin.database();
+        const ref = db.ref('pir/' + chapter.pirId + '/chapters/' + chapter.chapterId);
+        return ref.update(chapter)
+            .then(() => {
+                return { chapter }
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error }
+            });
+    }
 };

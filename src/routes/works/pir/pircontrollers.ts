@@ -78,4 +78,19 @@ const retrieveChaptersByEditorId = async (req: Request, res: Response) => {
 
     })
 }
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId }
+
+const updateChapter = async (req: Request, res: Response) => {
+    const chapter: Chapter = req.body.chapter;
+    const token = req.body.token;
+    console.log(chapter)
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        const db = admin.database();
+        pirInstance.updateChapter(chapter).then((updatedChapter) => {
+            return res.status(200).send(updatedChapter)
+        })
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter }

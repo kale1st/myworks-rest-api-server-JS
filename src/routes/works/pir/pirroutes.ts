@@ -12,5 +12,6 @@ router.post('/pir/create', chechkRole, pircontroller.createPir);
 router.post('/pir/addchapter', tokenControl, pircontroller.createChapter);
 router.get('/pir/getpirs', tokenControl, pircontroller.retrievePirs)
 router.get('/pir/getchaptersbyeditorid', tokenControl, pircontrollers.retrieveChaptersByEditorId)
+router.patch('/pir/updatechapter', tokenControl, pircontrollers.updateChapter)
 
 export default router;
