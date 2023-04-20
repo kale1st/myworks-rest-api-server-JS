@@ -33,10 +33,15 @@ const createPir = async (req: Request, res: Response) => {
 }
 
 const retrievePirs = async (req: Request, res: Response) => {
-
-    pirInstance.retrievePirs().then((pirs) => {
-        return res.status(200).send(pirs)
+    const token = req.headers['authorization'].split(' ')[1];
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        pirInstance.retrievePirs().then((pirs) => {
+            return res.status(200).send(pirs)
+        })
+    }).catch((err) => {
+        return res.status(401).send(err.message);
     })
+
 }
 
 const createChapter = async (req: Request, res: Response) => {
