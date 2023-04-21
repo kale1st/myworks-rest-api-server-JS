@@ -8,7 +8,7 @@ const db = getDatabase();
 const createBook = async (req: Request, res: Response) => {
 
     const book: Book = req.body.book;
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
     try {
         await admin.auth().verifyIdToken(token).then(async (response) => {
             book.bookId = await uuidv1()
@@ -55,7 +55,7 @@ const retrieveAllBooks = async (req: Request, res: Response) => {
 }
 const deleteBook = async (req: Request, res: Response) => {
     const bookId = req.body.bookId;
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
 
         const ref = await admin.database().ref('users/' + response.uid + '/works/books/');
@@ -71,7 +71,7 @@ const deleteBook = async (req: Request, res: Response) => {
 }
 const updateBook = async (req: Request, res: Response) => {
     const book = req.body.book;
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
         const db = admin.database();
         const ref = db.ref('users/' + response.uid + '/works/books/' + book.bookId);

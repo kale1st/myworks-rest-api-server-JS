@@ -10,7 +10,8 @@ const createPir = async (req: Request, res: Response) => {
     newPir.pirId = await uuidv1();
     newPir.chapters[0].chapterId = await uuidv1(); // first chapter
     newPir.chapters[0].pirId = await uuidv1();
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
+
     await admin.auth().verifyIdToken(token).then(async (response) => {
         try {
             await pirInstance.createPir(newPir).then(() => {
@@ -47,7 +48,8 @@ const retrievePirs = async (req: Request, res: Response) => {
 const createChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
     chapter.chapterId = uuidv1();
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
+
     await admin.auth().verifyIdToken(token).then(async (response) => {
         try {
             pirInstance.addChapterToPir(chapter).then(() => {
@@ -85,10 +87,9 @@ const retrieveChaptersByEditorId = async (req: Request, res: Response) => {
         return res.status(401).send(error.message);
     })
 }
-
 const updateChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
         const db = admin.database();
         pirInstance.updateChapter(chapter).then((updatedChapter) => {
@@ -101,7 +102,8 @@ const updateChapter = async (req: Request, res: Response) => {
 }
 const updatePir = async (req: Request, res: Response) => {
     const pir: Pir = req.body.pir;
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
+
 
     await admin.auth().verifyIdToken(token).then(async (response) => {
         const db = admin.database();
@@ -113,4 +115,5 @@ const updatePir = async (req: Request, res: Response) => {
         console.log(err)
     })
 }
+
 export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir }

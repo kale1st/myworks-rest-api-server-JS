@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as admin from "firebase-admin";
-import { getAuth, updatePassword, updateProfile } from "firebase/auth";
+import { getAuth, updatePassword } from "firebase/auth";
 const auth = getAuth();
 
 const getUserInfo = async (req: Request, res: Response) => {

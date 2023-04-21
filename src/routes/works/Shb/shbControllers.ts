@@ -6,7 +6,7 @@ import { SHB } from "../../../models/shb";
 const shb_class = new SHB('', '', '', null, null, null);
 
 const createShb = async (req: Request, res: Response) => {
-    const token = req.body.token
+    const token = req.headers['authorization'].split(' ')[1];
     const shbId = await uuidv1()
     const shbInfo: string[] = []
     const shbHistory: string[] = []

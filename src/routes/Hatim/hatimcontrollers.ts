@@ -4,7 +4,13 @@ import * as admin from "firebase-admin";
 
 const hatim = new Hatim();
 const createHatim = async (req: Request, res: Response) => {
-    await hatim.createHatim();
+
+    const token = req.headers['authorization'].split(' ')[1];
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        await hatim.createHatim();
+    }).catch((err) => {
+        return res.status(401).send(err.message);
+    })
 };
 const retrieveHatim = async (req: Request, res: Response) => {
     const token = req.headers['authorization'].split(' ')[1];
@@ -22,16 +28,15 @@ const retrieveHatim = async (req: Request, res: Response) => {
 
 }
 const updateHatim = async (req: Request, res: Response) => {
-    const { cuz, cuznumber, token } = req.body
+    const { cuz, cuznumber } = req.body;
+    const token = req.headers['authorization'].split(' ')[1];
+
     await admin.auth().verifyIdToken(token).then(async (response) => {
-        //
         await hatim.updateHatim(cuznumber, cuz).then((data) => {
             res.status(200).send(data);
         }).catch((err) => {
             return res.status(401).send(err.message);
         })
-        //   
-
     }).catch((err) => {
         console.log(err)
     })
