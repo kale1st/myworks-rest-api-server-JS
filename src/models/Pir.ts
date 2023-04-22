@@ -1,6 +1,7 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
+import { EditedWord } from "./editedWord";
 
 const db = getDatabase();
 
@@ -9,20 +10,26 @@ export class Pir {
     editorId: any;
     name: string | any;
     description: string;
-    chapters: Chapter[]
+    chapters: Chapter[];
+    wordPairs: EditedWord[]
 
     constructor(
+        pirId: any,
         editorId: any,
         name: string | any,
         description: string,
-        chapters: Chapter[]
+        chapters: Chapter[],
+        wordPairs: EditedWord[]
     ) {
+        this.pirId = pirId
         this.editorId = editorId
         this.name = name
         this.description = description
         this.chapters = chapters
+        this.wordPairs = wordPairs
 
     }
+
 
     async createPir(pir: Pir) {
         await set(ref(db, 'pir/' + pir.pirId), {

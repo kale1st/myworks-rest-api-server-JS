@@ -4,7 +4,7 @@ import { Pir } from '../../../models/Pir';
 import { Chapter } from '../../../models/Chapter';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
-const pirInstance = new Pir(null, null, null, null)
+const pirInstance = new Pir(null, null, null, null, null, null)
 const createPir = async (req: Request, res: Response) => {
     let newPir: Pir = req.body.pir;
     newPir.pirId = await uuidv1();
