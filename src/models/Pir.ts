@@ -97,4 +97,8 @@ export class Pir {
                 return { errror: error }
             });
     }
+
+    async createEditedWordPair(wordPair: EditedWord) {
+        await set(ref(db, 'pir/' + wordPair.pirId + '/wordpairs/' + wordPair.wordPairId), wordPair);
+    }
 };

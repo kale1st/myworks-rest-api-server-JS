@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as admin from "firebase-admin";
 import { Pir } from '../../../models/Pir';
 import { Chapter } from '../../../models/Chapter';
+import { EditedWord } from '../../../models/editedWord';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
 const pirInstance = new Pir(null, null, null, null, null, null)
@@ -116,4 +117,17 @@ const updatePir = async (req: Request, res: Response) => {
     })
 }
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir }
+const createEditedWordPairOfPir = async (req: Request, res: Response) => {
+    const wordpair: EditedWord = req.body.wordpair;
+    wordpair.wordPairId = uuidv1();
+    const token = req.headers['authorization'].split(' ')[1];
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        await pirInstance.createEditedWordPair(wordpair)
+        return res.status(200).send(wordpair)
+    }).catch((err) => {
+        return res.status(401).send(
+            { error: err.message }
+        );
+    })
+}
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createEditedWordPairOfPir }
