@@ -22,4 +22,13 @@ const retrievePirsNames = async (req: Request, res: Response) => {
 
 
 }
-export default { retrievePirsNames }
+
+const retrievePirByPirId = async (req: Request, res: Response) => {
+    const pirId = req.query.pirId;
+    pirInstance.retrievePirByPirId(pirId).then((pir) => {
+        return res.status(200).send(pir)
+    }).catch((error) => {
+        return res.status(401).send(error.message);
+    });
+}
+export default { retrievePirsNames, retrievePirByPirId }

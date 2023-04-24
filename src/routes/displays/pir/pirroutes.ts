@@ -1,12 +1,11 @@
 import express from 'express';
-import pircontroller from './pircontrollers'
+import pircontrollers from './pircontrollers'
 import bodyParser from 'body-parser';
-import tokenControl from '../../../functions/checkTokenExpiration';
 
 const router = express.Router();
 
 router.use(bodyParser.json());
-router.get('/display/retrievepirs', pircontroller.retrievePirsNames)
-
+router.get('/display/retrievepirs', pircontrollers.retrievePirsNames)
+router.get('/display/retrievechaptersbypirid', pircontrollers.retrievePirByPirId)
 
 export default router;

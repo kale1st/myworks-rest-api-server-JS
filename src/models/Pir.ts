@@ -97,7 +97,6 @@ export class Pir {
                 return { errror: error }
             });
     }
-
     async createEditedWordPair(wordPair: EditedWord) {
         await set(ref(db, 'pir/' + wordPair.pirId + '/wordpairs/' + wordPair.wordPairId), wordPair);
     }
@@ -117,6 +116,23 @@ export class Pir {
             });
             console.log(newDataArray)
             return newDataArray
+        });
+    }
+
+    async retrievePirByPirId(pirId: any) {
+        const nodeRef = admin.database().ref('pir/' + pirId);
+        // Read the data at the node once
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it exists
+                const data = snapshot.val();
+                return data
+
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
         });
     }
 
