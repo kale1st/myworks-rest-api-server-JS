@@ -2,6 +2,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
 import { EditedWord } from "./editedWord";
+import { concatMap, delay, from, mergeMap, of } from 'rxjs'
 
 const db = getDatabase();
 
@@ -101,4 +102,23 @@ export class Pir {
     async createEditedWordPair(wordPair: EditedWord) {
         await set(ref(db, 'pir/' + wordPair.pirId + '/wordpairs/' + wordPair.wordPairId), wordPair);
     }
+    //display for users (readers)
+    async retrievePirsNames() {
+        const pirNode = admin.database().ref('pir');
+
+        pirNode.once("value", async (dataSnapshot: any) => {
+            const dataArray = Object.values(dataSnapshot.val())
+            // console.log(arr)
+
+            const newDataArray = await dataArray.map((data: Pir) => {
+                return {
+                    pirId: data.pirId,
+                    pirName: data.name
+                };
+            });
+            console.log(newDataArray)
+            return newDataArray
+        });
+    }
+
 };

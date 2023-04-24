@@ -130,4 +130,5 @@ const createEditedWordPairOfPir = async (req: Request, res: Response) => {
         );
     })
 }
+
 export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createEditedWordPairOfPir }

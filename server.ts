@@ -10,6 +10,7 @@ import settingsroutes from './src/routes/settings/settingsroutes'
 import shbroutes from './src/routes/works/Shb/shbRoutes'
 import pirroutes from './src/routes/works/pir/pirroutes'
 import generalroutes from './src/routes/general/generalroutes'
+import display from './src/routes/displays/pir/pirroutes'
 
 const port = process.env.PORT || 3000;
 
@@ -62,6 +63,7 @@ app.use('/', settingsroutes)
 app.use('/', shbroutes)
 app.use('/', pirroutes)
 app.use('/', generalroutes)
+app.use('/', display)
 // #############################################################################
 // Catch all handler for all other request.
 // app.use("*", (req, res) => {
