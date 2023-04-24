@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { Pir } from '../../../models/Pir';
-import { Observable } from 'rxjs';
 
 const pirInstance = new Pir(null, null, null, null, null, null)
 

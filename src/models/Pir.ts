@@ -2,7 +2,6 @@ import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
 import { EditedWord } from "./editedWord";
-import { concatMap, delay, from, mergeMap, of } from 'rxjs'
 
 const db = getDatabase();
 

@@ -43,7 +43,20 @@ const retrievePirs = async (req: Request, res: Response) => {
     }).catch((err) => {
         return res.status(401).send(err.message);
     })
+    // pirInstance.retrievePirs().then(async (dataSnapshot) => {
+    //     const dataArray = Object.values(dataSnapshot.val());
 
+    //     const newDataArray = await dataArray.map((data: Pir) => {
+    //         return {
+    //             pirId: data.pirId,
+    //             name: data.name
+    //         };
+    //     });
+    //     return res.status(200).send(newDataArray)
+    // }).catch((error) => {
+    //     return res.status(401).send(error.message);
+
+    // });
 }
 
 const createChapter = async (req: Request, res: Response) => {
