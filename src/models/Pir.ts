@@ -11,7 +11,6 @@ export class Pir {
     name: string | any;
     description: string;
     chapters: Chapter[];
-    wordPairs: EditedWord[]
 
     constructor(
         pirId: any,
@@ -19,14 +18,12 @@ export class Pir {
         name: string | any,
         description: string,
         chapters: Chapter[],
-        wordPairs: EditedWord[]
     ) {
         this.pirId = pirId
         this.editorId = editorId
         this.name = name
         this.description = description
         this.chapters = chapters
-        this.wordPairs = wordPairs
 
     }
 
@@ -101,7 +98,7 @@ export class Pir {
     }
 
     async createEditedWordPair(wordPair: EditedWord) {
-        await set(ref(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordpairs/' + wordPair.wordPairId), wordPair);
+        await set(ref(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
     }
 
     async retrieveChaptersNamesByPirId(pirId: any) {

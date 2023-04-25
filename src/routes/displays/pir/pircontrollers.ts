@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Pir } from '../../../models/Pir';
 import { Chapter } from '../../../models/Chapter';
 
-const pirInstance = new Pir(null, null, null, null, null, null)
+const pirInstance = new Pir(null, null, null, null, null)
 
 const retrievePirsNames = async (req: Request, res: Response) => {
 
