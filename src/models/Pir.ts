@@ -100,26 +100,8 @@ export class Pir {
     async createEditedWordPair(wordPair: EditedWord) {
         await set(ref(db, 'pir/' + wordPair.pirId + '/wordpairs/' + wordPair.wordPairId), wordPair);
     }
-    //display for users (readers)
-    async retrievePirsNames() {
-        const pirNode = admin.database().ref('pir');
 
-        pirNode.once("value", async (dataSnapshot: any) => {
-            const dataArray = Object.values(dataSnapshot.val())
-            // console.log(arr)
-
-            const newDataArray = await dataArray.map((data: Pir) => {
-                return {
-                    pirId: data.pirId,
-                    pirName: data.name
-                };
-            });
-            console.log(newDataArray)
-            return newDataArray
-        });
-    }
-
-    async retrievePirByPirId(pirId: any) {
+    async retrieveChaptersNamesByPirId(pirId: any) {
         const nodeRef = admin.database().ref('pir/' + pirId);
         // Read the data at the node once
         return nodeRef.once('value', (snapshot) => {
@@ -136,4 +118,21 @@ export class Pir {
         });
     }
 
+    async retrieveChapterByChapterId(chapterId: any, pirId: any) {
+        const nodeRef = admin.database().ref(`pir/${pirId}/chapters/${chapterId}`);
+        // Read the data at the node once
+        return nodeRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                // access the data from the snapshot if it exists
+                const data = snapshot.val();
+                console.log(data)
+                return data
+
+            } else {
+                return null
+            }
+        }, (error) => {
+            return { error: error }
+        });
+    }
 };

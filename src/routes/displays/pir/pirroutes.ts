@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(bodyParser.json());
 router.get('/display/retrievepirs', pircontrollers.retrievePirsNames)
-router.get('/display/retrievechaptersbypirid', pircontrollers.retrievePirByPirId)
+router.get('/display/retrievechaptersbypirid', pircontrollers.retrieveChaptersNamesByPirId)
+router.get('/display/retrievechapterbychapterid', pircontrollers.retrieveChaptersByChapterId)
 
 export default router;
