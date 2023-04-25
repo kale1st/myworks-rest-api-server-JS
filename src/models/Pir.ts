@@ -1,7 +1,7 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
-import { EditedWord } from "./editedWord";
+import { WordPair } from "./WordPair";
 
 const db = getDatabase();
 
@@ -97,7 +97,7 @@ export class Pir {
             });
     }
 
-    async createEditedWordPair(wordPair: EditedWord) {
+    async createEditedWordPair(wordPair: WordPair) {
         await set(ref(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
     }
 

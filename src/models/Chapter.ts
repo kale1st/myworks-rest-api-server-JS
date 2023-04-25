@@ -1,4 +1,4 @@
-import { EditedWord } from "./editedWord";
+import { WordPair } from "./WordPair";
 
 export class Chapter {
     chapterId: any;
@@ -7,6 +7,6 @@ export class Chapter {
     createDate: Date;
     chapterName: string;
     chapterContent: string;
-    wordPairs: EditedWord[]
+    wordPairs: WordPair[]
 
 }

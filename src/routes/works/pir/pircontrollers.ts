@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as admin from "firebase-admin";
 import { Pir } from '../../../models/Pir';
 import { Chapter } from '../../../models/Chapter';
-import { EditedWord } from '../../../models/editedWord';
+import { WordPair } from '../../../models/WordPair';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
 const pirInstance = new Pir(null, null, null, null, null)
@@ -131,7 +131,7 @@ const updatePir = async (req: Request, res: Response) => {
 }
 
 const createEditedWordPairOfPir = async (req: Request, res: Response) => {
-    const wordpair: EditedWord = req.body.wordpair;
+    const wordpair: WordPair = req.body.wordpair;
     wordpair.wordPairId = uuidv1();
     const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {

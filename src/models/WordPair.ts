@@ -1,4 +1,4 @@
-export class EditedWord {
+export class WordPair {
     wordPairId: any;
     word: string;
     meaning: string;
