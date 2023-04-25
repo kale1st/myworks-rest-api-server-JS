@@ -38,7 +38,7 @@ const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 const db = (0, database_1.getDatabase)();
 const createBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const book = req.body.book;
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
     try {
         yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
             book.bookId = yield uuidv1();
@@ -76,7 +76,7 @@ const retrieveAllBooks = (req, res) => __awaiter(void 0, void 0, void 0, functio
 });
 const deleteBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.body.bookId;
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
         const ref = yield admin.database().ref('users/' + response.uid + '/works/books/');
         yield ref.child(bookId).remove();
@@ -87,7 +87,7 @@ const deleteBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const updateBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const book = req.body.book;
-    const token = req.body.token;
+    const token = req.headers['authorization'].split(' ')[1];
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
         const db = admin.database();
         const ref = db.ref('users/' + response.uid + '/works/books/' + book.bookId);

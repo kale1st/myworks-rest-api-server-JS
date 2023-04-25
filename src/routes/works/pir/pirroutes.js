@@ -16,4 +16,6 @@ router.post('/pir/addchapter', checkTokenExpiration_1.default, pircontrollers_1.
 router.get('/pir/getpirs', checkTokenExpiration_1.default, pircontrollers_1.default.retrievePirs);
 router.get('/pir/getchaptersbyeditorid', checkTokenExpiration_1.default, pircontrollers_2.default.retrieveChaptersByEditorId);
 router.patch('/pir/updatechapter', checkTokenExpiration_1.default, pircontrollers_2.default.updateChapter);
+router.patch('/pir/updatepir', checkTokenExpiration_1.default, pircontrollers_2.default.updatePir);
+router.post('/pir/createeditedwordpair', checkTokenExpiration_1.default, pircontrollers_2.default.createEditedWordPairOfPir);
 exports.default = router;
