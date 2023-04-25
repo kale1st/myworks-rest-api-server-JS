@@ -73,6 +73,7 @@ export class Pir {
             return { error: error }
         });
     }
+
     async updateChapter(chapter: Chapter) {
         const db = admin.database();
         const ref = db.ref('pir/' + chapter.pirId + '/chapters/' + chapter.chapterId);
@@ -85,6 +86,7 @@ export class Pir {
                 return { errror: error }
             });
     }
+
     async updatePir(pir: Pir) {
         const db = admin.database();
         const ref = db.ref('pir/' + pir.pirId);
@@ -97,8 +99,9 @@ export class Pir {
                 return { errror: error }
             });
     }
+
     async createEditedWordPair(wordPair: EditedWord) {
-        await set(ref(db, 'pir/' + wordPair.pirId + '/wordpairs/' + wordPair.wordPairId), wordPair);
+        await set(ref(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordpairs/' + wordPair.wordPairId), wordPair);
     }
 
     async retrieveChaptersNamesByPirId(pirId: any) {
