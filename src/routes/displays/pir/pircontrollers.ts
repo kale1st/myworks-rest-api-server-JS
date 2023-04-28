@@ -32,7 +32,8 @@ const retrieveChaptersNamesByPirId = async (req: Request, res: Response) => {
         const newDataArray = await dataArray.map((data: Chapter) => {
             return {
                 chapterId: data.chapterId,
-                chapterName: data.chapterName
+                chapterName: data.chapterName,
+                pirId: data.pirId
             };
         });
         return res.status(200).send(newDataArray)
