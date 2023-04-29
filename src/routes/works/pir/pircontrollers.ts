@@ -9,8 +9,6 @@ const pirInstance = new Pir(null, null, null, null, null)
 const createPir = async (req: Request, res: Response) => {
     let newPir: Pir = req.body.pir;
     newPir.pirId = await uuidv1();
-    newPir.chapters[0].chapterId = await uuidv1(); // first chapter
-    newPir.chapters[0].pirId = await uuidv1();
     const token = req.headers['authorization'].split(' ')[1];
 
     await admin.auth().verifyIdToken(token).then(async (response) => {

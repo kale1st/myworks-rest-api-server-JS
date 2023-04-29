@@ -35,9 +35,6 @@ export class Pir {
             description: pir.description,
             editorId: pir.editorId,
         });
-        await set(ref(db, 'pir/' + pir.pirId + '/chapters/' + pir.chapters[0].chapterId + '/'), pir.chapters[0]
-        );
-
     }
 
     async addChapterToPir(chapter: Chapter) {
@@ -125,7 +122,6 @@ export class Pir {
             if (snapshot.exists()) {
                 // access the data from the snapshot if it exists
                 const data = snapshot.val();
-                console.log(data)
                 return data
 
             } else {
