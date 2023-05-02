@@ -1,7 +1,6 @@
 import { getDatabase, ref, set } from "firebase/database";
 import { Chapter } from "./Chapter";
 import * as admin from "firebase-admin";
-import { WordPair } from "./WordPair";
 
 const db = getDatabase();
 
@@ -92,10 +91,6 @@ export class Pir {
                 console.error("Error updating data:", error);
                 return { errror: error }
             });
-    }
-
-    async createEditedWordPair(wordPair: WordPair) {
-        await set(ref(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
     }
 
     async retrieveChaptersNamesByPirId(pirId: any) {

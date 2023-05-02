@@ -6,11 +6,13 @@ import { WordPair } from '../../../models/WordPair';
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 
 const pirInstance = new Pir(null, null, null, null, null)
+const wordPairInstance = new WordPair(null, null, null, null, null)
+
 const createPir = async (req: Request, res: Response) => {
     let newPir: Pir = req.body.pir;
     newPir.pirId = await uuidv1();
     const token = req.headers['authorization'].split(' ')[1];
-
+    console.log(newPir)
     await admin.auth().verifyIdToken(token).then(async (response) => {
         try {
             await pirInstance.createPir(newPir).then(() => {
@@ -99,6 +101,7 @@ const retrieveChaptersByEditorId = async (req: Request, res: Response) => {
         return res.status(401).send(error.message);
     })
 }
+
 const updateChapter = async (req: Request, res: Response) => {
     const chapter: Chapter = req.body.chapter;
     const token = req.headers['authorization'].split(' ')[1];
@@ -112,28 +115,25 @@ const updateChapter = async (req: Request, res: Response) => {
         console.log(err)
     })
 }
+
 const updatePir = async (req: Request, res: Response) => {
     const pir: Pir = req.body.pir;
     const token = req.headers['authorization'].split(' ')[1];
-
-
     await admin.auth().verifyIdToken(token).then(async (response) => {
-        const db = admin.database();
         pirInstance.updatePir(pir).then((updatedPir) => {
             return res.status(200).send(updatedPir)
         })
-
     }).catch((err) => {
         console.log(err)
     })
 }
 
-const createEditedWordPairOfPir = async (req: Request, res: Response) => {
+const createWordPair = async (req: Request, res: Response) => {
     const wordpair: WordPair = req.body.wordpair;
     wordpair.wordPairId = uuidv1();
     const token = req.headers['authorization'].split(' ')[1];
     await admin.auth().verifyIdToken(token).then(async (response) => {
-        await pirInstance.createEditedWordPair(wordpair)
+        await wordPairInstance.createWordPair(wordpair)
         return res.status(200).send(wordpair)
     }).catch((err) => {
         return res.status(401).send(
@@ -142,4 +142,16 @@ const createEditedWordPairOfPir = async (req: Request, res: Response) => {
     })
 }
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createEditedWordPairOfPir }
+const updateWordPair = async (req: Request, res: Response) => {
+    const wordPair: WordPair = req.body.wordPair;
+    const token = req.headers['authorization'].split(' ')[1];
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        wordPairInstance.updateWordPair(wordPair).then((updatedWordPair) => {
+            return res.status(200).send(updatedWordPair)
+        })
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair }

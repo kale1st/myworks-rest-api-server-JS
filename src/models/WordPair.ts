@@ -1,3 +1,6 @@
+import { getDatabase, ref, set } from "firebase/database";
+import * as admin from "firebase-admin";
+
 export class WordPair {
     wordPairId: any;
     word: string;
@@ -12,5 +15,24 @@ export class WordPair {
         this.chapterId = chapterId
         this.pirId = pirId
         this.editorId = editorId
+    }
+
+    async createWordPair(wordPair: WordPair) {
+        const db = getDatabase();
+        await set(ref(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
+    }
+
+    async updateWordPair(wordPair: WordPair) {
+        const db = admin.database();
+        const ref = db.ref('pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId);
+        console.log(wordPair)
+        // return ref.update(wordPair)
+        //     .then(() => {
+        //         return { wordPair }
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error updating data:", error);
+        //         return { errror: error }
+        //     });
     }
 }
