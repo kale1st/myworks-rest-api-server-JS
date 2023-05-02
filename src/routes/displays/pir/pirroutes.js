@@ -9,6 +9,6 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const router = express_1.default.Router();
 router.use(body_parser_1.default.json());
 router.get('/display/retrievepirs', pircontrollers_1.default.retrievePirsNames);
-router.get('/display/retrievechaptersbypirid', pircontrollers_1.default.retrieveChaptersNamesByPirId);
+router.get('/display/retrievechaptersnamesbypirid', pircontrollers_1.default.retrieveChaptersNamesByPirId);
 router.get('/display/retrievechapterbychapterid', pircontrollers_1.default.retrieveChaptersByChapterId);
 exports.default = router;

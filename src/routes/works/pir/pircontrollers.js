@@ -34,14 +34,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
 const Pir_1 = require("../../../models/Pir");
+const WordPair_1 = require("../../../models/WordPair");
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 const pirInstance = new Pir_1.Pir(null, null, null, null, null);
+const wordPairInstance = new WordPair_1.WordPair(null, null, null, null, null);
 const createPir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let newPir = req.body.pir;
     newPir.pirId = yield uuidv1();
-    newPir.chapters[0].chapterId = yield uuidv1(); // first chapter
-    newPir.chapters[0].pirId = yield uuidv1();
     const token = req.headers['authorization'].split(' ')[1];
+    console.log(newPir);
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             yield pirInstance.createPir(newPir).then(() => {
@@ -125,7 +126,6 @@ const updatePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pir = req.body.pir;
     const token = req.headers['authorization'].split(' ')[1];
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        const db = admin.database();
         pirInstance.updatePir(pir).then((updatedPir) => {
             return res.status(200).send(updatedPir);
         });
@@ -133,15 +133,26 @@ const updatePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(err);
     });
 });
-const createEditedWordPairOfPir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const wordpair = req.body.wordpair;
     wordpair.wordPairId = uuidv1();
     const token = req.headers['authorization'].split(' ')[1];
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        yield pirInstance.createEditedWordPair(wordpair);
+        yield wordPairInstance.createWordPair(wordpair);
         return res.status(200).send(wordpair);
     })).catch((err) => {
         return res.status(401).send({ error: err.message });
     });
 });
-exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createEditedWordPairOfPir };
+const updateWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const wordPair = req.body.wordPair;
+    const token = req.headers['authorization'].split(' ')[1];
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        wordPairInstance.updateWordPair(wordPair).then((updatedWordPair) => {
+            return res.status(200).send(updatedWordPair);
+        });
+    })).catch((err) => {
+        console.log(err);
+    });
+});
+exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair };

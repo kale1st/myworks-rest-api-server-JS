@@ -52,7 +52,6 @@ class Pir {
                 description: pir.description,
                 editorId: pir.editorId,
             });
-            yield (0, database_1.set)((0, database_1.ref)(db, 'pir/' + pir.pirId + '/chapters/' + pir.chapters[0].chapterId + '/'), pir.chapters[0]);
         });
     }
     addChapterToPir(chapter) {
@@ -115,11 +114,6 @@ class Pir {
             });
         });
     }
-    createEditedWordPair(wordPair) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield (0, database_1.set)((0, database_1.ref)(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
-        });
-    }
     retrieveChaptersNamesByPirId(pirId) {
         return __awaiter(this, void 0, void 0, function* () {
             const nodeRef = admin.database().ref('pir/' + pirId);
@@ -146,7 +140,6 @@ class Pir {
                 if (snapshot.exists()) {
                     // access the data from the snapshot if it exists
                     const data = snapshot.val();
-                    console.log(data);
                     return data;
                 }
                 else {
