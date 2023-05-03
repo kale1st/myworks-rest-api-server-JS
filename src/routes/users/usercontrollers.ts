@@ -33,7 +33,7 @@ const createUser = async (req: Request, res: Response) => {
                         });
                     })
                     .catch(async (error) => {
-                        return await res.send({
+                        return await res.status(401).send({
                             "status": 404,
                             "message": error.message,
                         });
@@ -48,12 +48,8 @@ const getUserById = async (req: Request, res: Response) => {
     await admin.auth().verifyIdToken(token).then(async (response) => {
         admin.auth().getUser(userId)
             .then((userRecord) => {
-
+                return res.status(200).send(userRecord)
             })
-            .catch((error) => {
-                console.error('Error fetching user record:', error);
-            });
-
     }).catch((err) => {
         return res.status(401).send(err.message);
     })

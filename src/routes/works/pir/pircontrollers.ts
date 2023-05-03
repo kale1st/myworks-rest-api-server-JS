@@ -154,4 +154,19 @@ const updateWordPair = async (req: Request, res: Response) => {
     })
 }
 
-export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair }
+const deletePir = async (req: Request, res: Response) => {
+    const pirId = req.body.pirId;
+    const token = req.headers['authorization'].split(' ')[1];
+    await admin.auth().verifyIdToken(token).then(async (response) => {
+        pirInstance.deletePir(pirId).then(() => {
+            return res.status(200).send(
+                { info: 'the book at' + pirId + 'id! deleted' }
+            );
+        })
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+export default { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir }

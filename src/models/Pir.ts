@@ -126,4 +126,9 @@ export class Pir {
             return { error: error }
         });
     }
+
+    async deletePir(pirId: any) {
+        const ref = await admin.database().ref('pir/');
+        return await ref.child(pirId).remove();
+    }
 };

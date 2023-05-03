@@ -23,16 +23,18 @@ export class WordPair {
     }
 
     async updateWordPair(wordPair: WordPair) {
+        console.log(wordPair)
+
         const db = admin.database();
         const ref = db.ref('pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId);
-        console.log(wordPair)
-        // return ref.update(wordPair)
-        //     .then(() => {
-        //         return { wordPair }
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error updating data:", error);
-        //         return { errror: error }
-        //     });
+
+        return ref.update(wordPair)
+            .then((ress) => {
+                return { ress }
+            })
+            .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error }
+            });
     }
 }
