@@ -155,4 +155,15 @@ const updateWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function*
         console.log(err);
     });
 });
-exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair };
+const deletePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pirId = req.body.pirId;
+    const token = req.headers['authorization'].split(' ')[1];
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        pirInstance.deletePir(pirId).then(() => {
+            return res.status(200).send({ info: 'the book at' + pirId + 'id! deleted' });
+        });
+    })).catch((err) => {
+        console.log(err);
+    });
+});
+exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir };

@@ -150,6 +150,12 @@ class Pir {
             });
         });
     }
+    deletePir(pirId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ref = yield admin.database().ref('pir/');
+            return yield ref.child(pirId).remove();
+        });
+    }
 }
 exports.Pir = Pir;
 ;

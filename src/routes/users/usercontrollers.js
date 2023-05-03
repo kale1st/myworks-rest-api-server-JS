@@ -62,7 +62,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 });
             }))
                 .catch((error) => __awaiter(void 0, void 0, void 0, function* () {
-                return yield res.send({
+                return yield res.status(401).send({
                     "status": 404,
                     "message": error.message,
                 });
@@ -76,9 +76,7 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
         admin.auth().getUser(userId)
             .then((userRecord) => {
-        })
-            .catch((error) => {
-            console.error('Error fetching user record:', error);
+            return res.status(200).send(userRecord);
         });
     })).catch((err) => {
         return res.status(401).send(err.message);
