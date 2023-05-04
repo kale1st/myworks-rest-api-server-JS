@@ -33,53 +33,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
-const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = yield req.body;
-    yield admin.auth().getUserByEmail(email).then((userRecord) => __awaiter(void 0, void 0, void 0, function* () {
-        if (userRecord) {
-            return yield res.send({
-                'status': 409,
-                response: 'user already exists'
-            });
-        }
-    })).catch((error) => __awaiter(void 0, void 0, void 0, function* () {
-        // if user does not exist than new user is created========
-        yield admin.auth().createUser({
-            displayName: email.split('@')[0],
-            password: password,
-            email: email,
-        })
-            .then((userCredential) => __awaiter(void 0, void 0, void 0, function* () {
-            //adding role in firebase-auth within customclaims
-            yield admin.auth().setCustomUserClaims(userCredential.uid, { roles: new Array() });
-            //getting idToken to send to the client-side===============
-            admin.auth().createCustomToken(userCredential.uid)
-                .then((customToken) => __awaiter(void 0, void 0, void 0, function* () {
-                return res.send({
-                    "status": 200,
-                    "message": "Success",
-                    "token": customToken
-                });
-            }))
-                .catch((error) => __awaiter(void 0, void 0, void 0, function* () {
-                return yield res.status(401).send({
-                    "status": 404,
-                    "message": error.message,
-                });
-            }));
-        }));
-    }));
-});
-const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const controlTokenExpired = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers['authorization'].split(' ')[1];
-    const userId = req.query.uid;
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        admin.auth().getUser(userId)
-            .then((userRecord) => {
-            return res.status(200).send(userRecord);
+        return res.status(200).send({
+            response: 'valid token!',
+            status: 200,
         });
     })).catch((err) => {
         return res.status(401).send(err.message);
     });
 });
-exports.default = { createUser, getUserById };
+exports.default = { controlTokenExpired };

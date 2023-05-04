@@ -36,7 +36,12 @@ const Hatim_1 = require("../../models/Hatim");
 const admin = __importStar(require("firebase-admin"));
 const hatim = new Hatim_1.Hatim();
 const createHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield hatim.createHatim();
+    const token = req.headers['authorization'].split(' ')[1];
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        yield hatim.createHatim();
+    })).catch((err) => {
+        return res.status(401).send(err.message);
+    });
 });
 const retrieveHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers['authorization'].split(' ')[1];
@@ -53,15 +58,14 @@ const retrieveHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
 });
 const updateHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { cuz, cuznumber, token } = req.body;
+    const { cuz, cuznumber } = req.body;
+    const token = req.headers['authorization'].split(' ')[1];
     yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        //
         yield hatim.updateHatim(cuznumber, cuz).then((data) => {
             res.status(200).send(data);
         }).catch((err) => {
             return res.status(401).send(err.message);
         });
-        //   
     })).catch((err) => {
         console.log(err);
     });

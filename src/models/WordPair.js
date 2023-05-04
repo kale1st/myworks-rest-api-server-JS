@@ -32,28 +32,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WordPair = void 0;
+const database_1 = require("firebase/database");
 const admin = __importStar(require("firebase-admin"));
-const { v1: uuidv1, v4: uuidv4 } = require('uuid');
-const shb_1 = require("../../../models/shb");
-const shb_class = new shb_1.SHB('', '', '', null, null, null);
-const createShb = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
-    const shbId = yield uuidv1();
-    const shbInfo = [];
-    const shbHistory = [];
-    const { shbName, editorId, createDate } = req.body.shb;
-    let newShb = req.body.shb;
-    newShb.shbId = yield uuidv1();
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            yield shb_class.createShb(newShb);
-            yield res.status(200).send(newShb);
-        }
-        catch (err) {
-            return res.status(409).send({ error: err.message });
-        }
-    })).catch((err) => {
-        return res.status(401).send({ error: err.message });
-    });
-});
-exports.default = { createShb };
+class WordPair {
+    constructor(word, meaning, chapterId, pirId, editorId) {
+        this.word = word;
+        this.meaning = meaning;
+        this.chapterId = chapterId;
+        this.pirId = pirId;
+        this.editorId = editorId;
+    }
+    createWordPair(wordPair) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const db = (0, database_1.getDatabase)();
+            yield (0, database_1.set)((0, database_1.ref)(db, 'pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
+        });
+    }
+    updateWordPair(wordPair) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(wordPair);
+            const db = admin.database();
+            const ref = db.ref('pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId);
+            return ref.update(wordPair)
+                .then((ress) => {
+                return { ress };
+            })
+                .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error };
+            });
+        });
+    }
+}
+exports.WordPair = WordPair;

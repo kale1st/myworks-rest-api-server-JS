@@ -37,7 +37,8 @@ const database_1 = require("firebase/database");
 const admin = __importStar(require("firebase-admin"));
 const db = (0, database_1.getDatabase)();
 class Pir {
-    constructor(editorId, name, description, chapters) {
+    constructor(pirId, editorId, name, description, chapters) {
+        this.pirId = pirId;
         this.editorId = editorId;
         this.name = name;
         this.description = description;
@@ -51,7 +52,6 @@ class Pir {
                 description: pir.description,
                 editorId: pir.editorId,
             });
-            yield (0, database_1.set)((0, database_1.ref)(db, 'pir/' + pir.pirId + '/chapters/' + pir.chapters[0].chapterId + '/'), pir.chapters[0]);
         });
     }
     addChapterToPir(chapter) {
@@ -98,6 +98,62 @@ class Pir {
                 console.error("Error updating data:", error);
                 return { errror: error };
             });
+        });
+    }
+    updatePir(pir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const db = admin.database();
+            const ref = db.ref('pir/' + pir.pirId);
+            return ref.update(pir)
+                .then(() => {
+                return { pir };
+            })
+                .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error };
+            });
+        });
+    }
+    retrieveChaptersNamesByPirId(pirId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const nodeRef = admin.database().ref('pir/' + pirId);
+            // Read the data at the node once
+            return nodeRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    // access the data from the snapshot if it exists
+                    const data = snapshot.val();
+                    return data;
+                }
+                else {
+                    return null;
+                }
+            }, (error) => {
+                return { error: error };
+            });
+        });
+    }
+    retrieveChapterByChapterId(chapterId, pirId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const nodeRef = admin.database().ref(`pir/${pirId}/chapters/${chapterId}`);
+            // Read the data at the node once
+            return nodeRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    // access the data from the snapshot if it exists
+                    const data = snapshot.val();
+                    return data;
+                }
+                else {
+                    return null;
+                }
+            }, (error) => {
+                return { error: error };
+            });
+        });
+    }
+    deletePir(pirId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ref = yield admin.database().ref('pir/');
+            return yield ref.child(pirId).remove();
         });
     }
 }

@@ -14,6 +14,8 @@ const hatimroutes_1 = __importDefault(require("./src/routes/Hatim/hatimroutes"))
 const settingsroutes_1 = __importDefault(require("./src/routes/settings/settingsroutes"));
 const shbRoutes_1 = __importDefault(require("./src/routes/works/Shb/shbRoutes"));
 const pirroutes_1 = __importDefault(require("./src/routes/works/pir/pirroutes"));
+const generalroutes_1 = __importDefault(require("./src/routes/general/generalroutes"));
+const pirroutes_2 = __importDefault(require("./src/routes/displays/pir/pirroutes"));
 const port = process.env.PORT || 3000;
 require('dotenv').config();
 const corsOptions = {
@@ -60,6 +62,8 @@ app.use('/', hatimroutes_1.default);
 app.use('/', settingsroutes_1.default);
 app.use('/', shbRoutes_1.default);
 app.use('/', pirroutes_1.default);
+app.use('/', generalroutes_1.default);
+app.use('/', pirroutes_2.default);
 // #############################################################################
 // Catch all handler for all other request.
 // app.use("*", (req, res) => {

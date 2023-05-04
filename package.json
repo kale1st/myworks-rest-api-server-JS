@@ -12,12 +12,12 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "firebase": "^9.17.1",
     "firebase-admin": "^11.5.0",
     "token": "^0.1.0",
-    "uuid": "^9.0.0",
-    "dotenv": "^16.0.3"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "^8.36.0",
