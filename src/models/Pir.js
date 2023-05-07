@@ -156,6 +156,12 @@ class Pir {
             return yield ref.child(pirId).remove();
         });
     }
+    deleteChapter(pirId, chapterId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ref = yield admin.database().ref(`pir/${pirId}/chapters/`);
+            return yield ref.child(chapterId).remove();
+        });
+    }
 }
 exports.Pir = Pir;
 ;

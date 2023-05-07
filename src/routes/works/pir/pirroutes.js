@@ -20,4 +20,5 @@ router.post('/pir/createeditedwordpair', checkTokenExpiration_1.default, pircont
 router.patch('/pir/updatewordpair', checkTokenExpiration_1.default, pircontrollers_1.default.updateWordPair);
 router.delete('/pir/deletepir', checkTokenExpiration_1.default, pircontrollers_1.default.deletePir);
 router.get('/pir/getallwordpairsofsinglepir', checkTokenExpiration_1.default, pircontrollers_1.default.retrieveAllWordPairsOfSinglePir);
+router.delete('/pir/deletechapter', checkTokenExpiration_1.default, pircontrollers_1.default.deleteChapter);
 exports.default = router;
