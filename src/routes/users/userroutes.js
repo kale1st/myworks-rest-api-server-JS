@@ -12,4 +12,6 @@ router.use(body_parser_1.default.json());
 router.post('/signin', sigin_1.default.signin);
 router.post('/users/createuser', usercontrollers_1.default.createUser);
 router.get('/users/getUserById', usercontrollers_1.default.getUserById);
+router.get('/users/retrieveallusers', usercontrollers_1.default.retrieveAllUsers);
+router.get('/users/retrieveeditorbyid', usercontrollers_1.default.retrieveEditorbyEditorId);
 exports.default = router;

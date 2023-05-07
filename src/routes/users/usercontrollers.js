@@ -33,6 +33,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
+const User_1 = require("../../models/User");
+const instanceUser = new User_1.User(null, null, null, null);
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = yield req.body;
     yield admin.auth().getUserByEmail(email).then((userRecord) => __awaiter(void 0, void 0, void 0, function* () {
@@ -82,4 +84,37 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(401).send(err.message);
     });
 });
-exports.default = { createUser, getUserById };
+const retrieveAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers['authorization'].split(' ')[1];
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        let users = [];
+        yield admin.auth().listUsers()
+            .then((userRecords) => __awaiter(void 0, void 0, void 0, function* () {
+            userRecords.users.map((userInfo) => {
+                let user = {
+                    displayName: userInfo.displayName,
+                    uid: userInfo.uid
+                };
+                users.push(user);
+            });
+            return yield res.status(200).send(users);
+        }))
+            .catch((error) => {
+            console.log('Error fetching user data:', error);
+        });
+    })).catch((err) => {
+        return res.status(401).send(err.message);
+    });
+});
+const retrieveEditorbyEditorId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers['authorization'].split(' ')[1];
+    const editorid = req.query.editorid;
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        instanceUser.retrieveEditorByEditorId(editorid).then((user) => {
+            res.status(200).send(user);
+        });
+    })).catch((err) => {
+        return res.status(401).send(err.message);
+    });
+});
+exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId };

@@ -166,4 +166,33 @@ const deletePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(err);
     });
 });
-exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir };
+const retrieveAllWordPairsOfSinglePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pirId = req.query.pirId;
+    const token = req.headers['authorization'].split(' ')[1];
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        const nodeRef = admin.database().ref('pir/' + pirId + '/chapters');
+        // Read the data at the node once
+        yield nodeRef.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
+            if (snapshot.exists()) {
+                const chapters = snapshot.val();
+                let wordpairs = [];
+                yield Object.values(chapters).map((data) => {
+                    if (data.wordPairs) {
+                        Object.values(data.wordPairs).map((wp) => {
+                            wordpairs.push(wp);
+                        });
+                    }
+                });
+                yield res.send(wordpairs);
+            }
+            else {
+                return null;
+            }
+        }), (error) => {
+            return { error: error };
+        });
+    })).catch((err) => {
+        console.log(err);
+    });
+});
+exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir };

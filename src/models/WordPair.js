@@ -51,7 +51,6 @@ class WordPair {
     }
     updateWordPair(wordPair) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(wordPair);
             const db = admin.database();
             const ref = db.ref('pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId);
             return ref.update(wordPair)
