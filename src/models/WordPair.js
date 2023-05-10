@@ -63,5 +63,11 @@ class WordPair {
             });
         });
     }
+    deleteWordPair(wordPair) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ref = yield admin.database().ref('pir/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/');
+            return yield ref.child(wordPair.wordPairId).remove();
+        });
+    }
 }
 exports.WordPair = WordPair;

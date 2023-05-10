@@ -36,8 +36,6 @@ exports.User = void 0;
 const admin = __importStar(require("firebase-admin"));
 class User {
     constructor(username, email, password, role) {
-        this.creasteUser = (email, password) => __awaiter(this, void 0, void 0, function* () {
-        });
         this.retrieveAllUsers = () => __awaiter(this, void 0, void 0, function* () {
             // let users: any[] = []
             // return await admin.auth().listUsers()
@@ -61,6 +59,22 @@ class User {
                     displayName: userRecords.displayName,
                     uid: userRecords.uid
                 };
+            }));
+        });
+        this.addRoleToUser = (userId, role) => __awaiter(this, void 0, void 0, function* () {
+            yield admin.auth().getUser(userId).then((userRecord) => __awaiter(this, void 0, void 0, function* () {
+                if (userRecord.customClaims.roles.includes(role)) {
+                    console.log('this user is already a ' + role);
+                    return { response: 'this user is already a ' + role };
+                }
+                else {
+                    // adds role to users
+                    const uid = userRecord.uid;
+                    const arr = userRecord.customClaims.roles;
+                    yield arr.push(role);
+                    yield admin.auth().setCustomUserClaims(uid, { roles: arr });
+                    return { response: arr };
+                }
             }));
         });
         this.userName = username;

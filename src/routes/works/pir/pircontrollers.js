@@ -110,6 +110,15 @@ const retrieveChaptersByEditorId = (req, res) => __awaiter(void 0, void 0, void 
         return res.status(401).send(error.message);
     });
 });
+const retrieveAllChapters = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pirId = req.query.pirId;
+    pirInstance.retrievePirs().then((pirs) => {
+        const selectedPir = (Object.values(pirs.val()).filter((pir) => pir.pirId === pirId))[0];
+        return res.status(200).send(selectedPir.chapters);
+    }).catch((error) => {
+        return res.status(401).send(error.message);
+    });
+});
 const updateChapter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const chapter = req.body.chapter;
     const token = req.headers['authorization'].split(' ')[1];
@@ -208,4 +217,16 @@ const deleteChapter = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         console.log(err);
     });
 });
-exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter };
+const deleteWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const wordPair = req.body.wordPair;
+    console.log(wordPair);
+    const token = req.headers['authorization'].split(' ')[1];
+    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
+        wordPairInstance.deleteWordPair(wordPair).then((ress) => {
+            return res.status(200).send({ info: wordPair.word + ' deleted' });
+        });
+    })).catch((err) => {
+        console.log(err);
+    });
+});
+exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters };

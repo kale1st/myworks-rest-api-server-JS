@@ -117,4 +117,13 @@ const retrieveEditorbyEditorId = (req, res) => __awaiter(void 0, void 0, void 0,
         return res.status(401).send(err.message);
     });
 });
-exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId };
+const addRoleToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const uid = req.body.uid;
+    const role = req.body.role;
+    instanceUser.addRoleToUser(uid, role).then((result) => {
+        res.status(200).send(result);
+    }).catch((error) => {
+        res.status(401).send(error);
+    });
+});
+exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser };

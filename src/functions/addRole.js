@@ -34,8 +34,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addRole = void 0;
 const admin = __importStar(require("firebase-admin"));
-const addRole = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
-    yield admin.auth().getUserByEmail(email).then((userRecord) => __awaiter(void 0, void 0, void 0, function* () {
+const addRole = (uid, role) => __awaiter(void 0, void 0, void 0, function* () {
+    yield admin.auth().getUser(uid).then((userRecord) => __awaiter(void 0, void 0, void 0, function* () {
         if (userRecord.customClaims.roles.includes(role)) {
             console.log('this user is already a ' + role);
         }

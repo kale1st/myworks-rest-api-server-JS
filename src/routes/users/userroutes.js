@@ -14,4 +14,5 @@ router.post('/users/createuser', usercontrollers_1.default.createUser);
 router.get('/users/getUserById', usercontrollers_1.default.getUserById);
 router.get('/users/retrieveallusers', usercontrollers_1.default.retrieveAllUsers);
 router.get('/users/retrieveeditorbyid', usercontrollers_1.default.retrieveEditorbyEditorId);
+router.patch('/users/addroletouser', usercontrollers_1.default.addRoleToUser);
 exports.default = router;
