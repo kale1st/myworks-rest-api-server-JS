@@ -33,7 +33,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+const database_1 = require("firebase/database");
 const admin = __importStar(require("firebase-admin"));
+const addGroupToUser_1 = require("../functions/addGroupToUser");
 class User {
     constructor(username, email, password, role) {
         this.retrieveAllUsers = () => __awaiter(this, void 0, void 0, function* () {
@@ -59,7 +61,9 @@ class User {
                     displayName: userRecords.displayName,
                     uid: userRecords.uid
                 };
-            }));
+            })).catch(error => {
+                return { error: error.message };
+            });
         });
         this.addRoleToUser = (userId, role) => __awaiter(this, void 0, void 0, function* () {
             yield admin.auth().getUser(userId).then((userRecord) => __awaiter(this, void 0, void 0, function* () {
@@ -77,6 +81,47 @@ class User {
                 }
             }));
         });
+        this.retrieveUserByEmail = (email) => __awaiter(this, void 0, void 0, function* () {
+            return admin.auth().getUserByEmail(email).then(userRecord => {
+                return userRecord;
+            }).catch(error => {
+                return { error: error.message };
+            });
+        });
+        this.addParticipantToGroup = (groupId, email, role) => __awaiter(this, void 0, void 0, function* () {
+            const db = (0, database_1.getDatabase)();
+            const newParticipant = {
+                role: role,
+                email: email,
+            };
+            // retrieve group
+            return admin.database().ref(`groups/${groupId}/users/`)
+                .once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
+                //if there is an user-array already
+                const arrParticipants = (yield snapshot.val()) || [];
+                //controlling if the array has the users already
+                const isIncluded = arrParticipants === null || arrParticipants === void 0 ? void 0 : arrParticipants.some((obj) => {
+                    return obj.email === newParticipant.email && obj.role === newParticipant.role;
+                });
+                if (isIncluded) {
+                    return (`${newParticipant} exists in the array `);
+                }
+                else {
+                    yield arrParticipants.push(newParticipant);
+                    //adding participant to group
+                    yield (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/`), arrParticipants);
+                    //adding group to user
+                    yield admin.auth().getUserByEmail(email).then((userRecord) => {
+                        (0, addGroupToUser_1.addGroupToUser)(userRecord.uid, groupId, role);
+                    }).catch((error) => {
+                        return { error: error.message };
+                    });
+                    return yield arrParticipants;
+                }
+            }), (error) => {
+                return { error: error };
+            });
+        });
         this.userName = username;
         this.email = email;
         this.password = password;
@@ -84,4 +129,3 @@ class User {
     }
 }
 exports.User = User;
-;

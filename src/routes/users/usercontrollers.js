@@ -73,15 +73,12 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }));
 });
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
     const userId = req.query.uid;
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        admin.auth().getUser(userId)
-            .then((userRecord) => {
-            return res.status(200).send(userRecord);
-        });
-    })).catch((err) => {
-        return res.status(401).send(err.message);
+    admin.auth().getUser(userId)
+        .then((userRecord) => {
+        return res.status(200).send(userRecord);
+    }).catch(error => {
+        return { error: error.message };
     });
 });
 const retrieveAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -126,4 +123,20 @@ const addRoleToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(401).send(error);
     });
 });
-exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser };
+const retrieveUserByEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.query.email;
+    instanceUser.retrieveUserByEmail(email).then((result) => {
+        res.status(200).send(result);
+    }).catch((error) => {
+        res.status(404).send({ error: error.message });
+    });
+});
+const addPArticipantToGroup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { groupId, email, role } = req.body;
+    yield instanceUser.addParticipantToGroup(groupId, email, role).then((result) => {
+        res.status(200).send(result);
+    }).catch((error) => {
+        res.status(404).send({ error: error.message });
+    });
+});
+exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup };
