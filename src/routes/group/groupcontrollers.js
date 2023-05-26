@@ -70,4 +70,20 @@ const retrieveSingleGroupOfUserByGroupId = (req, res) => __awaiter(void 0, void 
         res.status(404).send({ error: error.message });
     });
 });
-exports.default = { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId };
+const retrieveAllParticipantsOfThegroupByGroupId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const groupId = req.query.groupId;
+    instanceGroup.retrieveAllUsersOfTheGroup(groupId).then((users) => {
+        res.status(200).send(users);
+    }).catch((error) => {
+        res.status(200).send({ error: error.message });
+    });
+});
+const retrieveAllGroupsOfTheMentor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const mentorId = req.query.mentorId;
+    instanceGroup.retrieveAllGroupsOfTheMentor(mentorId).then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+        res.status(200).send({ error: error.message });
+    });
+});
+exports.default = { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId, retrieveAllParticipantsOfThegroupByGroupId, retrieveAllGroupsOfTheMentor };

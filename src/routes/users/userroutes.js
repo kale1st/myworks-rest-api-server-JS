@@ -18,4 +18,5 @@ router.get('/users/retrieveeditorbyid', usercontrollers_1.default.retrieveEditor
 router.get('/users/retrieveuserbyemail', usercontrollers_1.default.retrieveUserByEmail);
 router.patch('/users/addroletouser', usercontrollers_1.default.addRoleToUser);
 router.patch('/users/addparticipant', checkTokenExpiration_1.default, usercontrollers_1.default.addPArticipantToGroup);
+router.get('/users/getuserroles', checkTokenExpiration_1.default, usercontrollers_1.default.getUserRoles);
 exports.default = router;

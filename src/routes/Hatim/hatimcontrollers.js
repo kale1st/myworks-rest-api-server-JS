@@ -36,55 +36,35 @@ const Hatim_1 = require("../../models/Hatim");
 const admin = __importStar(require("firebase-admin"));
 const hatim = new Hatim_1.Hatim();
 const createHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        yield hatim.createHatim();
-    })).catch((err) => {
-        return res.status(401).send(err.message);
-    });
+    const { groupId } = req.body;
+    return yield hatim.createHatim(groupId);
 });
 const retrieveHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        //
-        yield hatim.retrieveAllCuzs().then((data) => {
-            res.status(200).send(data);
-        }).catch((err) => {
-            return res.status(401).send(err.message);
-        });
-        //
-    })).catch((err) => {
+    const groupId = req.query.groupId;
+    yield hatim.retrieveAllCuzs(groupId).then((data) => {
+        res.status(200).send(data);
+    }).catch((err) => {
         return res.status(401).send(err.message);
     });
 });
 const updateHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { cuz, cuznumber } = req.body;
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        yield hatim.updateHatim(cuznumber, cuz).then((data) => {
-            res.status(200).send(data);
-        }).catch((err) => {
-            return res.status(401).send(err.message);
-        });
-    })).catch((err) => {
-        console.log(err);
+    const { cuz, cuznumber, groupId } = req.body;
+    yield hatim.updateHatim(cuznumber, cuz, groupId).then((data) => {
+        res.status(200).send(data);
+    }).catch((err) => {
+        return res.status(401).send(err.message);
     });
 });
 const deleteHatim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('deleted');
 });
 const getSingleCuz = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
-    const cuznumber = req.query.cuznumber;
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        //
-        yield hatim.getSingleCuz(cuznumber).then((data) => {
-            res.status(200).send(data);
-        }).catch((err) => {
-            return res.status(401).send(err.message);
-        });
-        //
-    })).catch((err) => {
+    const cuzname = req.query.cuzname;
+    const groupId = req.query.groupId;
+    console.log(cuzname + '  ' + groupId);
+    yield hatim.getSingleCuz(cuzname, groupId).then((data) => {
+        res.status(200).send(data);
+    }).catch((err) => {
         return res.status(401).send(err.message);
     });
 });

@@ -36,6 +36,7 @@ exports.User = void 0;
 const database_1 = require("firebase/database");
 const admin = __importStar(require("firebase-admin"));
 const addGroupToUser_1 = require("../functions/addGroupToUser");
+const role_getAll_1 = require("../functions/role_getAll");
 class User {
     constructor(username, email, password, role) {
         this.retrieveAllUsers = () => __awaiter(this, void 0, void 0, function* () {
@@ -98,28 +99,48 @@ class User {
             return admin.database().ref(`groups/${groupId}/users/`)
                 .once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
                 //if there is an user-array already
-                const arrParticipants = (yield snapshot.val()) || [];
-                //controlling if the array has the users already
-                const isIncluded = arrParticipants === null || arrParticipants === void 0 ? void 0 : arrParticipants.some((obj) => {
-                    return obj.email === newParticipant.email && obj.role === newParticipant.role;
-                });
-                if (isIncluded) {
-                    return (`${newParticipant} exists in the array `);
+                const participants = yield snapshot.val();
+                if (!Object.values(participants).includes(newParticipant)) {
+                    const userId = admin.auth().getUserByEmail(email).then((userRecords) => __awaiter(this, void 0, void 0, function* () {
+                        yield (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/${userRecords.uid}`), {
+                            email: email,
+                            role: role
+                        });
+                        yield (0, addGroupToUser_1.addGroupToUser)(userRecords.uid, groupId, role);
+                    }));
                 }
                 else {
-                    yield arrParticipants.push(newParticipant);
-                    //adding participant to group
-                    yield (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/`), arrParticipants);
-                    //adding group to user
-                    yield admin.auth().getUserByEmail(email).then((userRecord) => {
-                        (0, addGroupToUser_1.addGroupToUser)(userRecord.uid, groupId, role);
-                    }).catch((error) => {
-                        return { error: error.message };
-                    });
-                    return yield arrParticipants;
+                    return { response: 'The user exists with the ' + role + ' role' };
                 }
+                // controlling if the array has the users already
+                // const isIncluded = arrParticipants?.some((obj) => {
+                //     return obj.email === newParticipant.email && obj.role === newParticipant.role;
+                // });
+                // if (isIncluded) {
+                //     return (`${newParticipant} exists in the array `);
+                // } else {
+                //     await arrParticipants.push(newParticipant)
+                //     //adding participant to group
+                //     await set(ref(db, `groups/${groupId}/users/`),
+                //         arrParticipants
+                //     );
+                //     //adding group to user
+                //     await admin.auth().getUserByEmail(email).then((userRecord) => {
+                //         addGroupToUser(userRecord.uid, groupId, role)
+                //     }).catch((error) => {
+                //         return { error: error.message }
+                //     })
+                //     return await arrParticipants
+                // }
             }), (error) => {
                 return { error: error };
+            });
+        });
+        this.getUserRoles = (uid) => __awaiter(this, void 0, void 0, function* () {
+            return (0, role_getAll_1.getRoles)(uid).then((roles) => {
+                return roles;
+            }).catch((error) => {
+                return { error: error.messages };
             });
         });
         this.userName = username;

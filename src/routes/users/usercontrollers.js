@@ -139,4 +139,12 @@ const addPArticipantToGroup = (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.status(404).send({ error: error.message });
     });
 });
-exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup };
+const getUserRoles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const uid = req.query.uid;
+    instanceUser.getUserRoles(uid).then((roles) => {
+        res.status(200).send(roles);
+    }).catch((error) => {
+        res.status(404).send({ error: error.message });
+    });
+});
+exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup, getUserRoles };

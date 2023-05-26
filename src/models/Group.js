@@ -55,10 +55,10 @@ class Group {
                 mentorId: mentorId,
                 mentorEmail: mentorEmail,
                 groupId: groupId,
-                users: [{
-                        email: mentorEmail,
-                        role: Roles_1.Roles[2]
-                    }]
+            });
+            yield (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/${mentorId}`), {
+                email: mentorEmail,
+                role: Roles_1.Roles[2]
             });
             //add the group to the user (here the userId is mentorId)
             (0, addGroupToUser_1.addGroupToUser)(mentorId, groupId, Roles_1.Roles[2]);
@@ -99,9 +99,12 @@ class Group {
     }
     deleteGroup(groupId) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield (0, deleteGroupFromUser_1.deleteGroupFromUsers)(groupId);
-            const ref = yield admin.database().ref('groups/');
-            return yield ref.child(groupId).remove();
+            //removes the group from users at first
+            yield (0, deleteGroupFromUser_1.deleteGroupFromUsers)(groupId).then((data) => __awaiter(this, void 0, void 0, function* () {
+                //then deletes group from the node 'groups'
+                const ref = yield admin.database().ref('groups/');
+                return yield ref.child(groupId).remove();
+            }));
         });
     }
     retrieveAllGroupsOfTheUserByuserId(userId) {
@@ -114,11 +117,11 @@ class Group {
                         groupName: group.val().groupName
                     })), (0, rxjs_1.toArray)()).subscribe({
                         next: (groupData) => {
-                            resolve(groupData); // Resolve the Promise with the groupData
+                            return resolve(groupData); // Resolve the Promise with the groupData
                         }
                     });
                 }).catch((error) => {
-                    reject(error); // Reject the Promise if there is an error in getUsersAllGroupsAndRoles
+                    return reject(error); // Reject the Promise if there is an error in getUsersAllGroupsAndRoles
                 });
             });
         });
@@ -150,6 +153,58 @@ class Group {
             }), (error) => {
                 return { error: error };
             });
+        });
+    }
+    retrieveAllUsersOfTheGroup(groupId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Get a reference to the desired node in the database
+            const nodeRef = admin.database().ref('groups/' + groupId + '/users');
+            // Read the data at the node once
+            return nodeRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    // access the data from the snapshot if it exists
+                    const data = snapshot.val();
+                    return data;
+                }
+                else {
+                    return null;
+                }
+            }, (error) => {
+                return { error: error };
+            });
+        });
+    }
+    //gets groups of a mentor in which mentor is not a participant  
+    retrieveAllGroupsOfTheMentor(mentorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const nodeRef = admin.database().ref(`users/${mentorId}/groups`);
+            const snapshot = yield nodeRef.once('value');
+            if (snapshot.exists()) {
+                const groups = snapshot.val();
+                for (const obj of Object.values(groups)) {
+                    yield this.getGroupNameByGroupId(obj['groupId']).then((name) => {
+                        obj['groupName'] = name;
+                    });
+                }
+                return yield (0, rxjs_1.from)(Object.values(groups)).pipe((0, rxjs_1.filter)((groupinfo) => groupinfo.role === Roles_1.Roles[2]), (0, rxjs_1.toArray)()).toPromise();
+            }
+            else {
+                return [];
+            }
+        });
+    }
+    getGroupNameByGroupId(groupId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const nodeRef = admin.database().ref(`groups/${groupId}`);
+            const snapshot = yield nodeRef.once('value');
+            if (snapshot.exists()) {
+                const group = snapshot.val();
+                //filtering groups according mentors role
+                return group.groupName;
+            }
+            else {
+                return '';
+            }
         });
     }
 }

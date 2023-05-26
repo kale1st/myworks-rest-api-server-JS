@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pir_1 = require("../../../models/Pir");
-const pirInstance = new Pir_1.Pir(null, null, null, null, null);
+const pirInstance = new Pir_1.Pir(null, null, null, null, null, [], []);
 const retrievePirsNames = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     pirInstance.retrievePirs().then((dataSnapshot) => __awaiter(void 0, void 0, void 0, function* () {
         const dataArray = Object.values(dataSnapshot.val());

@@ -32,27 +32,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteGroupFromUsers = void 0;
+exports.removeRole = void 0;
 const admin = __importStar(require("firebase-admin"));
-const deleteGroupFromUsers = (groupId) => __awaiter(void 0, void 0, void 0, function* () {
-    const usersOfTheGroup = yield admin.database().ref(`groups/${groupId}/users`);
-    return usersOfTheGroup.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
-        if (snapshot.exists()) {
-            // access all users of the group
-            const data = snapshot.val();
-            //getting user's IDs 
-            const arrUsersId = Object.keys(data);
-            //removes the group from all users of the froup the node '`users/${userId}/groups/${groupId}`'
-            yield arrUsersId.map((userId) => __awaiter(void 0, void 0, void 0, function* () {
-                const nodeRef = yield admin.database().ref(`users/${userId}/groups/`);
-                return yield nodeRef.child(groupId).remove();
-            }));
+const removeRole = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
+    yield admin.auth().getUserByEmail(email).then((userRecord) => __awaiter(void 0, void 0, void 0, function* () {
+        if (userRecord.customClaims.roles.includes(role)) {
+            // deletes role to users
+            const uid = userRecord.uid;
+            const arr = userRecord.customClaims.roles;
+            const newArr = arr.filter((role_) => role_ !== role);
+            yield admin.auth().setCustomUserClaims(uid, { roles: newArr });
+            yield console.log(role + ' is removed from users roles');
         }
         else {
-            return null;
+            console.log('this user is already not a ' + role);
         }
-    }), (error) => {
-        return { error: error };
-    });
+    }));
 });
-exports.deleteGroupFromUsers = deleteGroupFromUsers;
+exports.removeRole = removeRole;

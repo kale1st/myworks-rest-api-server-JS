@@ -7,15 +7,17 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const checkUser_1 = require("./src/functions/checkUser");
-const addRole_1 = require("./src/functions/addRole");
 const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
-const hatimroutes_1 = __importDefault(require("./src/routes/Hatim/hatimroutes"));
+const hatimroutes_1 = __importDefault(require("./src/routes/hatim/hatimroutes"));
 const settingsroutes_1 = __importDefault(require("./src/routes/settings/settingsroutes"));
 const shbRoutes_1 = __importDefault(require("./src/routes/works/Shb/shbRoutes"));
 const pirroutes_1 = __importDefault(require("./src/routes/works/pir/pirroutes"));
 const generalroutes_1 = __importDefault(require("./src/routes/general/generalroutes"));
+const grouproutes_1 = __importDefault(require("./src/routes/group/grouproutes"));
 const pirroutes_2 = __importDefault(require("./src/routes/displays/pir/pirroutes"));
+const role_remove_1 = require("./src/functions/role_remove");
+const role_add_1 = require("./src/functions/role_add");
 const port = process.env.PORT || 3000;
 require('dotenv').config();
 const corsOptions = {
@@ -64,30 +66,19 @@ app.use('/', shbRoutes_1.default);
 app.use('/', pirroutes_1.default);
 app.use('/', generalroutes_1.default);
 app.use('/', pirroutes_2.default);
-// #############################################################################
-// Catch all handler for all other request.
-// app.use("*", (req, res) => {
-//   res
-//     .json({
-//       at: new Date().toISOString(),
-//       method: req.method,
-//       hostname: req.hostname,
-//       ip: req.ip,
-//       query: req.query,
-//       headers: req.headers,
-//       cookies: req.cookies,
-//       params: req.params,
-//     })
-//     .end();
-// });
+app.use('/', grouproutes_1.default);
 app.get("/checkuser", (req, res) => {
     (0, checkUser_1.checkUser)("azizkale@hotmail.com");
 });
-app.get("/adduser", (req, res) => {
-    // createUser("azizkale@hotmail.com", "123456");
+app.get("/checkrole", (req, res) => {
 });
 app.get("/addrole", (req, res) => {
-    (0, addRole_1.addRole)("azizkale@hotmail.com", 'mentor');
+    const { uid, role } = req.query;
+    (0, role_add_1.addRole)(uid, role);
+});
+app.get("/removerole", (req, res) => {
+    const { email, role } = req.query;
+    (0, role_remove_1.removeRole)(email, role);
 });
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

@@ -32,27 +32,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteGroupFromUsers = void 0;
+exports.addRole = void 0;
 const admin = __importStar(require("firebase-admin"));
-const deleteGroupFromUsers = (groupId) => __awaiter(void 0, void 0, void 0, function* () {
-    const usersOfTheGroup = yield admin.database().ref(`groups/${groupId}/users`);
-    return usersOfTheGroup.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
-        if (snapshot.exists()) {
-            // access all users of the group
-            const data = snapshot.val();
-            //getting user's IDs 
-            const arrUsersId = Object.keys(data);
-            //removes the group from all users of the froup the node '`users/${userId}/groups/${groupId}`'
-            yield arrUsersId.map((userId) => __awaiter(void 0, void 0, void 0, function* () {
-                const nodeRef = yield admin.database().ref(`users/${userId}/groups/`);
-                return yield nodeRef.child(groupId).remove();
-            }));
+const addRole = (uid, role) => __awaiter(void 0, void 0, void 0, function* () {
+    yield admin.auth().getUser(uid).then((userRecord) => __awaiter(void 0, void 0, void 0, function* () {
+        if (userRecord.customClaims.roles.includes(role)) {
+            console.log('this user is already a ' + role);
         }
         else {
-            return null;
+            // adds role to users
+            const uid = userRecord.uid;
+            const arr = userRecord.customClaims.roles;
+            yield arr.push(role);
+            yield admin.auth().setCustomUserClaims(uid, { roles: arr });
+            yield console.log('role added');
         }
-    }), (error) => {
-        return { error: error };
-    });
+    }));
 });
-exports.deleteGroupFromUsers = deleteGroupFromUsers;
+exports.addRole = addRole;

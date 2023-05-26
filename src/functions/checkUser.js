@@ -41,7 +41,10 @@ const applicationDefault = require("../tools/applicationDefault.json");
     databaseURL: "https://mywebsite-3f527-default-rtdb.firebaseio.com",
 });
 const checkUser = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield admin.auth().getUserByEmail(email);
-    yield console.log(user);
+    const user = yield admin.auth().getUserByEmail(email).then((userRecord) => {
+        console.log(userRecord);
+    }).catch((error) => {
+        console.log(error.message);
+    });
 });
 exports.checkUser = checkUser;

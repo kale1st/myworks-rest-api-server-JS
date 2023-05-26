@@ -32,27 +32,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteGroupFromUsers = void 0;
+exports.getRoles = void 0;
 const admin = __importStar(require("firebase-admin"));
-const deleteGroupFromUsers = (groupId) => __awaiter(void 0, void 0, void 0, function* () {
-    const usersOfTheGroup = yield admin.database().ref(`groups/${groupId}/users`);
-    return usersOfTheGroup.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
-        if (snapshot.exists()) {
-            // access all users of the group
-            const data = snapshot.val();
-            //getting user's IDs 
-            const arrUsersId = Object.keys(data);
-            //removes the group from all users of the froup the node '`users/${userId}/groups/${groupId}`'
-            yield arrUsersId.map((userId) => __awaiter(void 0, void 0, void 0, function* () {
-                const nodeRef = yield admin.database().ref(`users/${userId}/groups/`);
-                return yield nodeRef.child(groupId).remove();
-            }));
-        }
-        else {
-            return null;
-        }
-    }), (error) => {
-        return { error: error };
-    });
+const getRoles = (uid) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield admin.auth().getUser(uid).then((userRecord) => __awaiter(void 0, void 0, void 0, function* () {
+        return userRecord.customClaims.roles;
+    }));
 });
-exports.deleteGroupFromUsers = deleteGroupFromUsers;
+exports.getRoles = getRoles;

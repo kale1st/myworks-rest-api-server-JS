@@ -35,22 +35,95 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pir = void 0;
 const database_1 = require("firebase/database");
 const admin = __importStar(require("firebase-admin"));
+const Group_1 = require("./Group");
+const groupInstance = new Group_1.Group(null, null);
 const db = (0, database_1.getDatabase)();
 class Pir {
-    constructor(pirId, editorId, name, description, chapters) {
+    constructor(pirId, editorId, groupId, name, description, chapters, wordPairs) {
         this.pirId = pirId;
         this.editorId = editorId;
+        this.groupId = groupId;
         this.name = name;
         this.description = description;
         this.chapters = chapters;
+        this.wordPairs = wordPairs;
     }
+    //add a mew pir to node 'pirs' in db (pirlist)
     createPir(pir) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield (0, database_1.set)((0, database_1.ref)(db, 'pirs/' + pir.pirId), {
+                pirId: pir.pirId,
+                name: pir.name,
+                description: pir.description,
+            });
+        });
+    }
+    //this manipulates three nodes in DB
+    assignPirToGroup(pir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //adds pir to the node 'pir' in db
             yield (0, database_1.set)((0, database_1.ref)(db, 'pir/' + pir.pirId), {
                 pirId: pir.pirId,
                 name: pir.name,
                 description: pir.description,
                 editorId: pir.editorId,
+                groupId: pir.groupId
+            }).then(() => __awaiter(this, void 0, void 0, function* () {
+                //when a pir of pirlist is assigned, two nodes added to the pir in pirlist('pirs' in db)
+                yield this.addPirToTheNodeInDb(pir).then(() => __awaiter(this, void 0, void 0, function* () {
+                    yield this.addAssignedPirToGroupsWorks(pir);
+                }));
+            })).catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error };
+            });
+        });
+    }
+    //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db) / is used in assignPirToGroup(pir: Pir)
+    addPirToTheNodeInDb(pir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const reff = admin.database().ref(`pirs/${pir.pirId}`);
+            reff.update({
+                assigned: true,
+                groupId: pir.groupId
+            })
+                .then(() => {
+                return { pir };
+            })
+                .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error };
+            });
+        });
+    }
+    //add assigned pir to groups works (works/pirs) / / is used in assignPirToGroup(pir: Pir)
+    addAssignedPirToGroupsWorks(pir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const refff = admin.database().ref(`groups/${pir.groupId}/works/pirs/${pir.pirId}`);
+            return refff.update({
+                pirName: pir.name
+            })
+                .then(() => __awaiter(this, void 0, void 0, function* () {
+            }))
+                .catch((error) => {
+                console.error("Error updating data:", error);
+                return { errror: error };
+            });
+        });
+    }
+    retrievePirByPirid(pirId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const nodeRef = admin.database().ref(`pir/${pirId}`);
+            return nodeRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    return data;
+                }
+                else {
+                    return null;
+                }
+            }, (error) => {
+                return { error: error };
             });
         });
     }
@@ -76,6 +149,47 @@ class Pir {
                     // access the data from the snapshot if it exists
                     const data = snapshot.val();
                     return data;
+                }
+                else {
+                    return null;
+                }
+            }, (error) => {
+                return { error: error };
+            });
+        });
+    }
+    retrievePirList() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const nodeRef = admin.database().ref('pirs');
+            const snapshot = yield nodeRef.once('value');
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                //adds groupname to assigned pirs
+                const updatedData = yield Promise.all(Object.values(data).map((pir) => __awaiter(this, void 0, void 0, function* () {
+                    if (pir.assigned) {
+                        const groupinfo = yield groupInstance.retrieveSingleGroupByGroupId(pir.groupId);
+                        return Object.assign(Object.assign({}, pir), { groupName: groupinfo.val().groupName });
+                    }
+                    return Object.assign({}, pir);
+                })));
+                return updatedData;
+            }
+            else {
+                return null;
+            }
+        });
+    }
+    retrievePirsByPirEditorId(pirEditorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Get a reference to the desired node in the database
+            const nodeRef = admin.database().ref('pir');
+            // Read the data at the node once
+            return nodeRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    // access the data from the snapshot if it exists
+                    const data = snapshot.val();
+                    const editorsPirs = (Object.values(data)).filter((pir) => pir.pirId.editorId === pirEditorId);
+                    return editorsPirs;
                 }
                 else {
                     return null;
@@ -159,6 +273,32 @@ class Pir {
         return __awaiter(this, void 0, void 0, function* () {
             const ref = yield admin.database().ref(`pir/${pirId}/chapters/`);
             return yield ref.child(chapterId).remove();
+        });
+    }
+    leaveThePirFromTheGroup(pir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const db = admin.database();
+            //1- it removed the pir from groups-> works -> pirs
+            const ref = db.ref(`groups/${pir.groupId}/works/pirs/`);
+            yield ref.child(pir.pirId).remove().then(() => {
+                console.log('removed from the object in the database');
+            })
+                .catch((error) => {
+                console.error('Error removing in the database:', error);
+            });
+            //2- it update pir in the node pirs
+            const reff = db.ref(`pirs/${pir.pirId}/`);
+            const updateData = {
+                assigned: null,
+                groupId: null
+            };
+            yield reff.update(updateData)
+                .then(() => {
+                console.log('Features removed from the object in the database');
+            })
+                .catch((error) => {
+                console.error('Error removing features from the object in the database:', error);
+            });
         });
     }
 }

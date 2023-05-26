@@ -15,4 +15,6 @@ router.patch('/group/updategroup', [checkTokenExpiration_1.default], groupcontro
 router.delete('/group/deletegroup', [checkTokenExpiration_1.default], groupcontrollers_1.default.deleteGroup);
 router.get('/group/retrieveallgroupsnamesoftheuserbyuserid', [checkTokenExpiration_1.default], groupcontrollers_1.default.retrieveAllGroupsNamesOfTheUserByuserId);
 router.get('/group/retrievesinglegroupofuserbygroupid', [checkTokenExpiration_1.default], groupcontrollers_1.default.retrieveSingleGroupOfUserByGroupId);
+router.get('/group/retrieveallparticipantsofthegroupbygroupid', checkTokenExpiration_1.default, groupcontrollers_1.default.retrieveAllParticipantsOfThegroupByGroupId);
+router.get('/group/retrieveallgroupsofthementor', checkTokenExpiration_1.default, groupcontrollers_1.default.retrieveAllGroupsOfTheMentor);
 exports.default = router;
