@@ -69,20 +69,6 @@ class WordPair {
                     }
                 });
             });
-            //         let wordpairs: any[] = []
-            //         return await Object.values(chapters).map((data: any) => {
-            //             if (data.wordPairs) {
-            //                 Object.values(data.wordPairs).map((wp: WordPair) => {
-            //                     wordpairs.push(wp)
-            //                 })
-            //             }
-            //         })
-            //     } else {
-            //         return null
-            //     }
-            // }, (error) => {
-            //     return { error: error }
-            // });
         });
     }
     updateWordPair(wordPair) {
