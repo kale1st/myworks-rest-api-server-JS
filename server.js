@@ -4,12 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const cors_1 = __importDefault(require("cors"));
+const swagger_1 = require("./swagger");
 const app = (0, express_1.default)();
 const checkUser_1 = require("./src/functions/checkUser");
 const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
-const hatimroutes_1 = __importDefault(require("./src/routes/hatim/hatimroutes"));
+const hatimroutes_1 = __importDefault(require("./src/routes/Hatim/hatimroutes"));
 const settingsroutes_1 = __importDefault(require("./src/routes/settings/settingsroutes"));
 const shbRoutes_1 = __importDefault(require("./src/routes/works/Shb/shbRoutes"));
 const pirroutes_1 = __importDefault(require("./src/routes/works/pir/pirroutes"));
@@ -17,7 +19,6 @@ const generalroutes_1 = __importDefault(require("./src/routes/general/generalrou
 const grouproutes_1 = __importDefault(require("./src/routes/group/grouproutes"));
 const pirroutes_2 = __importDefault(require("./src/routes/displays/pir/pirroutes"));
 const role_remove_1 = require("./src/functions/role_remove");
-const role_add_1 = require("./src/functions/role_add");
 const port = process.env.PORT || 3000;
 require('dotenv').config();
 const corsOptions = {
@@ -67,14 +68,10 @@ app.use('/', pirroutes_1.default);
 app.use('/', generalroutes_1.default);
 app.use('/', pirroutes_2.default);
 app.use('/', grouproutes_1.default);
+//swagger configuration
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.specs));
 app.get("/checkuser", (req, res) => {
     (0, checkUser_1.checkUser)("azizkale@hotmail.com");
-});
-app.get("/checkrole", (req, res) => {
-});
-app.get("/addrole", (req, res) => {
-    const { uid, role } = req.query;
-    (0, role_add_1.addRole)(uid, role);
 });
 app.get("/removerole", (req, res) => {
     const { email, role } = req.query;
