@@ -151,7 +151,6 @@ const deleteChapter = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 const deleteWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const wordPair = req.body.wordPair;
-    console.log(wordPair);
     wordPairInstance.deleteWordPair(wordPair).then((ress) => {
         return res.status(200).send({ info: wordPair.word + ' deleted' });
     });
