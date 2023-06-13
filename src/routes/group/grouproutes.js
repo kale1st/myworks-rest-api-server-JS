@@ -17,4 +17,5 @@ router.get('/group/retrieveallgroupsnamesoftheuserbyuserid', [checkTokenExpirati
 router.get('/group/retrievesinglegroupofuserbygroupid', [checkTokenExpiration_1.default], groupcontrollers_1.default.retrieveSingleGroupOfUserByGroupId);
 router.get('/group/retrieveallparticipantsofthegroupbygroupid', checkTokenExpiration_1.default, groupcontrollers_1.default.retrieveAllParticipantsOfThegroupByGroupId);
 router.get('/group/retrieveallgroupsofthementor', checkTokenExpiration_1.default, groupcontrollers_1.default.retrieveAllGroupsOfTheMentor);
+router.delete('/group/deleteparticipantfromgroup', checkTokenExpiration_1.default, groupcontrollers_1.default.deleteParticipantFromGroup);
 exports.default = router;

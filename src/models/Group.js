@@ -38,6 +38,7 @@ const database_1 = require("firebase/database");
 const Roles_1 = require("./Roles");
 const addGroupToUser_1 = require("../functions/addGroupToUser");
 const rxjs_1 = require("rxjs");
+const Pir_1 = require("./Pir");
 const deleteGroupFromUser_1 = require("../functions/deleteGroupFromUser");
 const db = (0, database_1.getDatabase)();
 class Group {
@@ -56,9 +57,10 @@ class Group {
                 mentorEmail: mentorEmail,
                 groupId: groupId,
             });
+            //this is the first user(mentor) of this grup. So, at first no need to call roles of the user in this group
             yield (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/${mentorId}`), {
                 email: mentorEmail,
-                role: Roles_1.Roles[2]
+                roles: [Roles_1.Roles[2]]
             });
             //add the group to the user (here the userId is mentorId)
             (0, addGroupToUser_1.addGroupToUser)(mentorId, groupId, Roles_1.Roles[2]);
@@ -99,12 +101,45 @@ class Group {
     }
     deleteGroup(groupId) {
         return __awaiter(this, void 0, void 0, function* () {
-            //removes the group from users at first
-            yield (0, deleteGroupFromUser_1.deleteGroupFromUsers)(groupId).then((data) => __awaiter(this, void 0, void 0, function* () {
-                //then deletes group from the node 'groups'
-                const ref = yield admin.database().ref('groups/');
-                return yield ref.child(groupId).remove();
-            }));
+            const pirInstance = new Pir_1.Pir(null, null, null, null, null, [], []);
+            //at first deleted the node 'assigned' of all pir of this group on pirlist
+            return new Promise((resolve, reject) => {
+                const nodeRef = admin.database().ref(`groups/${groupId}/works/pirs`);
+                nodeRef.once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
+                    //if group has pir to edit
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        return (0, rxjs_1.from)(Object.keys(data)).pipe((0, rxjs_1.concatMap)((pirId) => __awaiter(this, void 0, void 0, function* () {
+                            const ref = yield admin.database().ref(`pirs/${pirId}`);
+                            ref.update({ assigned: false }).then(() => __awaiter(this, void 0, void 0, function* () {
+                                //removes the group from users at first
+                                yield (0, deleteGroupFromUser_1.deleteGroupFromUsers)(groupId).then((data) => __awaiter(this, void 0, void 0, function* () {
+                                    //then deletes group from the node 'groups'
+                                    const ref = yield admin.database().ref('groups/');
+                                    return yield ref.child(groupId).remove();
+                                }));
+                            })).catch((error) => {
+                                console.error('Error updating node:', error);
+                            });
+                        })), (0, rxjs_1.toArray)()).subscribe({
+                            next: () => {
+                                return null;
+                            }
+                        });
+                        //if group has no pir to edit
+                    }
+                    else {
+                        //removes the group from users at first
+                        yield (0, deleteGroupFromUser_1.deleteGroupFromUsers)(groupId).then((data) => __awaiter(this, void 0, void 0, function* () {
+                            //then deletes group from the node 'groups'
+                            const ref = yield admin.database().ref('groups/');
+                            return yield ref.child(groupId).remove();
+                        }));
+                    }
+                }), (error) => {
+                    return { error: error };
+                });
+            });
         });
     }
     retrieveAllGroupsOfTheUserByuserId(userId) {
@@ -112,10 +147,13 @@ class Group {
             return new Promise((resolve, reject) => {
                 this.getUsersAllGroupsAndRoles(userId).then((info) => {
                     const listGroups = info.val();
-                    (0, rxjs_1.from)(Object.values(listGroups)).pipe((0, rxjs_1.concatMap)((data) => this.retrieveSingleGroupByGroupId(data.groupId)), (0, rxjs_1.map)((group) => ({
-                        groupId: group.val().groupId,
-                        groupName: group.val().groupName
-                    })), (0, rxjs_1.toArray)()).subscribe({
+                    (0, rxjs_1.from)(Object.values(listGroups)).pipe((0, rxjs_1.concatMap)((data) => this.retrieveSingleGroupByGroupId(data.groupId)), (0, rxjs_1.map)((group) => {
+                        var _a, _b;
+                        return ({
+                            groupId: (_a = group.val()) === null || _a === void 0 ? void 0 : _a.groupId,
+                            groupName: (_b = group.val()) === null || _b === void 0 ? void 0 : _b.groupName
+                        });
+                    }), (0, rxjs_1.toArray)()).subscribe({
                         next: (groupData) => {
                             return resolve(groupData); // Resolve the Promise with the groupData
                         }
@@ -150,6 +188,7 @@ class Group {
             // getting IDs and roles of all groups of the user
             const nodeRef = admin.database().ref(`users/${userId}/groups`);
             return nodeRef.once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
+                return snapshot.val();
             }), (error) => {
                 return { error: error };
             });
@@ -181,30 +220,51 @@ class Group {
             const snapshot = yield nodeRef.once('value');
             if (snapshot.exists()) {
                 const groups = snapshot.val();
-                for (const obj of Object.values(groups)) {
-                    yield this.getGroupNameByGroupId(obj['groupId']).then((name) => {
-                        obj['groupName'] = name;
+                return new Promise((resolve, reject) => {
+                    (0, rxjs_1.from)(Object.values(groups)).pipe(
+                    // gets groups in that the user is mentor
+                    (0, rxjs_1.filter)((groupsinfo) => { var _a; return (_a = groupsinfo === null || groupsinfo === void 0 ? void 0 : groupsinfo.roles) === null || _a === void 0 ? void 0 : _a.includes(Roles_1.Roles[2]); }), (0, rxjs_1.concatMap)((data) => this.retrieveSingleGroupByGroupId(data.groupId)), (0, rxjs_1.map)((group) => ({
+                        //returns only groupId and its names
+                        groupId: group.val().groupId,
+                        groupName: group.val().groupName
+                    })), (0, rxjs_1.toArray)()).subscribe({
+                        next: (groups) => {
+                            resolve(groups);
+                        },
+                        error: (error) => {
+                            reject(error);
+                        }
                     });
-                }
-                return yield (0, rxjs_1.from)(Object.values(groups)).pipe((0, rxjs_1.filter)((groupinfo) => groupinfo.role === Roles_1.Roles[2]), (0, rxjs_1.toArray)()).toPromise();
+                });
             }
             else {
                 return [];
             }
         });
     }
-    getGroupNameByGroupId(groupId) {
+    deleteParticipantFromGroup(groupId, email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const nodeRef = admin.database().ref(`groups/${groupId}`);
-            const snapshot = yield nodeRef.once('value');
-            if (snapshot.exists()) {
-                const group = snapshot.val();
-                //filtering groups according mentors role
-                return group.groupName;
-            }
-            else {
-                return '';
-            }
+            //gets users id
+            admin.auth().getUserByEmail(email).then((userRecords) => {
+                //deletes user from the group
+                const userId = userRecords.uid;
+                const nodeRef = admin.database().ref(`groups/${groupId}/users`);
+                return nodeRef.once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
+                    if (snapshot.exists()) {
+                        yield nodeRef.child(userId).remove();
+                        //deletes group from the user
+                        const nodeRef2 = admin.database().ref(`users/${userId}/groups/`);
+                        yield nodeRef2.once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
+                            if (snapshot.exists()) {
+                                yield nodeRef2.child(groupId).remove();
+                            }
+                        }));
+                        return yield { result: 'user deleted successfully' };
+                    }
+                    else
+                        return yield { result: 'user cannot be deleted' };
+                }));
+            });
         });
     }
 }
