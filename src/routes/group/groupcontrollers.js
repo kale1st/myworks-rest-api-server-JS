@@ -86,4 +86,12 @@ const retrieveAllGroupsOfTheMentor = (req, res) => __awaiter(void 0, void 0, voi
         res.status(200).send({ error: error.message });
     });
 });
-exports.default = { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId, retrieveAllParticipantsOfThegroupByGroupId, retrieveAllGroupsOfTheMentor };
+const deleteParticipantFromGroup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { groupId, email } = req.body;
+    instanceGroup.deleteParticipantFromGroup(groupId, email).then((result) => {
+        res.status(200).send(result);
+    }).catch((error) => {
+        res.status(404).send({ error: error.message });
+    });
+});
+exports.default = { createGroup, retrieveGroups, updateGroup, deleteGroup, retrieveAllGroupsNamesOfTheUserByuserId, retrieveSingleGroupOfUserByGroupId, retrieveAllParticipantsOfThegroupByGroupId, retrieveAllGroupsOfTheMentor, deleteParticipantFromGroup };

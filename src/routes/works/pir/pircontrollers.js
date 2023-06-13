@@ -50,19 +50,19 @@ const createPir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 const assingPirToGroup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pir = req.body.pir;
-    pirInstance.assignPirToGroup(pir).then((pir) => {
+    const { pirinfo, groupId } = req.body;
+    pirInstance.assignPirToGroup(pirinfo, groupId).then((pir) => {
         res.status(200).send({ response: pir + ' added' });
     }).catch((error) => {
         res.status(401).send({ error: error.message });
     });
 });
-const retrievePirs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pirEditorId = req.query.pirEditorId;
-    pirInstance.retrievePirsByPirEditorId(pirEditorId).then((pirs) => {
-        return res.status(200).send(pirs);
-    });
-});
+// const retrievePirs = async (req: Request, res: Response) => {
+//     const pirEditorId = req.query.pirEditorId;
+//     pirInstance.retrievePirsByPirEditorId(pirEditorId).then((pirs) => {
+//         return res.status(200).send(pirs)
+//     })
+// }
 const createChapter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const chapter = req.body.chapter;
     chapter.chapterId = uuidv1();
@@ -94,14 +94,8 @@ const retrieveAllChapters = (req, res) => __awaiter(void 0, void 0, void 0, func
 });
 const updateChapter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const chapter = req.body.chapter;
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        const db = admin.database();
-        pirInstance.updateChapter(chapter).then((updatedChapter) => {
-            return res.status(200).send(updatedChapter);
-        });
-    })).catch((err) => {
-        console.log(err);
+    pirInstance.updateChapter(chapter).then((updatedChapter) => {
+        return res.status(200).send(updatedChapter);
     });
 });
 const updatePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -134,70 +128,35 @@ const updateWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 const deletePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pirId = req.body.pirId;
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        pirInstance.deletePir(pirId).then(() => {
-            return res.status(200).send({ info: 'the book at' + pirId + 'id! deleted' });
-        });
-    })).catch((err) => {
-        console.log(err);
-    });
+    // pirInstance.deletePir(pirId).then(() => {
+    //     return res.status(200).send(
+    //         { info: 'the book at' + pirId + 'id! deleted' }
+    //     );
+    // })
 });
 const retrieveAllWordPairsOfSinglePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pirId = req.query.pirId;
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        const nodeRef = admin.database().ref('pir/' + pirId + '/chapters');
-        // Read the data at the node once
-        yield nodeRef.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
-            if (snapshot.exists()) {
-                const chapters = snapshot.val();
-                let wordpairs = [];
-                yield Object.values(chapters).map((data) => {
-                    if (data.wordPairs) {
-                        Object.values(data.wordPairs).map((wp) => {
-                            wordpairs.push(wp);
-                        });
-                    }
-                });
-                yield res.send(wordpairs);
-            }
-            else {
-                return null;
-            }
-        }), (error) => {
-            return { error: error };
-        });
-    })).catch((err) => {
-        console.log(err);
+    wordPairInstance.retrieveAllWordPairsOfSinglePir(pirId).then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+        return res.status(401).send({ error: error.message });
     });
 });
 const deleteChapter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pirId = req.body.pirId;
     const chapterId = req.body.chapterId;
-    console.log(pirId, chapterId);
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        pirInstance.deleteChapter(pirId, chapterId).then(() => {
-            return res.status(200).send({ info: 'the chapter at' + pirId + 'id! deleted' });
-        });
-    })).catch((err) => {
-        console.log(err);
+    pirInstance.deleteChapter(pirId, chapterId).then(() => {
+        return res.status(200).send({ info: 'the chapter at' + pirId + 'id! deleted' });
     });
 });
 const deleteWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const wordPair = req.body.wordPair;
     console.log(wordPair);
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        wordPairInstance.deleteWordPair(wordPair).then((ress) => {
-            return res.status(200).send({ info: wordPair.word + ' deleted' });
-        });
-    })).catch((err) => {
-        console.log(err);
+    wordPairInstance.deleteWordPair(wordPair).then((ress) => {
+        return res.status(200).send({ info: wordPair.word + ' deleted' });
     });
 });
-const retrievePirListToCreateNewPirToEdit = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const retrievePirList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     pirInstance.retrievePirList().then((data) => {
         res.status(200).send(data);
     }).catch((error) => {
@@ -220,4 +179,4 @@ const leaveThePirFromTheGroup = (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(200).send({ error: error.message });
     });
 });
-exports.default = { createPir, createChapter, retrievePirs, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirListToCreateNewPirToEdit, assingPirToGroup, retrievePirByPirId, leaveThePirFromTheGroup };
+exports.default = { createPir, createChapter, retrieveChaptersByEditorId, updateChapter, updatePir, createWordPair, updateWordPair, deletePir, retrieveAllWordPairsOfSinglePir, deleteChapter, deleteWordPair, retrieveAllChapters, retrievePirList, assingPirToGroup, retrievePirByPirId, leaveThePirFromTheGroup };

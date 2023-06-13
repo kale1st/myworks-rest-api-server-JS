@@ -82,42 +82,31 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     });
 });
 const retrieveAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        let users = [];
-        yield admin.auth().listUsers()
-            .then((userRecords) => __awaiter(void 0, void 0, void 0, function* () {
-            userRecords.users.map((userInfo) => {
-                let user = {
-                    displayName: userInfo.displayName,
-                    uid: userInfo.uid
-                };
-                users.push(user);
-            });
-            return yield res.status(200).send(users);
-        }))
-            .catch((error) => {
-            console.log('Error fetching user data:', error);
+    let users = [];
+    yield admin.auth().listUsers()
+        .then((userRecords) => __awaiter(void 0, void 0, void 0, function* () {
+        userRecords.users.map((userInfo) => {
+            let user = {
+                displayName: userInfo.displayName,
+                uid: userInfo.uid
+            };
+            users.push(user);
         });
-    })).catch((err) => {
-        return res.status(401).send(err.message);
+        return yield res.status(200).send(users);
+    }))
+        .catch((error) => {
+        console.log('Error fetching user data:', error);
     });
 });
 const retrieveEditorbyEditorId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
     const editorid = req.query.editorid;
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        instanceUser.retrieveEditorByEditorId(editorid).then((user) => {
-            res.status(200).send(user);
-        });
-    })).catch((err) => {
-        return res.status(401).send(err.message);
+    instanceUser.retrieveEditorByEditorId(editorid).then((user) => {
+        res.status(200).send(user);
     });
 });
 const addRoleToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const uid = req.body.uid;
-    const role = req.body.role;
-    instanceUser.addRoleToUser(uid, role).then((result) => {
+    const { uid, role, groupId } = req.body;
+    instanceUser.addRoleToUser(uid, role, groupId).then((result) => {
         res.status(200).send(result);
     }).catch((error) => {
         res.status(401).send(error);
@@ -147,4 +136,20 @@ const getUserRoles = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(404).send({ error: error.message });
     });
 });
-exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, addRoleToUser, retrieveUserByEmail, addPArticipantToGroup, getUserRoles };
+const retrieveAllUsersOfTheGroup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const groupId = req.query.groupId;
+    instanceUser.retrieveAllUsersOfTheGroup(groupId).then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+        res.status(404).send({ error: error.message });
+    });
+});
+const retrieveSingleUserRolesOfTheGroup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { groupId, userId } = req.query;
+    instanceUser.retrieveSingleUserRolesOfTheGroup(groupId, userId).then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+        res.status(404).send({ error: error.message });
+    });
+});
+exports.default = { createUser, getUserById, retrieveAllUsers, retrieveEditorbyEditorId, retrieveUserByEmail, addPArticipantToGroup, getUserRoles, retrieveAllUsersOfTheGroup, retrieveSingleUserRolesOfTheGroup, addRoleToUser };

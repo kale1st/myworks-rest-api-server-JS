@@ -2,12 +2,12 @@
     "name": "young-developers",
     "version": "1.0.0",
     "description": "",
-    "main": "server.ts",
+    "main": "server.js",
     "author": "azizkale",
     "scripts": {
         "test": "mocha tests/unit/",
-        "dev": "nodemon server.ts",
-        "start": "ts-node server.ts",
+        "dev": "node server.js",
+        "start": "node server.js",
         "build": "tsc"
     },
     "dependencies": {

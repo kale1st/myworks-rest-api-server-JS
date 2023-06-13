@@ -59,36 +59,24 @@ class Pir {
         });
     }
     //this manipulates three nodes in DB
-    assignPirToGroup(pir) {
+    assignPirToGroup(pirinfo, groupId) {
         return __awaiter(this, void 0, void 0, function* () {
-            //adds pir to the node 'pir' in db
-            yield (0, database_1.set)((0, database_1.ref)(db, 'pir/' + pir.pirId), {
-                pirId: pir.pirId,
-                name: pir.name,
-                description: pir.description,
-                editorId: pir.editorId,
-                groupId: pir.groupId
-            }).then(() => __awaiter(this, void 0, void 0, function* () {
-                //when a pir of pirlist is assigned, two nodes added to the pir in pirlist('pirs' in db)
-                yield this.addPirToTheNodeInDb(pir).then(() => __awaiter(this, void 0, void 0, function* () {
-                    yield this.addAssignedPirToGroupsWorks(pir);
-                }));
-            })).catch((error) => {
-                console.error("Error updating data:", error);
-                return { errror: error };
-            });
+            //when a pir of pirlist is assigned, two nodes added to the pir in pirlist('pirs' in db)
+            yield this.addPirToTheNodeInDb(pirinfo.pirId, groupId).then(() => __awaiter(this, void 0, void 0, function* () {
+                yield this.addAssignedPirToGroupsWorks(pirinfo, groupId);
+            }));
         });
     }
     //when a pir of pirlist assigned, it is added a two nodes to pir in pirlist('pirs' in db) / is used in assignPirToGroup(pir: Pir)
-    addPirToTheNodeInDb(pir) {
+    addPirToTheNodeInDb(pirId, groupId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const reff = admin.database().ref(`pirs/${pir.pirId}`);
+            const reff = admin.database().ref(`pirs/${pirId}`);
             reff.update({
                 assigned: true,
-                groupId: pir.groupId
+                groupId: groupId
             })
                 .then(() => {
-                return { pir };
+                return { response: 'added succesfully' };
             })
                 .catch((error) => {
                 console.error("Error updating data:", error);
@@ -97,11 +85,11 @@ class Pir {
         });
     }
     //add assigned pir to groups works (works/pirs) / / is used in assignPirToGroup(pir: Pir)
-    addAssignedPirToGroupsWorks(pir) {
+    addAssignedPirToGroupsWorks(pirinfo, groupId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const refff = admin.database().ref(`groups/${pir.groupId}/works/pirs/${pir.pirId}`);
+            const refff = admin.database().ref(`groups/${groupId}/works/pirs/${pirinfo.pirId}`);
             return refff.update({
-                pirName: pir.name
+                pirName: pirinfo.name
             })
                 .then(() => __awaiter(this, void 0, void 0, function* () {
             }))
@@ -113,7 +101,7 @@ class Pir {
     }
     retrievePirByPirid(pirId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const nodeRef = admin.database().ref(`pir/${pirId}`);
+            const nodeRef = admin.database().ref(`pirs/${pirId}`);
             return nodeRef.once('value', (snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
@@ -129,7 +117,7 @@ class Pir {
     }
     addChapterToPir(chapter) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield (0, database_1.set)((0, database_1.ref)(db, 'pir/' + chapter.pirId + '/chapters/' + chapter.chapterId), {
+            yield (0, database_1.set)((0, database_1.ref)(db, 'pirs/' + chapter.pirId + '/chapters/' + chapter.chapterId), {
                 chapterName: chapter.chapterName,
                 chapterContent: chapter.chapterContent,
                 editorId: chapter.editorId,
@@ -142,7 +130,7 @@ class Pir {
     retrievePirs() {
         return __awaiter(this, void 0, void 0, function* () {
             // Get a reference to the desired node in the database
-            const nodeRef = admin.database().ref('pir');
+            const nodeRef = admin.database().ref('pirs');
             // Read the data at the node once
             return nodeRef.once('value', (snapshot) => {
                 if (snapshot.exists()) {
@@ -158,13 +146,14 @@ class Pir {
             });
         });
     }
+    //display all pir list on piredit.component.html
     retrievePirList() {
         return __awaiter(this, void 0, void 0, function* () {
             const nodeRef = admin.database().ref('pirs');
             const snapshot = yield nodeRef.once('value');
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                //adds groupname to assigned pirs
+                //adds groupname to assigned pirs to display goruopName on the component
                 const updatedData = yield Promise.all(Object.values(data).map((pir) => __awaiter(this, void 0, void 0, function* () {
                     if (pir.assigned) {
                         const groupinfo = yield groupInstance.retrieveSingleGroupByGroupId(pir.groupId);
@@ -179,30 +168,11 @@ class Pir {
             }
         });
     }
-    retrievePirsByPirEditorId(pirEditorId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Get a reference to the desired node in the database
-            const nodeRef = admin.database().ref('pir');
-            // Read the data at the node once
-            return nodeRef.once('value', (snapshot) => {
-                if (snapshot.exists()) {
-                    // access the data from the snapshot if it exists
-                    const data = snapshot.val();
-                    const editorsPirs = (Object.values(data)).filter((pir) => pir.pirId.editorId === pirEditorId);
-                    return editorsPirs;
-                }
-                else {
-                    return null;
-                }
-            }, (error) => {
-                return { error: error };
-            });
-        });
-    }
     updateChapter(chapter) {
         return __awaiter(this, void 0, void 0, function* () {
             const db = admin.database();
-            const ref = db.ref('pir/' + chapter.pirId + '/chapters/' + chapter.chapterId);
+            const ref = db.ref('pirs/' + chapter.pirId + '/chapters/' + chapter.chapterId);
+            delete chapter.selectEditor; // removes selectEditor (no need)
             return ref.update(chapter)
                 .then(() => {
                 return { chapter };
@@ -216,7 +186,7 @@ class Pir {
     updatePir(pir) {
         return __awaiter(this, void 0, void 0, function* () {
             const db = admin.database();
-            const ref = db.ref('pir/' + pir.pirId);
+            const ref = db.ref('pirs/' + pir.pirId);
             return ref.update(pir)
                 .then(() => {
                 return { pir };
@@ -229,7 +199,7 @@ class Pir {
     }
     retrieveChaptersNamesByPirId(pirId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const nodeRef = admin.database().ref('pir/' + pirId);
+            const nodeRef = admin.database().ref('pirs/' + pirId);
             // Read the data at the node once
             return nodeRef.once('value', (snapshot) => {
                 if (snapshot.exists()) {
@@ -247,7 +217,7 @@ class Pir {
     }
     retrieveChapterByChapterId(chapterId, pirId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const nodeRef = admin.database().ref(`pir/${pirId}/chapters/${chapterId}`);
+            const nodeRef = admin.database().ref(`pirs/${pirId}/chapters/${chapterId}`);
             // Read the data at the node once
             return nodeRef.once('value', (snapshot) => {
                 if (snapshot.exists()) {
@@ -263,15 +233,13 @@ class Pir {
             });
         });
     }
-    deletePir(pirId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const ref = yield admin.database().ref('pir/');
-            return yield ref.child(pirId).remove();
-        });
-    }
+    // async deletePir(pirId: any) {
+    //     const ref = await admin.database().ref('pir/');
+    //     return await ref.child(pirId).remove();
+    // }
     deleteChapter(pirId, chapterId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const ref = yield admin.database().ref(`pir/${pirId}/chapters/`);
+            const ref = yield admin.database().ref(`pirs/${pirId}/chapters/`);
             return yield ref.child(chapterId).remove();
         });
     }
@@ -279,7 +247,7 @@ class Pir {
         return __awaiter(this, void 0, void 0, function* () {
             const db = admin.database();
             //1- it removed the pir from groups-> works -> pirs
-            const ref = db.ref(`groups/${pir.groupId}/works/pirs/`);
+            const ref = yield db.ref(`groups/${pir.groupId}/works/pirs/`);
             yield ref.child(pir.pirId).remove().then(() => {
                 console.log('removed from the object in the database');
             })

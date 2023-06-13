@@ -34,19 +34,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addRole = void 0;
 const admin = __importStar(require("firebase-admin"));
-const addRole = (uid, role) => __awaiter(void 0, void 0, void 0, function* () {
-    yield admin.auth().getUser(uid).then((userRecord) => __awaiter(void 0, void 0, void 0, function* () {
-        if (userRecord.customClaims.roles.includes(role)) {
-            console.log('this user is already a ' + role);
+const database_1 = require("firebase/database");
+const addRole = (userId, groupId, role) => {
+    const db = (0, database_1.getDatabase)(); //to update
+    const nodeRef = admin.database().ref(`users/${userId}/groups/${groupId}`);
+    return nodeRef.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a, _b, _c;
+        //it is checked that the new role is already added to the user'
+        const roles = yield ((_a = snapshot.val()) === null || _a === void 0 ? void 0 : _a.roles);
+        const bool = yield (roles === null || roles === void 0 ? void 0 : roles.includes(role));
+        //if the role is not added at the user, than it is added to the user
+        if (!bool) {
+            roles === null || roles === void 0 ? void 0 : roles.push(role);
+            //add role to the user in the node "group"
+            yield ((_c = (_b = admin.auth()) === null || _b === void 0 ? void 0 : _b.getUser(userId)) === null || _c === void 0 ? void 0 : _c.then((userRecords) => __awaiter(void 0, void 0, void 0, function* () {
+                yield (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/${userId}`), {
+                    email: userRecords.email,
+                    roles: roles
+                });
+            })).catch((error) => {
+                return { response: error.message };
+            }));
+            //add role to the user in the node "users"
+            yield (0, database_1.set)((0, database_1.ref)(db, `users/${userId}/groups/${groupId}`), {
+                groupId: groupId,
+                roles: roles
+            });
         }
         else {
-            // adds role to users
-            const uid = userRecord.uid;
-            const arr = userRecord.customClaims.roles;
-            yield arr.push(role);
-            yield admin.auth().setCustomUserClaims(uid, { roles: arr });
-            yield console.log('role added');
+            //if user already has the role
+            return { response: 'the user is already a ' + role };
         }
     }));
-});
+};
 exports.addRole = addRole;
