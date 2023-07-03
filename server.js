@@ -62,7 +62,7 @@ app.use('/', express_1.default.static("public", options));
 /** Routes */
 app.use('/', userroutes_1.default);
 app.use('/', bookroutes_1.default);
-app.use('/', hatimroutes_1.default);
+// app.use('/', hatimroutes_1.default);
 app.use('/', settingsroutes_1.default);
 app.use('/', shbRoutes_1.default);
 app.use('/', pirroutes_1.default);
