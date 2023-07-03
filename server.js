@@ -11,7 +11,7 @@ const app = (0, express_1.default)();
 const checkUser_1 = require("./src/functions/checkUser");
 const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
-const hatimroutes_1 = __importDefault(require("./src/routes/hatim/hatimroutes"));
+//const hatimroutes_1 = __importDefault(require("./src/routes/hatim/hatimroutes"));
 const settingsroutes_1 = __importDefault(require("./src/routes/settings/settingsroutes"));
 const shbRoutes_1 = __importDefault(require("./src/routes/works/Shb/shbRoutes"));
 const pirroutes_1 = __importDefault(require("./src/routes/works/pir/pirroutes"));
@@ -62,7 +62,7 @@ app.use('/', express_1.default.static("public", options));
 /** Routes */
 app.use('/', userroutes_1.default);
 app.use('/', bookroutes_1.default);
-app.use('/', hatimroutes_1.default);
+//app.use('/', hatimroutes_1.default);
 app.use('/', settingsroutes_1.default);
 app.use('/', shbRoutes_1.default);
 app.use('/', pirroutes_1.default);
