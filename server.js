@@ -1,5 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -11,8 +11,7 @@ const app = (0, express_1.default)();
 const checkUser_1 = require("./src/functions/checkUser");
 const userroutes_1 = __importDefault(require("./src/routes/users/userroutes"));
 const bookroutes_1 = __importDefault(require("./src/routes/works/Book/bookroutes"));
-// const hatimroutes_1 = __importDefault(require("./src/routes/Hatim/hatimroutes"));
-
+const hatimroutes_1 = __importDefault(require("./src/routes/Hatim/hatimroutes"));
 const settingsroutes_1 = __importDefault(require("./src/routes/settings/settingsroutes"));
 const shbRoutes_1 = __importDefault(require("./src/routes/works/Shb/shbRoutes"));
 const pirroutes_1 = __importDefault(require("./src/routes/works/pir/pirroutes"));
@@ -27,7 +26,8 @@ const corsOptions = {
         "https://mywebsite-3f527.firebaseapp.com",
         "http://localhost:4200",
         "https://mywebsite-3f527.web.app/",
-        "http://192.168.0.17:4200"
+        "http://192.168.0.17:4200",
+        "192.168.178.111:4200"
     ],
     default: "http://localhost:4200",
     optionsSuccessStatus: 200

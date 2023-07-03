@@ -106,14 +106,8 @@ const updatePir = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const createWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const wordpair = req.body.wordpair;
-    wordpair.wordPairId = uuidv1();
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        yield wordPairInstance.createWordPair(wordpair);
-        return res.status(200).send(wordpair);
-    })).catch((err) => {
-        return res.status(401).send({ error: err.message });
-    });
+    yield wordPairInstance.createWordPair(wordpair);
+    return res.status(200).send(wordpair);
 });
 const updateWordPair = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const wordPair = req.body.wordPair;
