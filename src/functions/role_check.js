@@ -22,39 +22,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.chechkRole = void 0;
+exports.checkRole = void 0;
 const admin = __importStar(require("firebase-admin"));
-const chechkRole = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const checkRole = async (req, res, next) => {
     try {
-        const idToken = (yield req.body.token) || req.headers['authorization'].split(' ')[1];
-        admin.auth()
-            .verifyIdToken(idToken)
-            .then((decodedToken) => {
-            // Token is valid.   
-            if (decodedToken.roles.includes('admin') || decodedToken.roles.includes('mentor'))
-                next();
-            else
-                console.log('yetkisiz giris');
-            return decodedToken.roles;
-        })
-            .catch((err) => {
-            return res.status(401).send(err.message);
-        });
+        const idToken = req.body.token || (req.headers['authorization'] && req.headers['authorization'].split(' ')[1]);
+        if (!idToken) {
+            return res.status(401).send('Unauthorized: No token provided');
+        }
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        if (decodedToken.roles && (decodedToken.roles.includes('admin') || decodedToken.roles.includes('mentor'))) {
+            next();
+        }
+        else {
+            console.log('Unauthorized access: Insufficient role');
+            return res.status(403).send('Forbidden: Insufficient role');
+        }
+        return decodedToken.roles;
     }
     catch (error) {
-        return res.status(401).send(error.message);
+        console.error('Error verifying token:', error);
+        return res.status(401).send('Unauthorized: ' + error.message);
     }
-    return true;
-});
-exports.chechkRole = chechkRole;
-exports.default = exports.chechkRole;
+};
+exports.checkRole = checkRole;
+exports.default = exports.checkRole;

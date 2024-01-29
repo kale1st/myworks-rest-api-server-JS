@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const database_1 = require("firebase/database");
@@ -41,44 +32,45 @@ const rxjs_1 = require("rxjs");
 const role_add_1 = require("../functions/role_add");
 class User {
     constructor(username, email, password, role) {
-        this.retrieveEditorByEditorId = (editorId) => __awaiter(this, void 0, void 0, function* () {
-            return yield admin.auth().getUser(editorId)
-                .then((userRecords) => __awaiter(this, void 0, void 0, function* () {
+        this.books = [];
+        this.retrieveEditorByEditorId = async (editorId) => {
+            return await admin.auth().getUser(editorId)
+                .then(async (userRecords) => {
                 return {
                     displayName: userRecords.displayName,
                     uid: userRecords.uid
                 };
-            })).catch(error => {
+            }).catch(error => {
                 return { error: error.message };
             });
-        });
-        this.addRoleToUser = (userId, role, groupId) => __awaiter(this, void 0, void 0, function* () {
-            yield (0, role_add_1.addRole)(userId, groupId, role).then(result => {
+        };
+        this.addRoleToUser = async (userId, role, groupId) => {
+            await (0, role_add_1.addRole)(userId, groupId, role).then(result => {
                 {
                     return result;
                 }
             });
-        });
-        this.retrieveUserByEmail = (email) => __awaiter(this, void 0, void 0, function* () {
+        };
+        this.retrieveUserByEmail = async (email) => {
             return admin.auth().getUserByEmail(email).then(userRecord => {
                 return userRecord;
             }).catch(error => {
                 return { error: error.message };
             });
-        });
-        this.addParticipantToGroup = (groupId, email, role) => __awaiter(this, void 0, void 0, function* () {
+        };
+        this.addParticipantToGroup = async (groupId, email, role) => {
             const db = (0, database_1.getDatabase)();
             // checking if the user a member
-            const userRecords = yield admin.auth().getUserByEmail(email);
+            const userRecords = await admin.auth().getUserByEmail(email);
             const nodeRef = admin.database().ref(`groups/${groupId}/users/${userRecords.uid}`);
-            return nodeRef.once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
+            return nodeRef.once('value', async (snapshot) => {
                 //if not, the user is added as a participant
                 if (!snapshot.exists()) {
-                    yield (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/${userRecords.uid}`), {
+                    await (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/${userRecords.uid}`), {
                         email: email,
                         roles: [role]
                     });
-                    yield (0, addGroupToUser_1.addGroupToUser)(userRecords.uid, groupId, role);
+                    await (0, addGroupToUser_1.addGroupToUser)(userRecords.uid, groupId, role);
                     return {
                         response: {
                             email: email,
@@ -88,26 +80,26 @@ class User {
                 }
                 else {
                     //if the user already a member of the grup
-                    yield (0, role_add_1.addRole)(userRecords.uid, groupId, role).then(res => {
+                    await (0, role_add_1.addRole)(userRecords.uid, groupId, role).then(res => {
                         { }
                     });
                 }
-            }), (error) => {
+            }, (error) => {
                 return { error: error };
             });
-        });
-        this.getUserRoles = (uid) => __awaiter(this, void 0, void 0, function* () {
+        };
+        this.getUserRoles = async (uid) => {
             return (0, role_getAll_1.getRoles)(uid).then((roles) => {
                 return roles;
             }).catch((error) => {
                 return { error: error.messages };
             });
-        });
+        };
         //fullfilling the select tag on FormGroup to create new chapter
-        this.retrieveAllUsersOfTheGroup = (groupId) => __awaiter(this, void 0, void 0, function* () {
+        this.retrieveAllUsersOfTheGroup = async (groupId) => {
             const nodeRef = admin.database().ref(`groups/${groupId}/users`);
             return new Promise((resolve, reject) => {
-                nodeRef.once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
+                nodeRef.once('value', async (snapshot) => {
                     if (snapshot.exists()) {
                         const data = snapshot.val();
                         (0, rxjs_1.from)(Object.values(data)).pipe((0, rxjs_1.concatMap)((data) => this.retrieveUserByEmail(data.email).then((userRecord) => {
@@ -121,16 +113,16 @@ class User {
                     else {
                         return null;
                     }
-                }), (error) => {
+                }, (error) => {
                     return { error: error };
                 });
             });
-        });
+        };
         //to role controll on the client-side
-        this.retrieveSingleUserRolesOfTheGroup = (groupId, userId) => __awaiter(this, void 0, void 0, function* () {
+        this.retrieveSingleUserRolesOfTheGroup = async (groupId, userId) => {
             const nodeRef = admin.database().ref(`groups/${groupId}/users/${userId}`);
             return new Promise((resolve, reject) => {
-                (0, rxjs_1.from)(nodeRef.once('value', (snapshot) => __awaiter(this, void 0, void 0, function* () {
+                (0, rxjs_1.from)(nodeRef.once('value', async (snapshot) => {
                     if (snapshot.exists()) {
                         const data = snapshot.val();
                         return data;
@@ -138,7 +130,7 @@ class User {
                     else {
                         return null;
                     }
-                }), (error) => {
+                }, (error) => {
                     return { error: error };
                 })).subscribe({
                     next: ((data) => {
@@ -147,7 +139,7 @@ class User {
                     })
                 });
             });
-        });
+        };
         this.userName = username;
         this.email = email;
         this.password = password;

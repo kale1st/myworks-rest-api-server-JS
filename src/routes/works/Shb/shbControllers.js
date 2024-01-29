@@ -22,38 +22,36 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
 const shb_1 = require("../../../models/shb");
-const shb_class = new shb_1.SHB('', '', '', null, null, null);
-const createShb = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
-    const shbId = yield uuidv1();
-    const shbInfo = [];
-    const shbHistory = [];
+const shb_class = new shb_1.SHB('', '', '', new Date, [], []);
+const createShb = async (req, res) => {
+    var _a;
+    const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+    if (!token) {
+        return res.status(401).send('Unauthorized: No token provided');
+    }
     const { shbName, editorId, createDate } = req.body.shb;
-    let newShb = req.body.shb;
-    newShb.shbId = yield uuidv1();
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            yield shb_class.createShb(newShb);
-            yield res.status(200).send(newShb);
-        }
-        catch (err) {
-            return res.status(409).send({ error: err.message });
-        }
-    })).catch((err) => {
-        return res.status(401).send({ error: err.message });
-    });
-});
+    const newShb = {
+        shbId: uuidv1(),
+        shbName,
+        editorId,
+        createDate,
+        shbInfo: [],
+        shbHistory: [],
+        // Add other properties as needed
+    };
+    try {
+        await admin.auth().verifyIdToken(token);
+        // Assuming that shb_class.createShb is a function that creates the SHB
+        await shb_class.createShb(newShb);
+        return res.status(200).send(newShb);
+    }
+    catch (err) {
+        console.error('Error creating SHB:', err);
+        return res.status(409).send({ error: err.message });
+    }
+};
 exports.default = { createShb };

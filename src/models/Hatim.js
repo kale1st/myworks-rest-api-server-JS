@@ -28,6 +28,8 @@ const database_1 = require("firebase/database");
 const admin = __importStar(require("firebase-admin"));
 class Hatim {
     constructor() {
+        this.hatim = [];
+        this.totalHatim = 0;
         this.createHatim = (groupId) => {
             const db = (0, database_1.getDatabase)();
             for (let index = 1; index < 31; index++) {

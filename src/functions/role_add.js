@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addRole = void 0;
 const admin = __importStar(require("firebase-admin"));
@@ -38,25 +29,25 @@ const database_1 = require("firebase/database");
 const addRole = (userId, groupId, role) => {
     const db = (0, database_1.getDatabase)(); //to update
     const nodeRef = admin.database().ref(`users/${userId}/groups/${groupId}`);
-    return nodeRef.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
+    return nodeRef.once('value', async (snapshot) => {
         var _a, _b, _c;
         //it is checked that the new role is already added to the user'
-        const roles = yield ((_a = snapshot.val()) === null || _a === void 0 ? void 0 : _a.roles);
-        const bool = yield (roles === null || roles === void 0 ? void 0 : roles.includes(role));
+        const roles = await ((_a = snapshot.val()) === null || _a === void 0 ? void 0 : _a.roles);
+        const bool = await (roles === null || roles === void 0 ? void 0 : roles.includes(role));
         //if the role is not added at the user, than it is added to the user
         if (!bool) {
             roles === null || roles === void 0 ? void 0 : roles.push(role);
             //add role to the user in the node "group"
-            yield ((_c = (_b = admin.auth()) === null || _b === void 0 ? void 0 : _b.getUser(userId)) === null || _c === void 0 ? void 0 : _c.then((userRecords) => __awaiter(void 0, void 0, void 0, function* () {
-                yield (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/${userId}`), {
+            await ((_c = (_b = admin.auth()) === null || _b === void 0 ? void 0 : _b.getUser(userId)) === null || _c === void 0 ? void 0 : _c.then(async (userRecords) => {
+                await (0, database_1.set)((0, database_1.ref)(db, `groups/${groupId}/users/${userId}`), {
                     email: userRecords.email,
                     roles: roles
                 });
-            })).catch((error) => {
+            }).catch((error) => {
                 return { response: error.message };
             }));
             //add role to the user in the node "users"
-            yield (0, database_1.set)((0, database_1.ref)(db, `users/${userId}/groups/${groupId}`), {
+            await (0, database_1.set)((0, database_1.ref)(db, `users/${userId}/groups/${groupId}`), {
                 groupId: groupId,
                 roles: roles
             });
@@ -65,6 +56,6 @@ const addRole = (userId, groupId, role) => {
             //if user already has the role
             return { response: 'the user is already a ' + role };
         }
-    }));
+    });
 };
 exports.addRole = addRole;

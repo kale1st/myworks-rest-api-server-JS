@@ -22,39 +22,30 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addGroupToUser = void 0;
 const database_1 = require("firebase/database");
 const admin = __importStar(require("firebase-admin"));
 const role_add_1 = require("./role_add");
-const addGroupToUser = (userId, groupId, role) => __awaiter(void 0, void 0, void 0, function* () {
+const addGroupToUser = async (userId, groupId, role) => {
     const db = (0, database_1.getDatabase)();
     const nodeRef = admin.database().ref(`users/${userId}/groups/${groupId}`);
-    return nodeRef.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
+    return nodeRef.once('value', async (snapshot) => {
         //if the user is not a member of the group,the user is added to the group and the role is added to the user as the first role
         if (!snapshot.exists()) {
-            const uObj = yield {
+            const uObj = await {
                 groupId: groupId,
                 roles: [role]
             };
-            return yield (0, database_1.set)((0, database_1.ref)(db, `users/${userId}/groups/${groupId}`), uObj);
+            return await (0, database_1.set)((0, database_1.ref)(db, `users/${userId}/groups/${groupId}`), uObj);
         }
         else {
             //if the user is already member of the group with any role
-            yield (0, role_add_1.addRole)(userId, groupId, role);
+            await (0, role_add_1.addRole)(userId, groupId, role);
             return null;
         }
-    }), (error) => {
+    }, (error) => {
         return { error: error };
     });
-});
+};
 exports.addGroupToUser = addGroupToUser;

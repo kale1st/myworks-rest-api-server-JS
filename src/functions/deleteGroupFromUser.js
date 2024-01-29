@@ -22,37 +22,28 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteGroupFromUsers = void 0;
 const admin = __importStar(require("firebase-admin"));
-const deleteGroupFromUsers = (groupId) => __awaiter(void 0, void 0, void 0, function* () {
-    const usersOfTheGroup = yield admin.database().ref(`groups/${groupId}/users`);
-    return usersOfTheGroup.once('value', (snapshot) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteGroupFromUsers = async (groupId) => {
+    const usersOfTheGroup = await admin.database().ref(`groups/${groupId}/users`);
+    return usersOfTheGroup.once('value', async (snapshot) => {
         if (snapshot.exists()) {
             // access all users of the group
             const data = snapshot.val();
             //getting user's IDs 
             const arrUsersId = Object.keys(data);
             //removes the group from all users of the froup the node '`users/${userId}/groups/${groupId}`'
-            yield arrUsersId.map((userId) => __awaiter(void 0, void 0, void 0, function* () {
-                const nodeRef = yield admin.database().ref(`users/${userId}/groups/`);
-                return yield nodeRef.child(groupId).remove();
-            }));
+            await arrUsersId.map(async (userId) => {
+                const nodeRef = await admin.database().ref(`users/${userId}/groups/`);
+                return await nodeRef.child(groupId).remove();
+            });
         }
         else {
             return null;
         }
-    }), (error) => {
+    }, (error) => {
         return { error: error };
     });
-});
+};
 exports.deleteGroupFromUsers = deleteGroupFromUsers;
