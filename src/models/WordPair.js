@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WordPair = void 0;
 const database_1 = require("firebase/database");
@@ -44,52 +35,74 @@ class WordPair {
         this.pirId = pirId;
         this.editorId = editorId;
     }
-    createWordPair(wordPair) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const db = (0, database_1.getDatabase)();
-            yield (0, database_1.set)((0, database_1.ref)(db, 'pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
-        });
+    async createWordPair(wordPair) {
+        const db = (0, database_1.getDatabase)();
+        await (0, database_1.set)((0, database_1.ref)(db, 'pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId), wordPair);
     }
-    retrieveAllWordPairsOfSinglePir(pirId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                const nodeRef = admin.database().ref('pirs/' + pirId + '/chapters');
-                // Read the data at the node once
-                nodeRef.once('value', (snapshot) => {
-                    if (snapshot.exists()) {
-                        const chapters = snapshot.val();
-                        return (0, rxjs_1.from)(Object.values(chapters)).pipe((0, rxjs_1.filter)((chapter) => chapter.wordPairs), // Filter out chapters without wordPairs
-                        (0, rxjs_1.mergeMap)((chapter) => Object.values(chapter.wordPairs)), // Merge all wordPairs into a single stream
-                        (0, rxjs_1.toArray)() // Collect the wordPairs into an array
-                        ).subscribe({
-                            next: ((arrWordPairs) => {
-                                return resolve(arrWordPairs);
-                            })
-                        });
-                    }
-                });
+    // async retrieveAllWordPairsOfSinglePir(pirId: any): Promise<WordPair[]> {
+    //     const nodeRef = admin.database().ref('pirs/' + pirId + '/chapters');
+    //     return new Promise<WordPair[]>((resolve, reject) => {
+    //         nodeRef.once('value', (snapshot) => {
+    //             if (snapshot.exists()) {
+    //                 const chapters: { [key: string]: { wordPairs?: WordPair[] } } = snapshot.val();
+    //                 const wordPairsObservable: Observable<WordPair[]> = from(Object.values(chapters))
+    //                     .pipe(
+    //                         filter((chapter) => chapter.wordPairs !== undefined), // Filter out chapters without wordPairs
+    //                         mergeMap((chapter) => chapter.wordPairs ?? []), // Merge all wordPairs into a single stream
+    //                         toArray() // Collect the wordPairs into an array
+    //                     );
+    //                 wordPairsObservable.subscribe({
+    //                     next: (arrWordPairs: WordPair[]) => {
+    //                         resolve(arrWordPairs);
+    //                     },
+    //                     error: (err) => {
+    //                         reject(err);
+    //                     },
+    //                     complete: () => {
+    //                         // Optional: You can handle completion here if needed
+    //                     },
+    //                 } as Observer<WordPair[]>); // Explicitly specify the Observer type
+    //             } else {
+    //                 // Handle the case where the node doesn't exist or is null
+    //                 resolve([]);
+    //             }
+    //         });
+    //     });
+    // }
+    async retrieveAllWordPairsOfSinglePir(pirId) {
+        return new Promise((resolve, reject) => {
+            const nodeRef = admin.database().ref('pirs/' + pirId + '/chapters');
+            // Read the data at the node once
+            nodeRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    const chapters = snapshot.val();
+                    return (0, rxjs_1.from)(Object.values(chapters)).pipe((0, rxjs_1.filter)((chapter) => chapter.wordPairs), // Filter out chapters without wordPairs
+                    (0, rxjs_1.mergeMap)((chapter) => Object.values(chapter.wordPairs)), // Merge all wordPairs into a single stream
+                    (0, rxjs_1.toArray)() // Collect the wordPairs into an array
+                    ).subscribe({
+                        next: ((arrWordPairs) => {
+                            return resolve(arrWordPairs);
+                        })
+                    });
+                }
             });
         });
     }
-    updateWordPair(wordPair) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const db = admin.database();
-            const ref = db.ref('pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId);
-            return ref.update(wordPair)
-                .then((ress) => {
-                return { ress };
-            })
-                .catch((error) => {
-                console.error("Error updating data:", error);
-                return { errror: error };
-            });
+    async updateWordPair(wordPair) {
+        const db = admin.database();
+        const ref = db.ref('pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/' + wordPair.wordPairId);
+        return ref.update(wordPair)
+            .then((ress) => {
+            return { ress };
+        })
+            .catch((error) => {
+            console.error("Error updating data:", error);
+            return { errror: error };
         });
     }
-    deleteWordPair(wordPair) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const ref = yield admin.database().ref('pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/');
-            return yield ref.child(wordPair.wordPairId).remove();
-        });
+    async deleteWordPair(wordPair) {
+        const ref = await admin.database().ref('pirs/' + wordPair.pirId + '/chapters/' + wordPair.chapterId + '/wordPairs/');
+        return await ref.child(wordPair.wordPairId).remove();
     }
 }
 exports.WordPair = WordPair;

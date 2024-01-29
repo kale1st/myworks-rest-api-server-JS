@@ -22,26 +22,35 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
-const controlTokenExpired = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        return res.status(200).send({
-            response: 'valid token!',
-            status: 200,
+const controlTokenExpired = async (req, res) => {
+    try {
+        const authorizationHeader = req.headers['authorization'];
+        if (!authorizationHeader) {
+            return res.status(401).send({
+                response: 'Authorization header not provided',
+                status: 401,
+            });
+        }
+        const token = authorizationHeader.split(' ')[1];
+        await admin.auth().verifyIdToken(token).then(async (response) => {
+            return res.status(200).send({
+                response: 'valid token!',
+                status: 200,
+            });
+        }).catch((err) => {
+            return res.status(401).send({
+                response: err.message,
+                status: 401,
+            });
         });
-    })).catch((err) => {
-        return res.status(401).send(err.message);
-    });
-});
+    }
+    catch (error) {
+        return res.status(500).send({
+            response: 'Internal server error',
+            status: 500,
+        });
+    }
+};
 exports.default = { controlTokenExpired };

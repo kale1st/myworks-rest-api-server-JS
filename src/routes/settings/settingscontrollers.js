@@ -22,31 +22,30 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
 const auth_1 = require("firebase/auth");
 const auth = (0, auth_1.getAuth)();
-const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['authorization'].split(' ')[1];
-    yield admin.auth().verifyIdToken(token).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-        if (response)
-            admin.auth().getUserByEmail(response.email).then((user) => {
-                return res.status(200).send(user);
-            });
-        else
-            return res.status(404).send('user not found');
-    }));
-});
-const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserInfo = async (req, res) => {
+    var _a;
+    try {
+        const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+        if (!token) {
+            return res.status(401).send('Unauthorized: No token provided');
+        }
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        if (!decodedToken) {
+            return res.status(404).send('User not found');
+        }
+        const user = await admin.auth().getUserByEmail(decodedToken.email);
+        return res.status(200).send(user);
+    }
+    catch (error) {
+        console.error('Error getting user info:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+};
+const updateUser = async (req, res) => {
     const { updateObject } = req.body;
     admin.auth().getUserByEmail(updateObject.email)
         .then((userRecord) => {
@@ -61,8 +60,8 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         .catch((error) => {
         console.error('Error updating user profile:', error);
     });
-});
-const updateUserPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const updateUserPassword = async (req, res) => {
     const { newPassword } = req.body;
     const user = auth.currentUser;
     (0, auth_1.updatePassword)(user, newPassword).then(() => {
@@ -71,5 +70,5 @@ const updateUserPassword = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }).catch((error) => {
         return res.status(401).send("Password couldn't be updated");
     });
-});
+};
 exports.default = { getUserInfo, updateUser, updateUserPassword };

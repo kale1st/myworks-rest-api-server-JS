@@ -22,21 +22,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
-const tokenControl = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const tokenControl = async (req, res, next) => {
     const checkRevoked = true;
     try {
-        const idToken = (yield req.body.token) || req.headers['authorization'].split(' ')[1];
+        const idToken = await req.body.token || req.headers['authorization'].split(' ')[1];
         admin.auth()
             .verifyIdToken(idToken, checkRevoked)
             .then((payload) => {
@@ -50,5 +41,5 @@ const tokenControl = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     catch (error) {
         return res.status(401).send(error.message);
     }
-});
+};
 exports.default = tokenControl;
