@@ -53,7 +53,7 @@ const signin = async (req, res) => {
                     });
                 })
                     .catch((err) => {
-                    return res.status(401).send(err.message);
+                    return res.send(err.message);
                 });
             })
                 .catch((error) => {
