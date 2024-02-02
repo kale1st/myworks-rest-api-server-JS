@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pir_1 = require("../../../models/Pir");
-const pirInstance = new Pir_1.Pir(null, null, null, null, '', [], []);
+const pirInstance = new Pir_1.Pir(null, null, null, null, '', [], [], '');
 const retrievePirsNames = async (req, res) => {
     pirInstance.retrievePirs().then(async (dataSnapshot) => {
         const dataArray = Object.values(dataSnapshot.val());
         const newDataArray = await dataArray.map((data) => {
             return {
                 pirId: data.pirId,
-                name: data.name
+                name: data.name,
+                imageUrl: data.imageUrl
             };
         });
         return res.status(200).send(newDataArray);

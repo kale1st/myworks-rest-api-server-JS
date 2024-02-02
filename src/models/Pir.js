@@ -30,7 +30,7 @@ const Group_1 = require("./Group");
 const groupInstance = new Group_1.Group(null, null);
 const db = (0, database_1.getDatabase)();
 class Pir {
-    constructor(pirId, editorId, groupId, name, description, chapters, wordPairs) {
+    constructor(pirId, editorId, groupId, name, description, chapters, wordPairs, imageUrl) {
         this.pirId = pirId;
         this.editorId = editorId;
         this.groupId = groupId;
@@ -38,6 +38,7 @@ class Pir {
         this.description = description;
         this.chapters = chapters;
         this.wordPairs = wordPairs;
+        this.imageUrl = imageUrl;
     }
     //add a mew pir to node 'pirs' in db (pirlist)
     async createPir(pir) {
@@ -45,6 +46,7 @@ class Pir {
             pirId: pir.pirId,
             name: pir.name,
             description: pir.description,
+            imageUrl: pir.imageUrl
         });
     }
     //this manipulates three nodes in DB

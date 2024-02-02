@@ -27,7 +27,7 @@ const admin = __importStar(require("firebase-admin"));
 const Pir_1 = require("../../../models/Pir");
 const WordPair_1 = require("../../../models/WordPair");
 const { v1: uuidv1, v4: uuidv4 } = require('uuid');
-const pirInstance = new Pir_1.Pir(null, null, null, null, '', [], []);
+const pirInstance = new Pir_1.Pir(null, null, null, null, '', [], [], '');
 const wordPairInstance = new WordPair_1.WordPair('', '', null, null, null);
 const createPir = async (req, res) => {
     let newPir = req.body.pir;

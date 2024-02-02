@@ -87,7 +87,7 @@ class Group {
         });
     }
     async deleteGroup(groupId) {
-        const pirInstance = new Pir_1.Pir(null, null, null, null, '', [], []);
+        const pirInstance = new Pir_1.Pir(null, null, null, null, '', [], [], '');
         //at first deleted the node 'assigned' of all pir of this group on pirlist
         return new Promise((resolve, reject) => {
             const nodeRef = admin.database().ref(`groups/${groupId}/works/pirs`);
