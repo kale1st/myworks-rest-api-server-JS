@@ -13,4 +13,3 @@ class Book {
     }
 }
 exports.Book = Book;
-;

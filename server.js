@@ -34,15 +34,17 @@ const pirroutes_2 = __importDefault(
   require("./src/routes/displays/pir/pirroutes")
 );
 const role_remove_1 = require("./src/functions/role_remove");
+const lugatroutes_1 = __importDefault(
+  require("./src/routes/lugat/lugatroutes")
+);
+
 const port = process.env.PORT || 3000;
 require("dotenv").config();
 const corsOptions = {
   origin: [
-    "https://mywebsite-3f527.firebaseapp.com",
     "http://localhost:4200",
     "https://mywebsite-3f527.web.app",
     "http://192.168.0.94:4200",
-    "192.168.178.111:4200",
     "http://anliyorum.web.app",
     "http://anliyorum.firebaseapp.com",
   ],
@@ -89,6 +91,7 @@ app.use("/", pirroutes_1.default);
 app.use("/", generalroutes_1.default);
 app.use("/", pirroutes_2.default);
 app.use("/", grouproutes_1.default);
+app.use("/", lugatroutes_1.default);
 
 app.get("/checkuser", (req, res) => {
   (0, checkUser_1.checkUser)("azizkale@hotmail.com");
