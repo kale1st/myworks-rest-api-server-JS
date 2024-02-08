@@ -42,6 +42,7 @@ const port = process.env.PORT || 3000;
 require("dotenv").config();
 const corsOptions = {
   origin: [
+    "https://mywebsite-3f527.firebaseapp.com",
     "http://localhost:4200",
     "https://mywebsite-3f527.web.app",
     "http://192.168.0.94:4200",
